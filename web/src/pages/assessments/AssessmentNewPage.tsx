@@ -27,6 +27,7 @@ import { ArrowLeft, Plus, Loader2 } from "lucide-react";
 import { assessmentsApi } from "@/services/assessments";
 import { TIME_LIMIT_OPTIONS } from "@/utils/constants";
 import type { AssessmentSkill } from "@/types";
+import HeroBanner from "@/components/common/HeroBanner";
 
 export interface AssessmentFormValues {
   name: string;
@@ -107,15 +108,34 @@ export default function AssessmentNewPage() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="max-w-3xl mx-auto space-y-8 pb-12">
+      {/* Hero Banner */}
+      <HeroBanner
+        badgeText="⭐️ Assessment & Rubric Builder"
+        title="Rancang Technical Assessment Baru"
+        highlightText="Rubrik B7"
+        subtitle="Tentukan judul role, batas waktu wawancara, bahasa pengantar, dan susun kriteria anchor level L1 hingga L5."
+        bulletPoints={[
+          "Pilihan taksonomi kompetensi terstandar B7 atau kustom",
+          "Dukungan drag-and-drop urutan probing wawancara",
+          "Batas waktu adaptif (30 s/d 90 menit) dengan graceful exit",
+        ]}
+        imageSrc="/images/hero-bg.png"
+        imageAlt="Rakamin New Assessment"
+        imageFloatingBadge={{
+          title: "B7 Rubric Matrix",
+          subtitle: "Standardized Anchors",
+        }}
+      />
+
       {/* Breadcrumb */}
-      <div className="flex items-center gap-2 mb-6">
-        <Link to="/assessments" className="text-muted-foreground hover:text-foreground">
+      <div className="flex items-center gap-2 pb-2 border-b border-slate-200">
+        <Link to="/assessments" className="p-1 rounded-md text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors">
           <ArrowLeft className="h-4 w-4" />
         </Link>
-        <span className="text-sm text-muted-foreground">Back</span>
-        <span className="text-sm text-muted-foreground">/</span>
-        <span className="text-sm font-medium">New Assessment</span>
+        <span className="text-xs text-slate-500">Assessments</span>
+        <span className="text-xs text-slate-400">/</span>
+        <span className="text-xs font-bold text-slate-900">Buat Assessment Baru</span>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -242,13 +262,14 @@ export default function AssessmentNewPage() {
           <Button
             type="button"
             variant="outline"
+            className="rounded-xl"
             onClick={() => navigate("/assessments")}
           >
-            Cancel
+            Batal
           </Button>
-          <Button type="submit" disabled={submitting}>
+          <Button type="submit" variant="cta" className="rounded-xl shadow-xs" disabled={submitting}>
             {submitting && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
-            Save &amp; Create Session →
+            Simpan &amp; Buat Sesi →
           </Button>
         </div>
       </form>

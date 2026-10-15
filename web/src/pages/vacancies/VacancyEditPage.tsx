@@ -12,6 +12,8 @@ import SkillPicker from "@/components/assessment/SkillPicker";
 import { vacanciesApi } from "@/services/vacancies";
 import { ArrowLeft, Plus, X, Loader2 } from "lucide-react";
 import type { VacancySkill } from "@/types";
+import HeroBanner from "@/components/common/HeroBanner";
+import RakaminSpinner from "@/components/common/RakaminSpinner";
 
 interface VacancyFormValues {
   role_title: string;
@@ -54,13 +56,42 @@ export default function VacancyEditPage() {
     }
   };
 
-  if (loading) return <div className="max-w-2xl mx-auto space-y-4"><Skeleton className="h-8 w-48" /><Skeleton className="h-10 w-full" /></div>;
+  if (loading) {
+    return (
+      <div className="max-w-3xl mx-auto py-12">
+        <RakaminSpinner text="Memuat data lowongan role..." size="lg" />
+      </div>
+    );
+  }
 
   return (
-    <div className="max-w-2xl mx-auto">
-      <div className="flex items-center gap-2 mb-6">
-        <Link to="/vacancies" className="text-muted-foreground hover:text-foreground"><ArrowLeft className="h-4 w-4" /></Link>
-        <span className="text-sm font-medium">Edit Vacancy</span>
+    <div className="max-w-3xl mx-auto space-y-8 pb-12">
+      {/* Hero Banner */}
+      <HeroBanner
+        badgeText="⭐️ Role Vacancy & Rubric Editor"
+        title="Edit Profil Lowongan Pekerjaan"
+        highlightText="Standar B7"
+        subtitle="Perbarui target rubrik kompetensi, dimensi budaya kerja, dan ekspektasi performa kandidat."
+        bulletPoints={[
+          "Penetapan dimensi kesesuaian kultur (Culture Dimensions)",
+          "Ekspektasi kompetensi B7 terstandarisasi per level",
+          "Sinkronisasi langsung dengan perbandingan fit/gap otomatis",
+        ]}
+        imageSrc="/images/counseling.png"
+        imageAlt="Rakamin Edit Vacancy"
+        imageFloatingBadge={{
+          title: "Standar Role",
+          subtitle: "B7 Taxonomy",
+        }}
+      />
+
+      <div className="flex items-center gap-2 pb-2 border-b border-slate-200">
+        <Link to="/vacancies" className="p-1 rounded-md text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors">
+          <ArrowLeft className="h-4 w-4" />
+        </Link>
+        <span className="text-xs text-slate-500">Lowongan</span>
+        <span className="text-xs text-slate-400">/</span>
+        <span className="text-xs font-bold text-slate-900">Edit Lowongan</span>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -94,8 +125,10 @@ export default function VacancyEditPage() {
           <Textarea rows={3} {...register("competency_expectations")} />
         </div>
         <div className="flex justify-end gap-2">
-          <Button type="button" variant="outline" onClick={() => navigate("/vacancies")}>Cancel</Button>
-          <Button type="submit" disabled={submitting}>{submitting && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}Save Changes</Button>
+          <Button type="button" variant="outline" className="rounded-xl" onClick={() => navigate("/vacancies")}>Batal</Button>
+          <Button type="submit" variant="cta" className="rounded-xl shadow-xs" disabled={submitting}>
+            {submitting && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}Simpan Perubahan
+          </Button>
         </div>
       </form>
 

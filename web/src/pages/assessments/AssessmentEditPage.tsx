@@ -28,6 +28,8 @@ import { assessmentsApi } from "@/services/assessments";
 import { TIME_LIMIT_OPTIONS } from "@/utils/constants";
 import type { AssessmentSkill } from "@/types";
 import type { AssessmentFormValues } from "./AssessmentNewPage";
+import HeroBanner from "@/components/common/HeroBanner";
+import RakaminSpinner from "@/components/common/RakaminSpinner";
 
 export default function AssessmentEditPage() {
   const { id } = useParams<{ id: string }>();
@@ -89,24 +91,40 @@ export default function AssessmentEditPage() {
 
   if (loading) {
     return (
-      <div className="max-w-2xl mx-auto space-y-4">
-        <Skeleton className="h-8 w-48" />
-        <Skeleton className="h-10 w-full" />
-        <Skeleton className="h-10 w-40" />
-        <Skeleton className="h-24 w-full" />
+      <div className="max-w-3xl mx-auto py-12">
+        <RakaminSpinner text="Memuat konfigurasi assessment..." size="lg" />
       </div>
     );
   }
 
   return (
-    <div className="max-w-2xl mx-auto">
-      <div className="flex items-center gap-2 mb-6">
-        <Link to="/assessments" className="text-muted-foreground hover:text-foreground">
+    <div className="max-w-3xl mx-auto space-y-8 pb-12">
+      {/* Hero Banner */}
+      <HeroBanner
+        badgeText="⭐️ Assessment & Rubric Editor"
+        title="Edit Technical Assessment"
+        highlightText="Rubrik B7"
+        subtitle="Sesuaikan judul role, batas durasi sesi, dan susunan rubrik kompetensi terstandarisasi."
+        bulletPoints={[
+          "Penetapan kriteria anchor kompetensi terstruktur (L1 s/d L5)",
+          "Reorganisasi urutan prioritas probing wawancara AI",
+          "Sinkronisasi langsung ke pembuatan token undangan kandidat",
+        ]}
+        imageSrc="/images/hero-bg.png"
+        imageAlt="Rakamin Edit Assessment"
+        imageFloatingBadge={{
+          title: "B7 Rubric Matrix",
+          subtitle: "Standardized Anchors",
+        }}
+      />
+
+      <div className="flex items-center gap-2 pb-2 border-b border-slate-200">
+        <Link to="/assessments" className="p-1 rounded-md text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors">
           <ArrowLeft className="h-4 w-4" />
         </Link>
-        <span className="text-sm text-muted-foreground">Back</span>
-        <span className="text-sm text-muted-foreground">/</span>
-        <span className="text-sm font-medium">Edit Assessment</span>
+        <span className="text-xs text-slate-500">Assessments</span>
+        <span className="text-xs text-slate-400">/</span>
+        <span className="text-xs font-bold text-slate-900">Edit Assessment</span>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -163,10 +181,10 @@ export default function AssessmentEditPage() {
         {error && <p className="text-sm text-destructive">{error}</p>}
 
         <div className="flex justify-end gap-2">
-          <Button type="button" variant="outline" onClick={() => navigate(`/assessments/${id}/invite`)}>Cancel</Button>
-          <Button type="submit" disabled={submitting}>
+          <Button type="button" variant="outline" className="rounded-xl" onClick={() => navigate(`/assessments/${id}/invite`)}>Batal</Button>
+          <Button type="submit" variant="cta" className="rounded-xl shadow-xs" disabled={submitting}>
             {submitting && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
-            Save Changes
+            Simpan Perubahan
           </Button>
         </div>
       </form>

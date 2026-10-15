@@ -9,8 +9,9 @@ import { Separator } from "@/components/ui/separator";
 import LevelRadio from "@/components/assessment/LevelRadio";
 import SkillPicker from "@/components/assessment/SkillPicker";
 import { vacanciesApi } from "@/services/vacancies";
-import { ArrowLeft, Plus, X, Loader2 } from "lucide-react";
+import { ArrowLeft, Plus, X, Loader2, Sparkles } from "lucide-react";
 import type { VacancySkill } from "@/types";
+import HeroBanner from "@/components/common/HeroBanner";
 
 interface VacancyFormValues {
   role_title: string;
@@ -50,14 +51,33 @@ export default function VacancyNewPage() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto">
-      <div className="flex items-center gap-2 mb-6">
-        <Link to="/vacancies" className="text-muted-foreground hover:text-foreground">
+    <div className="max-w-3xl mx-auto space-y-8 pb-12">
+      {/* Hero Banner */}
+      <HeroBanner
+        badgeText="⭐️ Role Vacancy & Rubric Creator"
+        title="Buat Profil Lowongan Pekerjaan Baru"
+        highlightText="Standar B7"
+        subtitle="Tetapkan profil lowongan pekerjaan, dimensi kultur kerja, dan ekspektasi level skill sebagai tolak ukur evaluasi kandidat."
+        bulletPoints={[
+          "Penetapan dimensi kesesuaian kultur (Culture Dimensions)",
+          "Ekspektasi kompetensi B7 terstandarisasi per level",
+          "Sinkronisasi langsung dengan perbandingan fit/gap otomatis",
+        ]}
+        imageSrc="/images/counseling.png"
+        imageAlt="Rakamin New Vacancy"
+        imageFloatingBadge={{
+          title: "Standar Role",
+          subtitle: "B7 Taxonomy",
+        }}
+      />
+
+      <div className="flex items-center gap-2 pb-2 border-b border-slate-200">
+        <Link to="/vacancies" className="p-1 rounded-md text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors">
           <ArrowLeft className="h-4 w-4" />
         </Link>
-        <span className="text-sm text-muted-foreground">Vacancies</span>
-        <span className="text-sm text-muted-foreground">/</span>
-        <span className="text-sm font-medium">New Vacancy</span>
+        <span className="text-xs text-slate-500">Lowongan</span>
+        <span className="text-xs text-slate-400">/</span>
+        <span className="text-xs font-bold text-slate-900">Tambah Lowongan Baru</span>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -128,10 +148,10 @@ export default function VacancyNewPage() {
         {error && <p className="text-sm text-destructive">{error}</p>}
 
         <div className="flex justify-end gap-2">
-          <Button type="button" variant="outline" onClick={() => navigate("/vacancies")}>Cancel</Button>
-          <Button type="submit" disabled={submitting}>
+          <Button type="button" variant="outline" className="rounded-xl" onClick={() => navigate("/vacancies")}>Batal</Button>
+          <Button type="submit" variant="cta" className="rounded-xl shadow-xs" disabled={submitting}>
             {submitting && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
-            Save Vacancy
+            Simpan Lowongan
           </Button>
         </div>
       </form>

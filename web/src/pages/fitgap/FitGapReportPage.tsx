@@ -20,6 +20,8 @@ import {
   AlertCircle
 } from "lucide-react";
 import type { FitGapReport, Portfolio, Vacancy } from "@/types";
+import HeroBanner from "@/components/common/HeroBanner";
+import RakaminSpinner from "@/components/common/RakaminSpinner";
 
 export default function FitGapReportPage() {
   const { id, sessionId, vacancyId } = useParams<{
@@ -124,36 +126,67 @@ export default function FitGapReportPage() {
 
   if (loading) {
     return (
-      <div className="max-w-3xl mx-auto space-y-6 py-6">
-        <Skeleton className="h-9 w-64" />
-        <Skeleton className="h-32 w-full" />
-        <Skeleton className="h-64 w-full" />
+      <div className="max-w-4xl mx-auto py-12">
+        <RakaminSpinner text="Menghitung analisis fit/gap multi-model AI..." size="lg" />
       </div>
     );
   }
 
   return (
-    <div className="max-w-3xl mx-auto space-y-6 py-6">
+    <div className="max-w-4xl mx-auto space-y-8 py-4 pb-12">
+      {/* Hero Banner */}
+      <HeroBanner
+        badgeText="⭐️ Multi-Model Fit/Gap Analysis"
+        title={vacancy?.role_title ? `Fit/Gap Evaluation: ${vacancy.role_title}` : "Fit/Gap Assessment Report"}
+        highlightText="Rakamin AI"
+        subtitle="Komparasi terverifikasi antara capaian kompetensi kandidat terhadap ekspektasi rubric lowongan kerja."
+        bulletPoints={[
+          "Analisis delta level skill (Match, Exceed, Gap, Not Assessed)",
+          "Narasi kesesuaian kultur (Culture Fit) terstruktur",
+          "Human override audit trail & PDF export compliant",
+        ]}
+        primaryAction={
+          report
+            ? {
+                label: "Export Dokumen PDF",
+                onClick: () => handleExport("pdf"),
+                icon: <Download className="h-4 w-4 mr-1.5" />,
+              }
+            : undefined
+        }
+        secondaryAction={{
+          label: "Kembali ke Portfolio",
+          onClick: () => window.history.back(),
+          icon: <ArrowLeft className="h-4 w-4 mr-1.5" />,
+        }}
+        imageSrc="/images/counseling.png"
+        imageAlt="Rakamin Fit/Gap Evaluation"
+        imageFloatingBadge={{
+          title: "100% Objektif",
+          subtitle: "Multi-model Validated",
+        }}
+      />
+
       {/* Navigation & Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <Link
               to={`/assessments/${id}/sessions/${sessionId}/portfolio`}
-              className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+              className="p-1 rounded-md text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors"
               title="Back to Candidate Portfolio"
             >
               <ArrowLeft className="h-4 w-4" />
             </Link>
-            <h1 className="text-xl font-bold tracking-tight text-foreground flex items-center gap-2">
-              <FileCheck2 className="h-5 w-5 text-primary" />
-              Fit/Gap Assessment Report
-            </h1>
+            <h2 className="text-xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
+              <FileCheck2 className="h-5 w-5 text-[#01959f]" />
+              Detail Laporan Fit/Gap
+            </h2>
           </div>
           {vacancy && (
-            <p className="text-sm text-muted-foreground flex items-center gap-1.5 ml-6">
-              <Building2 className="h-3.5 w-3.5" />
-              Evaluated against: <span className="font-semibold text-foreground">{vacancy.role_title}</span>
+            <p className="text-sm text-slate-500 flex items-center gap-1.5 ml-6">
+              <Building2 className="h-3.5 w-3.5 text-slate-400" />
+              Role Benchmark: <span className="font-semibold text-slate-800">{vacancy.role_title}</span>
             </p>
           )}
         </div>
@@ -165,23 +198,23 @@ export default function FitGapReportPage() {
               size="sm"
               onClick={handleRegenerate}
               disabled={regenerating || generating}
-              className="text-xs"
+              className="text-xs rounded-xl"
             >
               {regenerating ? (
                 <Loader2 className="h-3.5 w-3.5 animate-spin mr-1.5" />
               ) : (
                 <RefreshCw className="h-3.5 w-3.5 mr-1.5" />
               )}
-              Regenerate
+              Hitung Ulang
             </Button>
             {report && (
               <>
                 <Button
-                  variant="outline"
+                  variant="cta"
                   size="sm"
                   onClick={() => handleExport("pdf")}
                   disabled={!!exporting}
-                  className="text-xs"
+                  className="text-xs rounded-xl shadow-xs"
                 >
                   {exporting === "pdf" ? (
                     <Loader2 className="h-3.5 w-3.5 animate-spin mr-1.5" />
@@ -195,7 +228,7 @@ export default function FitGapReportPage() {
                   size="sm"
                   onClick={() => handleExport("json")}
                   disabled={!!exporting}
-                  className="text-xs"
+                  className="text-xs rounded-xl"
                 >
                   {exporting === "json" ? (
                     <Loader2 className="h-3.5 w-3.5 animate-spin mr-1.5" />

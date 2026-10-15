@@ -29,6 +29,8 @@ import {
   Link as LinkIcon
 } from "lucide-react";
 import type { Assessment, Session } from "@/types";
+import HeroBanner from "@/components/common/HeroBanner";
+import RakaminSpinner from "@/components/common/RakaminSpinner";
 
 function SessionRow({
   session,
@@ -125,9 +127,8 @@ function SessionRow({
 
           {isLive && (
             <Button
-              variant="default"
               size="sm"
-              className="h-8 px-3 text-xs shadow-xs"
+              className="h-8 px-3 text-xs bg-[#01959f] hover:bg-[#01808a] text-white shadow-xs font-bold"
               onClick={() => navigate(`/assessments/${assessmentId}/sessions/${session.id}/monitor`)}
             >
               <Eye className="h-3.5 w-3.5 mr-1" /> Live Monitor
@@ -136,9 +137,9 @@ function SessionRow({
 
           {isEnded && session.end_reason !== "error" && (
             <Button
-              variant="default"
+              variant="cta"
               size="sm"
-              className="h-8 px-3 text-xs bg-primary text-primary-foreground hover:bg-primary/90 shadow-xs"
+              className="h-8 px-3 text-xs shadow-xs"
               onClick={() => navigate(`/assessments/${assessmentId}/sessions/${session.id}/portfolio`)}
             >
               <FileCheck2 className="h-3.5 w-3.5 mr-1.5" /> View Portfolio &amp; Fit/Gap
@@ -223,37 +224,64 @@ export default function AssessmentInvitePage() {
 
   if (loading) {
     return (
-      <div className="max-w-4xl mx-auto space-y-4 py-6">
-        <Skeleton className="h-8 w-64" />
-        <Skeleton className="h-32 w-full rounded-xl" />
-        <Skeleton className="h-64 w-full rounded-xl" />
+      <div className="max-w-4xl mx-auto py-12">
+        <RakaminSpinner text="Memuat detail assessment dan sesi kandidat..." size="lg" />
       </div>
     );
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6 py-4">
+    <div className="max-w-4xl mx-auto space-y-8 py-4 pb-12">
+      {/* Hero Banner with interview illustration */}
+      <HeroBanner
+        badgeText="⭐️ Candidate AI Interview Hub"
+        title={assessment?.name || "Undang & Kelola Sesi Kandidat"}
+        highlightText="Live Session"
+        subtitle="Hasilkan link undangan sesi wawancara berbasis AI, monitor percakapan live secara realtime, dan evaluasi hasil portfolio kompetensi."
+        bulletPoints={[
+          `Batas waktu sesi wawancara: ${assessment?.time_limit_min || 45} menit`,
+          `${assessment?.skills?.length || 0} rubrik kompetensi B7 terintegrasi`,
+          "Link token unik satu kali pakai (Single-use Token) terproteksi",
+        ]}
+        primaryAction={{
+          label: "Undang Kandidat Baru",
+          onClick: openInviteDialog,
+          icon: <Plus className="h-4 w-4 mr-1.5" />,
+        }}
+        secondaryAction={{
+          label: "Edit Rubrik Assessment",
+          onClick: () => navigate(`/assessments/${id}/edit`),
+          icon: <Pencil className="h-4 w-4 mr-1.5" />,
+        }}
+        imageSrc="/images/interview.png"
+        imageAlt="Rakamin AI Technical Interview"
+        imageFloatingBadge={{
+          title: "Sesi Terproteksi",
+          subtitle: "Single-use Token",
+        }}
+      />
+
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-border/70">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200">
         <div className="flex items-start gap-3">
           <Link
             to="/assessments"
-            className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors mt-0.5"
-            title="Back to all assessments"
+            className="p-1.5 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors mt-0.5"
+            title="Kembali ke daftar assessment"
           >
             <ArrowLeft className="h-5 w-5" />
           </Link>
           <div>
-            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground">
-              {assessment?.name ?? "—"}
-            </h1>
-            <div className="flex items-center gap-2 text-xs text-muted-foreground mt-1">
-              <span className="flex items-center gap-1 bg-muted px-2 py-0.5 rounded font-medium">
-                <Clock className="h-3 w-3" />
-                {assessment?.time_limit_min} min session ceiling
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900">
+              Daftar Sesi Wawancara Kandidat
+            </h2>
+            <div className="flex items-center gap-2 text-xs text-slate-500 mt-1">
+              <span className="flex items-center gap-1 bg-slate-100 px-2 py-0.5 rounded font-medium">
+                <Clock className="h-3 w-3 text-slate-500" />
+                {assessment?.time_limit_min} Menit Session Ceiling
               </span>
               <span>•</span>
-              <span>{assessment?.skills?.length ?? 0} competencies configured</span>
+              <span>{assessment?.skills?.length ?? 0} Rubrik Terdaftar</span>
             </div>
           </div>
         </div>
@@ -263,18 +291,19 @@ export default function AssessmentInvitePage() {
             variant="outline"
             size="sm"
             onClick={() => navigate(`/assessments/${id}/edit`)}
-            className="text-xs"
+            className="text-xs rounded-xl"
           >
             <Pencil className="h-3.5 w-3.5 mr-1.5" /> Edit Assessment
           </Button>
           <Button
+            variant="cta"
             size="sm"
             onClick={openInviteDialog}
             disabled={creatingSession}
-            className="text-xs shadow-xs"
+            className="text-xs rounded-xl shadow-xs"
           >
             <Plus className="h-3.5 w-3.5 mr-1.5" />
-            {creatingSession ? "Creating Link..." : "Invite Candidate"}
+            {creatingSession ? "Membuat Link..." : "Undang Kandidat"}
           </Button>
         </div>
       </div>

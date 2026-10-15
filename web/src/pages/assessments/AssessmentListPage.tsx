@@ -2,48 +2,60 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
 import { assessmentsApi } from "@/services/assessments";
-import { Plus, Clock, ChevronRight, ClipboardList, Layers, Users } from "lucide-react";
+import {
+  Plus,
+  Clock,
+  ChevronRight,
+  ClipboardList,
+  Layers,
+  Users,
+  Briefcase,
+  PlayCircle,
+  FileCheck2,
+} from "lucide-react";
 import type { Assessment } from "@/types";
+import HeroBanner from "@/components/common/HeroBanner";
+import RakaminSpinner from "@/components/common/RakaminSpinner";
+import { motion } from "framer-motion";
 
 function SessionStatusBadge({ session }: { session?: Assessment["latest_session"] }) {
   if (!session) {
     return (
-      <span className="inline-flex items-center gap-1 text-[11px] font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">
-        No sessions yet
+      <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full">
+        Belum ada sesi
       </span>
     );
   }
 
   if (session.status === "active") {
     return (
-      <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-primary bg-primary/10 border border-primary/20 px-2.5 py-0.5 rounded-full">
-        <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-        Interview Live Now
+      <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#01959f] bg-teal-50 border border-teal-200 px-2.5 py-0.5 rounded-full shadow-2xs">
+        <span className="w-1.5 h-1.5 rounded-full bg-[#01959f] animate-ping" />
+        Sesi Aktif Sedang Berjalan
       </span>
     );
   }
 
   if (session.status === "ended" && session.end_reason === "error") {
     return (
-      <span className="inline-flex items-center gap-1 text-[11px] font-medium text-destructive bg-destructive/10 px-2 py-0.5 rounded-full">
-        Session Error
+      <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-destructive bg-destructive/10 px-2.5 py-0.5 rounded-full">
+        Sesi Dihentikan (Error)
       </span>
     );
   }
 
   if (session.status === "ended") {
     return (
-      <span className="inline-flex items-center gap-1 text-[11px] font-medium text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
-        ✓ Latest Completed
+      <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">
+        ✓ Wawancara Selesai
       </span>
     );
   }
 
   return (
-    <span className="inline-flex items-center gap-1 text-[11px] font-medium text-amber-800 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full">
-      Awaiting Candidate
+    <span className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-800 bg-amber-50 border border-amber-200 px-2.5 py-0.5 rounded-full">
+      Menunggu Kandidat
     </span>
   );
 }
@@ -63,97 +75,141 @@ export default function AssessmentListPage() {
   }, []);
 
   return (
-    <div className="space-y-6 max-w-5xl mx-auto">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-border/70">
+    <div className="space-y-8 max-w-5xl mx-auto pb-12">
+      {/* Hero Banner matching Reference Image 2 */}
+      <HeroBanner
+        badgeText="⭐️ Rakamin AI Assessment Hub"
+        title="Evaluasi Kompetensi Kandidat Berbasis AI"
+        highlightText="Cepat &amp; Objektif"
+        subtitle="Rancang rubric B7, undang kandidat secara otomatis, pantau sesi wawancara langsung, dan hasilkan laporan fit/gap komprehensif."
+        bulletPoints={[
+          "Wawancara interaktif suara & teks realtime berbasis LLM",
+          "Penilaian otomatis Coverage 4-Tingkat (0%, 33%, 66%, 100%)",
+          "Pematuhan penuh privasi UU PDP No. 27/2022 & Human Override",
+        ]}
+        primaryAction={{
+          label: "Buat Assessment Baru",
+          onClick: () => navigate("/assessments/new"),
+          icon: <Plus className="h-4 w-4 mr-1.5" />,
+        }}
+        secondaryAction={{
+          label: "Kelola Lowongan Role",
+          onClick: () => navigate("/vacancies"),
+          icon: <Briefcase className="h-4 w-4 mr-1.5" />,
+        }}
+        imageSrc="/images/hero-rakamin-logo.png"
+        imageAlt="Rakamin AI Assessment"
+        imageFloatingBadge={{
+          title: "100% Objektif",
+          subtitle: "UU PDP & B7 Standard",
+        }}
+      />
+
+      {/* Section Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200">
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground flex items-center gap-2.5">
-            <ClipboardList className="h-6 w-6 text-primary" />
-            Technical Assessments
-          </h1>
-          <p className="text-sm text-muted-foreground mt-0.5">
-            Configure conversational AI skill rubrics, time ceilings, and evaluate candidate sessions.
+          <h2 className="text-xl sm:text-2xl font-black tracking-tight text-slate-900 flex items-center gap-2.5">
+            <ClipboardList className="h-6 w-6 text-[#01959f]" />
+            Daftar Technical Assessments
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
+            Konfigurasi rubrik kompetensi B7, batas waktu, dan kelola link undangan kandidat.
           </p>
         </div>
-        <Button onClick={() => navigate("/assessments/new")} className="shadow-sm shadow-primary/20 self-start sm:self-auto">
-          <Plus className="h-4 w-4 mr-1.5" /> Create Assessment
+        <Button
+          variant="cta"
+          onClick={() => navigate("/assessments/new")}
+          className="shadow-sm self-start sm:self-auto rounded-xl"
+        >
+          <Plus className="h-4 w-4 mr-1.5" /> Assessment Baru
         </Button>
       </div>
 
       {error && (
         <div className="border border-destructive/30 rounded-xl p-4 bg-destructive/5 text-sm text-destructive flex items-center gap-2">
-          <span>Failed to load assessments from API. Please ensure the backend is running.</span>
+          <span>Gagal memuat assessment dari API. Pastikan server backend Rails berjalan di port 3001.</span>
         </div>
       )}
 
       {loading ? (
-        <div className="space-y-3">
-          {[1, 2, 3].map((i) => (
-            <Skeleton key={i} className="h-20 w-full rounded-xl" />
-          ))}
-        </div>
+        <RakaminSpinner text="Memuat daftar technical assessment..." size="lg" />
       ) : assessments.length === 0 ? (
-        <div className="border border-dashed border-2 rounded-2xl p-12 text-center space-y-4 bg-card/50">
-          <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto">
-            <ClipboardList className="h-6 w-6" />
+        <div className="border-2 border-dashed border-slate-200 rounded-3xl p-12 text-center space-y-4 bg-white/60">
+          <div className="w-14 h-14 rounded-2xl bg-[#01959f]/10 text-[#01959f] flex items-center justify-center mx-auto">
+            <ClipboardList className="h-7 w-7" />
           </div>
           <div className="space-y-1">
-            <h3 className="font-semibold text-foreground">No assessments created yet</h3>
-            <p className="text-sm text-muted-foreground max-w-md mx-auto">
-              Create your first assessment to define skill anchor criteria and start inviting candidates for conversational AI evaluation.
+            <h3 className="font-bold text-slate-900 text-base">Belum ada assessment dibuat</h3>
+            <p className="text-xs sm:text-sm text-slate-500 max-w-md mx-auto">
+              Buat assessment pertama Anda untuk menentukan standar kriteria skill anchor dan mulai mengundang kandidat untuk evaluasi AI.
             </p>
           </div>
-          <Button onClick={() => navigate("/assessments/new")}>
-            <Plus className="h-4 w-4 mr-1.5" /> Create your first assessment
+          <Button
+            variant="cta"
+            onClick={() => navigate("/assessments/new")}
+            className="rounded-xl shadow-sm"
+          >
+            <Plus className="h-4 w-4 mr-1.5" /> Buat Assessment Pertama
           </Button>
         </div>
       ) : (
-        <div className="grid gap-3">
-          {assessments.map((a) => (
-            <Card
+        <div className="grid gap-3.5">
+          {assessments.map((a, idx) => (
+            <motion.div
               key={a.id}
-              className="group cursor-pointer hover:border-primary/50 hover:shadow-md transition-all duration-200 border-border/80 bg-card"
-              onClick={() => navigate(`/assessments/${a.id}/invite`)}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: idx * 0.04, duration: 0.2 }}
             >
-              <CardContent className="p-4 sm:p-5 flex items-center justify-between gap-4">
-                <div className="space-y-2 flex-1 min-w-0">
-                  <div className="flex items-center gap-2.5 flex-wrap">
-                    <h2 className="font-semibold text-base text-foreground group-hover:text-primary transition-colors truncate">
-                      {a.name}
-                    </h2>
-                    <SessionStatusBadge session={a.latest_session} />
-                  </div>
+              <Card
+                className="group cursor-pointer hover:border-[#01959f]/50 hover:shadow-md transition-all duration-200 border-slate-200/90 bg-white rounded-2xl"
+                onClick={() => navigate(`/assessments/${a.id}/invite`)}
+              >
+                <CardContent className="p-4 sm:p-5 flex items-center justify-between gap-4">
+                  <div className="space-y-2.5 flex-1 min-w-0">
+                    <div className="flex items-center gap-2.5 flex-wrap">
+                      <h2 className="font-bold text-base sm:text-lg text-slate-900 group-hover:text-[#01959f] transition-colors truncate">
+                        {a.name}
+                      </h2>
+                      <SessionStatusBadge session={a.latest_session} />
+                    </div>
 
-                  <div className="flex items-center gap-3 text-xs text-muted-foreground flex-wrap">
-                    <span className="flex items-center gap-1 bg-muted/60 px-2.5 py-1 rounded-md font-medium">
-                      <Clock className="h-3.5 w-3.5 text-muted-foreground" />
-                      {a.time_limit_min} minutes
-                    </span>
-
-                    {a.skills && (
-                      <span className="flex items-center gap-1 bg-muted/60 px-2.5 py-1 rounded-md font-medium">
-                        <Layers className="h-3.5 w-3.5 text-muted-foreground" />
-                        {a.skills.length} target skills
+                    <div className="flex items-center gap-3 text-xs text-slate-500 flex-wrap">
+                      <span className="flex items-center gap-1.5 bg-slate-100 text-slate-700 px-2.5 py-1 rounded-md font-semibold">
+                        <Clock className="h-3.5 w-3.5 text-slate-500" />
+                        {a.time_limit_min} Menit
                       </span>
-                    )}
 
-                    <span className="hidden sm:inline-flex items-center gap-1 text-slate-500">
-                      <Users className="h-3.5 w-3.5" />
-                      Candidate Sessions
-                    </span>
-                  </div>
-                </div>
+                      {a.skills && (
+                        <span className="flex items-center gap-1.5 bg-teal-50 text-[#01808a] px-2.5 py-1 rounded-md font-semibold border border-teal-100">
+                          <Layers className="h-3.5 w-3.5 text-[#01959f]" />
+                          {a.skills.length} Target Skills
+                        </span>
+                      )}
 
-                <div className="flex items-center gap-2 shrink-0">
-                  <span className="text-xs font-semibold text-primary opacity-0 group-hover:opacity-100 transition-opacity hidden sm:inline">
-                    Manage →
-                  </span>
-                  <div className="w-8 h-8 rounded-full bg-muted/50 flex items-center justify-center group-hover:bg-primary/10 group-hover:text-primary transition-colors">
-                    <ChevronRight className="h-4 w-4" />
+                      <span className="hidden sm:inline-flex items-center gap-1.5 text-slate-500 font-medium">
+                        <Users className="h-3.5 w-3.5" />
+                        Candidate Pipeline
+                      </span>
+                    </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
+
+                  <div className="flex items-center gap-3 shrink-0">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="hidden sm:flex rounded-xl text-xs font-bold border-slate-200 hover:bg-[#fbc036]/20 hover:border-[#fbc036]"
+                    >
+                      <PlayCircle className="h-3.5 w-3.5 mr-1 text-[#01959f]" />
+                      Kelola Sesi
+                    </Button>
+                    <div className="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center group-hover:bg-[#01959f]/10 group-hover:text-[#01959f] transition-colors">
+                      <ChevronRight className="h-4 w-4" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
           ))}
         </div>
       )}

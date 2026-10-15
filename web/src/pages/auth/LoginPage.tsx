@@ -6,7 +6,8 @@ import { authApi } from "@/services/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Loader2, Sparkles, Eye, EyeOff, ShieldCheck, ArrowRight } from "lucide-react";
+import { Loader2, Eye, EyeOff, ShieldCheck, ArrowRight, Award } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -45,27 +46,37 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen relative flex items-center justify-center p-4 bg-gradient-to-br from-slate-50 via-teal-50/20 to-slate-100 overflow-hidden">
+    <div className="min-h-screen relative flex items-center justify-center p-4 bg-gradient-to-br from-slate-50 via-teal-50/30 to-amber-50/20 overflow-hidden">
       {/* Ambient background decoration */}
       <div className="absolute top-[-10%] right-[-5%] w-[450px] h-[450px] rounded-full bg-primary/10 blur-3xl pointer-events-none" />
-      <div className="absolute bottom-[-10%] left-[-5%] w-[450px] h-[450px] rounded-full bg-secondary/15 blur-3xl pointer-events-none" />
+      <div className="absolute bottom-[-10%] left-[-5%] w-[450px] h-[450px] rounded-full bg-[#fbc036]/15 blur-3xl pointer-events-none" />
 
-      <div className="w-full max-w-md space-y-6 relative z-10">
+      <motion.div
+        initial={{ opacity: 0, y: 15 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.35, ease: "easeOut" }}
+        className="w-full max-w-md space-y-6 relative z-10"
+      >
         {/* Brand header */}
-        <div className="text-center space-y-2">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-primary text-primary-foreground shadow-md shadow-primary/25 mb-1">
-            <Sparkles className="h-6 w-6" />
+        <div className="text-center space-y-3">
+          <div className="inline-flex items-center justify-center p-3 rounded-2xl bg-white shadow-md border border-slate-100 mb-1">
+            <img
+              src="/images/rakamin-logo.png"
+              alt="Rakamin"
+              className="h-9 w-auto object-contain"
+            />
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900">
-            Rakamin AI Interview
-          </h1>
-          <p className="text-sm text-muted-foreground max-w-sm mx-auto">
+          <div className="flex items-center justify-center gap-1.5 text-xs font-bold text-[#01808a] bg-teal-100/70 border border-teal-200/80 px-3 py-1 rounded-full w-fit mx-auto">
+            <Award className="h-3.5 w-3.5 text-[#01959f]" />
+            <span>Talent Assessment Suite</span>
+          </div>
+          <p className="text-sm text-slate-600 max-w-sm mx-auto">
             Autonomous Technical Competency &amp; Fit/Gap Assessment Platform
           </p>
         </div>
 
         {/* Card */}
-        <div className="rounded-2xl border border-border/80 bg-card/90 backdrop-blur-md p-6 sm:p-8 shadow-xl shadow-slate-900/5 space-y-6">
+        <div className="rounded-3xl border border-slate-200/80 bg-white/95 backdrop-blur-md p-6 sm:p-8 shadow-xl shadow-slate-900/5 space-y-6">
           {/* Quick Demo Credentials Pill */}
           <div className="p-3 rounded-lg bg-teal-50/80 border border-teal-200/80 flex items-center justify-between gap-3 text-xs">
             <div className="space-y-0.5">
@@ -76,11 +87,11 @@ export default function LoginPage() {
             </div>
             <Button
               type="button"
-              variant="outline"
+              variant="cta"
               size="sm"
               onClick={handleQuickDemoLogin}
               disabled={loading}
-              className="h-7 text-xs bg-white text-teal-800 hover:bg-teal-50 hover:text-teal-900 border-teal-300 shadow-xs"
+              className="h-8 px-3 text-xs shadow-xs"
             >
               1-Click Sign In <ArrowRight className="h-3 w-3 ml-1" />
             </Button>
@@ -137,7 +148,7 @@ export default function LoginPage() {
               </div>
             )}
 
-            <Button type="submit" className="w-full h-10 font-medium shadow-md shadow-primary/20" disabled={loading}>
+            <Button type="submit" className="w-full h-10 font-bold shadow-md shadow-primary/20" disabled={loading}>
               {loading ? (
                 <>
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" /> Signing in...
@@ -153,7 +164,7 @@ export default function LoginPage() {
         <p className="text-center text-xs text-muted-foreground">
           Built with Monozukuri craftsmanship • Compliant with UU PDP No. 27/2022
         </p>
-      </div>
+      </motion.div>
     </div>
   );
 }

@@ -23,6 +23,7 @@ import { sessionsApi } from "@/services/sessions";
 import HardwareCheck from "@/components/HardwareCheck";
 import { CheckCircle, Mic, MicOff } from "lucide-react";
 import type { CandidateInfo, InterviewState, InterviewSpeaker, TranscriptTurn } from "@/types";
+import HeroBanner from "@/components/common/HeroBanner";
 
 export default function InterviewPage() {
   const { token } = useParams<{ token: string }>();
@@ -190,35 +191,38 @@ export default function InterviewPage() {
   // ── State A: Pre-start ──────────────────────────────────────────────────
   if (interviewState === "idle") {
     return (
-      <div className="max-w-xl mx-auto px-4 py-8 space-y-6">
-        <div className="text-center space-y-1">
-          <h1 className="text-xl font-semibold">{candidateInfo?.role_title ?? "AI Interview"}</h1>
-          {candidateInfo && (
-            <p className="text-sm text-muted-foreground">
-              {candidateInfo.time_limit_min} minutes
-            </p>
-          )}
-        </div>
+      <div className="max-w-2xl mx-auto px-4 py-8 space-y-6">
+        <HeroBanner
+          badgeText="⭐️ Sesi Wawancara Teknis Interaktif"
+          title={candidateInfo?.role_title ? `Wawancara AI: ${candidateInfo.role_title}` : "AI Technical Interview"}
+          highlightText="Rakamin Assessor"
+          subtitle="Selamat datang di sesi evaluasi teknis berbasis AI. Sesi ini akan menguji pemahaman dan pengalaman Anda melalui percakapan suara interaktif."
+          bulletPoints={[
+            `Durasi maksimal sesi: ${candidateInfo?.time_limit_min ?? 45} menit`,
+            "Interaksi suara dua arah secara langsung (Real-Time Voice AI)",
+            "Pastikan mikrofon aktif dan Anda berada di lingkungan yang tenang",
+          ]}
+          imageSrc="/images/interview.png"
+          imageAlt="Rakamin Candidate Interview"
+          imageFloatingBadge={{
+            title: "Enkripsi Aman",
+            subtitle: "UU PDP No. 27/2022",
+          }}
+        />
 
         {!hardwareCheckDone ? (
           <div className="space-y-4">
-            <div className="bg-muted/50 rounded-lg p-4 text-sm space-y-1.5 text-muted-foreground">
-              <p>• This is a voice interview. Make sure you're in a quiet place.</p>
-              <p>• The AI will ask follow-up questions — there are no scripts.</p>
-              <p>• The session will last up to {candidateInfo?.time_limit_min ?? "—"} minutes.</p>
-              <p>• Your mic will be active throughout. You can end anytime.</p>
-            </div>
             <HardwareCheck onStart={() => { setHardwareCheckDone(true); startInterview(); }} />
           </div>
         ) : (
           <div className="space-y-4">
-            <div className="flex items-center gap-2 text-sm text-green-700 bg-green-50 border border-green-200 rounded-lg px-4 py-2.5">
-              <CheckCircle className="h-4 w-4 shrink-0" />
-              <span>Hardware checks passed. You're ready to start.</span>
+            <div className="flex items-center gap-2 text-sm text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-2.5">
+              <CheckCircle className="h-4 w-4 shrink-0 text-emerald-600" />
+              <span>Pengecekan audio berhasil. Anda siap memulai wawancara.</span>
             </div>
-            <Button className="w-full" size="lg" onClick={startInterview}>
+            <Button variant="cta" className="w-full rounded-xl shadow-md font-bold" size="lg" onClick={startInterview}>
               <Mic className="h-4 w-4 mr-2" />
-              Start Interview
+              Mulai Sesi Wawancara AI
             </Button>
           </div>
         )}
@@ -229,13 +233,13 @@ export default function InterviewPage() {
   // ── State F: Complete ───────────────────────────────────────────────────
   if (interviewState === "complete") {
     return (
-      <div className="max-w-xl mx-auto px-4 py-16 text-center space-y-4">
-        <div className="text-4xl">✅</div>
-        <h2 className="text-xl font-semibold">Interview Complete</h2>
-        <p className="text-sm text-muted-foreground">
-          Thank you. The interview has been recorded.
-          <br />
-          The hiring team will review your results and follow up with you.
+      <div className="max-w-xl mx-auto px-4 py-16 text-center space-y-5">
+        <div className="w-16 h-16 rounded-3xl bg-teal-50 text-[#01959f] border border-teal-200 flex items-center justify-center mx-auto text-2xl shadow-xs">
+          ✓
+        </div>
+        <h2 className="text-2xl font-black text-slate-900 tracking-tight">Wawancara Selesai</h2>
+        <p className="text-sm text-slate-600 leading-relaxed max-w-md mx-auto">
+          Terima kasih telah menyelesaikan sesi wawancara. Data percakapan dan bukti kompetensi telah tersimpan dengan aman untuk dievaluasi oleh tim asesor.
         </p>
       </div>
     );

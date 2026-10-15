@@ -11,6 +11,8 @@ import { portfoliosApi } from "@/services/portfolios";
 import { usePolling } from "@/hooks/usePolling";
 import { ArrowLeft, Download, Loader2, RefreshCw, Zap, FileText } from "lucide-react";
 import type { Portfolio, AssessorOverride, Vacancy } from "@/types";
+import HeroBanner from "@/components/common/HeroBanner";
+import RakaminSpinner from "@/components/common/RakaminSpinner";
 
 export default function PortfolioPage() {
   const { id, sessionId } = useParams<{ id: string; sessionId: string }>();
@@ -96,26 +98,62 @@ export default function PortfolioPage() {
 
   if (loading) {
     return (
-      <div className="max-w-2xl mx-auto space-y-4">
-        <Skeleton className="h-8 w-64" />
-        <Skeleton className="h-48 w-full" />
-        <Skeleton className="h-48 w-full" />
+      <div className="max-w-4xl mx-auto py-12">
+        <RakaminSpinner text="Memuat portfolio hasil wawancara AI..." size="lg" />
       </div>
     );
   }
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
+    <div className="max-w-4xl mx-auto space-y-8 py-4 pb-12">
+      {/* Hero Banner */}
+      <HeroBanner
+        badgeText="⭐️ Candidate Competency Dossier"
+        title={candidateName ? `Portfolio AI: ${candidateName}` : "Portfolio Hasil Wawancara AI"}
+        highlightText="Rakamin B7"
+        subtitle="Dossier bukti kompetensi teknis dari rekaman wawancara suara kandidat, dilengkapi level AI, kutipan verbatim, dan assessor override."
+        bulletPoints={[
+          "Analisis bukti transkrip verbatim per skill anchor B7",
+          "Deteksi kompetensi tambahan (Discovered Skills)",
+          "Dukungan Assessor Human Override sesuai standar UU PDP & Monozukuri",
+        ]}
+        primaryAction={
+          !generating && portfolio
+            ? {
+                label: "Export PDF Portfolio",
+                onClick: () => handleExport("pdf"),
+                icon: <Download className="h-4 w-4 mr-1.5" />,
+              }
+            : undefined
+        }
+        secondaryAction={{
+          label: "Transkrip Percakapan",
+          onClick: () => navigate(`/assessments/${id}/sessions/${sessionId}/transcript`),
+          icon: <FileText className="h-4 w-4 mr-1.5" />,
+        }}
+        imageSrc="/images/resume.png"
+        imageAlt="Rakamin Competency Portfolio"
+        imageFloatingBadge={{
+          title: "Verbatim Evidence",
+          subtitle: "Auditable Signals",
+        }}
+      />
+
       {/* Header */}
-      <div className="flex items-start justify-between">
+      <div className="flex items-start justify-between pb-2 border-b border-slate-200">
         <div className="flex items-center gap-2">
-          <Link to={`/assessments/${id}/invite`} className="text-muted-foreground hover:text-foreground">
+          <Link
+            to={`/assessments/${id}/invite`}
+            className="p-1 rounded-md text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors"
+          >
             <ArrowLeft className="h-4 w-4" />
           </Link>
           <div>
-            <h1 className="text-lg font-semibold">Portfolio Results</h1>
+            <h2 className="text-xl font-bold tracking-tight text-slate-900">
+              Hasil Bukti Kompetensi
+            </h2>
             {candidateName && (
-              <p className="text-sm text-muted-foreground">{candidateName}</p>
+              <p className="text-xs text-slate-500">Kandidat: <span className="font-semibold text-slate-700">{candidateName}</span></p>
             )}
           </div>
         </div>
@@ -123,18 +161,19 @@ export default function PortfolioPage() {
         <div className="flex gap-2">
           <Link
             to={`/assessments/${id}/sessions/${sessionId}/transcript`}
-            className="inline-flex items-center gap-1 text-sm border rounded-md px-3 py-1.5 hover:bg-accent transition-colors"
+            className="inline-flex items-center gap-1 text-xs border border-slate-200 rounded-xl px-3 py-1.5 hover:bg-slate-50 transition-colors font-medium text-slate-700"
           >
-            <FileText className="h-3.5 w-3.5" />
-            Transcript
+            <FileText className="h-3.5 w-3.5 text-[#01959f]" />
+            Transkrip
           </Link>
           {!generating && portfolio && (
             <>
               <Button
-                variant="outline"
+                variant="cta"
                 size="sm"
                 onClick={() => handleExport("pdf")}
                 disabled={!!exporting}
+                className="rounded-xl text-xs shadow-xs"
               >
                 {exporting === "pdf" ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Download className="h-3.5 w-3.5 mr-1" />}
                 PDF
@@ -144,6 +183,7 @@ export default function PortfolioPage() {
                 size="sm"
                 onClick={() => handleExport("json")}
                 disabled={!!exporting}
+                className="rounded-xl text-xs"
               >
                 {exporting === "json" ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Download className="h-3.5 w-3.5 mr-1" />}
                 JSON
@@ -245,7 +285,7 @@ export default function PortfolioPage() {
                 ))}
               </SelectContent>
             </Select>
-            <Button onClick={handleRunFitGap} disabled={!selectedVacancy}>
+            <Button variant="cta" onClick={handleRunFitGap} disabled={!selectedVacancy} className="rounded-xl shadow-xs">
               Run Fit/Gap Analysis →
             </Button>
           </div>
