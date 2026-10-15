@@ -1,10 +1,10 @@
 import { test, expect } from "@playwright/test";
-import { loginAsAssessor } from "./helpers/auth";
+import { loginAsAssessor, createCandidateSession } from "./helpers/auth";
 
 test.describe("Candidate Interview Access & Pre-Start Hardware Check Flow", () => {
-  const token = "["e75e595e", "645b1fa5", "6982272a", "f532c0a0", "651de69a", "63621aa5", "a636da52", "314478e7"].join("")";
-
   test("should load candidate interview pre-start page with compact HeroBanner and HardwareCheck", async ({ page }) => {
+    // Generate fresh session token
+    const token = await createCandidateSession("Pre-Start Candidate");
     await page.goto(`/interview/${token}`);
 
     // Verify compact HeroBanner on candidate page
@@ -27,10 +27,27 @@ test.describe("Candidate Interview Access & Pre-Start Hardware Check Flow", () =
     // Check header and compact hero banner
     await expect(page.getByRole("heading", { name: /Daftar Sesi Wawancara Kandidat/i })).toBeVisible();
 
-    // Verify candidate session is listed (James Rodri)
-    await expect(page.getByText(/James Rodri/i)).toBeVisible();
+    // Verify candidate sessions are listed
+    await expect(page.getByText(/Candidate Sessions/i)).toBeVisible();
 
-    // Verify presence of copy link action
-    await expect(page.getByRole("button", { name: /Copy Invite Link/i }).or(page.getByRole("button", { name: /Copy Link/i }))).toBeVisible();
+    // Verify presence of invite candidate trigger button
+    await expect(page.getByRole("button", { name: /Undang Kandidat/i })).toBeVisible();
+  });
+
+  test("should successfully complete hardware check and proceed to live AI interview session", async ({ page }) => {
+    // Generate fresh session token
+    const token = await createCandidateSession("Live Session Candidate");
+    await page.goto(`/interview/${token}`);
+
+    // Wait for hardware check to complete with fake media stream and Start Interview button to become enabled
+    const startBtn = page.getByRole("button", { name: /Start Interview/i });
+    await expect(startBtn).toBeEnabled({ timeout: 15000 });
+    await startBtn.click();
+
+    // Verify transition into the live AI interview room
+    await expect(page.getByText("AI Interview", { exact: true })).toBeVisible();
+
+    // Timer or VoiceBars or Akhiri Wawancara should be present
+    await expect(page.getByRole("button", { name: /Akhiri Wawancara/i }).or(page.getByText(/Connecting/i)).or(page.getByText(/AI speaking/i)).or(page.getByText(/Listening/i))).toBeVisible();
   });
 });

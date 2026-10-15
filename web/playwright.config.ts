@@ -11,6 +11,14 @@ export default defineConfig({
   use: {
     baseURL: "http://localhost:5173",
     trace: "on-first-retry",
+    video: "on",
+    permissions: ["microphone", "camera"],
+    launchOptions: {
+      args: [
+        "--use-fake-ui-for-media-stream",
+        "--use-fake-device-for-media-stream",
+      ],
+    },
     headless: true,
   },
   projects: [

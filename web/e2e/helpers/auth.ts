@@ -11,3 +11,16 @@ export async function loginAsAssessor(page: Page) {
     localStorage.setItem("auth_token", token);
   }, TEST_TOKEN);
 }
+
+export async function createCandidateSession(candidateName = "E2E Test Candidate"): Promise<string> {
+  const res = await fetch("http://localhost:3001/api/v1/assessments/2/sessions", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${TEST_TOKEN}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ candidate_name: candidateName }),
+  });
+  const data = await res.json();
+  return data.session.invite_token;
+}
