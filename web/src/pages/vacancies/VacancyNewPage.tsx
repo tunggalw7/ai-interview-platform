@@ -51,7 +51,17 @@ export default function VacancyNewPage() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto space-y-8 pb-12">
+    <div className="max-w-4xl mx-auto space-y-6 pb-12">
+      {/* Breadcrumb */}
+      <div className="flex items-center gap-2 pb-2 border-b border-slate-200">
+        <Link to="/vacancies" className="p-1 rounded-md text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors">
+          <ArrowLeft className="h-4 w-4" />
+        </Link>
+        <span className="text-xs text-slate-500">Lowongan</span>
+        <span className="text-xs text-slate-400">/</span>
+        <span className="text-xs font-bold text-slate-900">Tambah Lowongan Baru</span>
+      </div>
+
       {/* Hero Banner */}
       <HeroBanner
         badgeText="⭐️ Role Vacancy & Rubric Creator"
@@ -70,15 +80,6 @@ export default function VacancyNewPage() {
           subtitle: "B7 Taxonomy",
         }}
       />
-
-      <div className="flex items-center gap-2 pb-2 border-b border-slate-200">
-        <Link to="/vacancies" className="p-1 rounded-md text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors">
-          <ArrowLeft className="h-4 w-4" />
-        </Link>
-        <span className="text-xs text-slate-500">Lowongan</span>
-        <span className="text-xs text-slate-400">/</span>
-        <span className="text-xs font-bold text-slate-900">Tambah Lowongan Baru</span>
-      </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Card 1: Role Information */}

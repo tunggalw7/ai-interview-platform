@@ -239,36 +239,7 @@ export default function AssessmentInvitePage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8 py-4 pb-12">
-      {/* Hero Banner with interview illustration */}
-      <HeroBanner
-        badgeText="⭐️ Candidate AI Interview Hub"
-        title={assessment?.name || "Undang & Kelola Sesi Kandidat"}
-        highlightText="Live Session"
-        subtitle="Hasilkan link undangan sesi wawancara berbasis AI, monitor percakapan live secara realtime, dan evaluasi hasil portfolio kompetensi."
-        bulletPoints={[
-          `Batas waktu sesi wawancara: ${assessment?.time_limit_min || 45} menit`,
-          `${assessment?.skills?.length || 0} rubrik kompetensi B7 terintegrasi`,
-          "Link token unik satu kali pakai (Single-use Token) terproteksi",
-        ]}
-        primaryAction={{
-          label: "Undang Kandidat Baru",
-          onClick: openInviteDialog,
-          icon: <Plus className="h-4 w-4 mr-1.5" />,
-        }}
-        secondaryAction={{
-          label: "Edit Rubrik Assessment",
-          onClick: () => navigate(`/assessments/${id}/edit`),
-          icon: <Pencil className="h-4 w-4 mr-1.5" />,
-        }}
-        imageSrc="/images/interview.png"
-        imageAlt="Rakamin AI Technical Interview"
-        imageFloatingBadge={{
-          title: "Sesi Terproteksi",
-          subtitle: "Single-use Token",
-        }}
-      />
-
+    <div className="max-w-4xl mx-auto space-y-6 py-2 pb-12">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200">
         <div className="flex items-start gap-3">
@@ -315,6 +286,25 @@ export default function AssessmentInvitePage() {
           </Button>
         </div>
       </div>
+
+      {/* Hero Banner with interview illustration */}
+      <HeroBanner
+        badgeText="⭐️ Candidate AI Interview Hub"
+        title={assessment?.name || "Undang & Kelola Sesi Kandidat"}
+        highlightText="Live Session"
+        subtitle="Hasilkan link undangan sesi wawancara berbasis AI, monitor percakapan live secara realtime, dan evaluasi hasil portfolio kompetensi."
+        bulletPoints={[
+          `Batas waktu sesi: ${assessment?.time_limit_min || 45} menit`,
+          `${assessment?.skills?.length || 0} rubrik kompetensi B7 terintegrasi`,
+          "Link token unik satu kali pakai (Single-use Token)",
+        ]}
+        imageSrc="/images/interview.png"
+        imageAlt="Rakamin AI Technical Interview"
+        imageFloatingBadge={{
+          title: "Sesi Terproteksi",
+          subtitle: "Single-use Token",
+        }}
+      />
 
       {/* Invite candidate modal */}
       <Dialog open={showInviteDialog} onOpenChange={setShowInviteDialog}>

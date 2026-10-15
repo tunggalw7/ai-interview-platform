@@ -108,72 +108,75 @@ export default function HeroBanner({
   // Card variant (inspired by Reference Image 2)
   return (
     <motion.div
-      initial={{ opacity: 0, y: 12 }}
+      initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.35, ease: "easeOut" }}
-      className="relative overflow-hidden rounded-3xl border border-teal-100 bg-gradient-to-br from-teal-50/60 via-white to-amber-50/40 p-6 sm:p-8 lg:p-10 shadow-sm shadow-slate-900/5 mb-8"
+      transition={{ duration: 0.25, ease: "easeOut" }}
+      className="w-full relative overflow-hidden rounded-2xl border border-teal-100/80 bg-gradient-to-r from-teal-50/70 via-white to-amber-50/40 p-3.5 sm:py-3.5 sm:px-5 lg:px-6 shadow-xs mb-5"
     >
       {/* Decorative ambient radial orbs */}
-      <div className="absolute top-[-20%] right-[-10%] w-[350px] h-[350px] rounded-full bg-primary/10 blur-3xl pointer-events-none" />
-      <div className="absolute bottom-[-20%] left-[-10%] w-[300px] h-[300px] rounded-full bg-[#fbc036]/15 blur-3xl pointer-events-none" />
+      <div className="absolute top-[-20%] right-[-10%] w-[240px] h-[240px] rounded-full bg-primary/10 blur-3xl pointer-events-none" />
+      <div className="absolute bottom-[-20%] left-[-10%] w-[200px] h-[200px] rounded-full bg-[#fbc036]/15 blur-3xl pointer-events-none" />
 
-      <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 items-center">
-        {/* Left Column: Headlines, bullets, and CTAs */}
-        <div className="md:col-span-7 space-y-4 sm:space-y-5">
-          {badgeText && (
-            <div className="inline-flex items-center gap-1.5 text-xs font-bold text-[#01808a] bg-teal-100/70 border border-teal-200/80 px-3 py-1 rounded-full shadow-2xs">
-              <span>{badgeText}</span>
-            </div>
-          )}
-
-          <div className="space-y-2">
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-slate-900 leading-tight">
+      <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-3">
+        {/* Left Column: Headlines, bullets chips, and CTAs */}
+        <div className="flex-1 space-y-2 min-w-0">
+          <div className="flex flex-wrap items-center gap-2">
+            {badgeText && (
+              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-[#01808a] bg-teal-100/80 border border-teal-200/80 px-2 py-0.5 rounded-full shadow-2xs">
+                {badgeText}
+              </span>
+            )}
+            <h1 className="text-base sm:text-lg lg:text-xl font-black tracking-tight text-slate-900 leading-snug">
               {title}{" "}
               {highlightText && (
-                <span className="text-[#01959f] underline decoration-[#fbc036] decoration-4 underline-offset-4">
+                <span className="text-[#01959f] underline decoration-[#fbc036] decoration-2 underline-offset-4">
                   {highlightText}
                 </span>
               )}
             </h1>
-            <p className="text-xs sm:text-sm lg:text-base text-slate-600 leading-relaxed max-w-xl">
-              {subtitle}
-            </p>
           </div>
 
-          {/* Checklist bullets */}
+          <p className="text-xs text-slate-600 leading-relaxed max-w-2xl">
+            {subtitle}
+          </p>
+
+          {/* Compact checklist chips */}
           {bulletPoints && bulletPoints.length > 0 && (
-            <div className="space-y-2 pt-0.5">
+            <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
               {bulletPoints.map((point, i) => (
-                <div key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700 font-medium">
-                  <CheckCircle2 className="h-4.5 w-4.5 text-[#01959f] shrink-0 mt-0.5" />
-                  <span>{point}</span>
-                </div>
+                <span
+                  key={i}
+                  className="inline-flex items-center gap-1 text-[11px] font-medium text-slate-700 bg-white/90 border border-teal-100/90 px-2 py-0.5 rounded-md shadow-2xs"
+                >
+                  <CheckCircle2 className="h-3 w-3 text-[#01959f] shrink-0" />
+                  <span className="truncate max-w-[280px] sm:max-w-none">{point}</span>
+                </span>
               ))}
             </div>
           )}
 
-          {/* CTA Buttons in #fbc036 */}
+          {/* CTA Buttons */}
           {(primaryAction || secondaryAction) && (
-            <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 pt-2">
+            <div className="flex flex-wrap items-center gap-2 pt-1">
               {primaryAction && (
                 <Button
                   variant="cta"
-                  size="lg"
+                  size="sm"
                   onClick={primaryAction.onClick}
-                  className="rounded-xl px-5 sm:px-6 font-bold text-xs sm:text-sm shadow-md shadow-amber-400/20"
+                  className="rounded-xl px-3.5 font-bold text-xs shadow-xs h-8"
                 >
                   {primaryAction.icon}
                   <span>{primaryAction.label}</span>
-                  <ArrowRight className="h-4 w-4 ml-1.5" />
+                  <ArrowRight className="h-3 w-3 ml-1" />
                 </Button>
               )}
 
               {secondaryAction && (
                 <Button
                   variant="outline"
-                  size="lg"
+                  size="sm"
                   onClick={secondaryAction.onClick}
-                  className="rounded-xl px-4 sm:px-5 font-semibold text-xs sm:text-sm bg-white/90 border-slate-200 hover:bg-slate-50 text-slate-700"
+                  className="rounded-xl px-3 font-semibold text-xs bg-white/90 border-slate-200 hover:bg-slate-50 text-slate-700 h-8"
                 >
                   {secondaryAction.icon}
                   <span>{secondaryAction.label}</span>
@@ -183,72 +186,45 @@ export default function HeroBanner({
           )}
         </div>
 
-        {/* Right Column: Seamless Cutout or Clean Photo Card */}
-        <div className="hidden md:flex md:col-span-5 items-center justify-center relative">
+        {/* Right Column: Compact illustration or photo */}
+        <div className="hidden sm:flex shrink-0 items-center justify-end relative self-center">
           {imageSrc.includes("hero-rakamin-logo") || imageSrc.includes("rakamin-logo") ? (
-            /* Organic Transparent Cutout: No boxed frame, natural floating illustration */
-            <div className="relative w-full max-w-[320px] lg:max-w-[380px] flex items-center justify-center">
-              {/* Soft ambient aura blur behind cutout */}
-              <div className="absolute -inset-4 bg-gradient-to-br from-[#01959f]/20 via-[#fbc036]/15 to-transparent rounded-full blur-2xl pointer-events-none" />
-
-              <motion.img
-                whileHover={{ scale: 1.03 }}
-                transition={{ duration: 0.3 }}
+            <div className="relative w-auto flex items-center justify-center">
+              <div className="absolute -inset-1 bg-gradient-to-br from-[#01959f]/20 via-[#fbc036]/15 to-transparent rounded-full blur-lg pointer-events-none" />
+              <img
                 src={imageSrc}
                 alt={imageAlt}
-                className="relative z-10 w-full h-auto max-h-[300px] object-contain drop-shadow-xl select-none pointer-events-none"
+                className="relative z-10 h-16 sm:h-20 lg:h-24 w-auto object-contain drop-shadow-sm select-none pointer-events-none"
               />
-
-              {/* Floating verification badge */}
               {imageFloatingBadge && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.2, duration: 0.3 }}
-                  className="absolute bottom-2 -left-2 z-20 bg-white/95 backdrop-blur-md rounded-2xl p-2.5 sm:p-3 border border-slate-200/80 shadow-lg shadow-slate-900/5 flex items-center gap-2.5"
-                >
-                  <div className="w-8 h-8 rounded-xl bg-[#01959f] text-white flex items-center justify-center font-bold text-xs shadow-xs">
+                <div className="absolute -bottom-1 -left-2 z-20 bg-white/95 backdrop-blur-md rounded-lg py-1 px-2 border border-slate-200/80 shadow-xs flex items-center gap-1.5">
+                  <div className="w-4 h-4 rounded bg-[#01959f] text-white flex items-center justify-center font-bold text-[9px]">
                     ✓
                   </div>
                   <div>
-                    <p className="text-xs font-bold text-slate-900 leading-none">
+                    <p className="text-[10px] font-bold text-slate-900 leading-none">
                       {imageFloatingBadge.title}
                     </p>
-                    <p className="text-[10px] text-muted-foreground mt-0.5">
-                      {imageFloatingBadge.subtitle}
-                    </p>
                   </div>
-                </motion.div>
+                </div>
               )}
             </div>
           ) : (
-            /* Real Photography Card: Modern rounded-2xl photo frame with clean aspect ratio */
-            <div className="relative w-full max-w-[320px] lg:max-w-[360px] aspect-4/3 rounded-2xl overflow-hidden shadow-xl shadow-teal-950/10 border-2 border-white/90 group">
-              <motion.img
-                whileHover={{ scale: 1.05 }}
-                transition={{ duration: 0.4 }}
+            <div className="relative w-28 sm:w-36 lg:w-44 h-16 sm:h-20 lg:h-22 rounded-xl overflow-hidden shadow-xs border border-white/90 group">
+              <img
                 src={imageSrc}
                 alt={imageAlt}
                 className="w-full h-full object-cover select-none"
               />
-
-              {/* Overlay gradient for text readability */}
               <div className="absolute inset-0 bg-gradient-to-t from-slate-900/30 via-transparent to-transparent pointer-events-none" />
-
-              {/* Floating verification badge */}
               {imageFloatingBadge && (
-                <div className="absolute bottom-2 left-2 right-2 z-20 bg-white/95 backdrop-blur-md rounded-xl p-2 sm:p-2.5 border border-white/60 shadow-md flex items-center gap-2">
-                  <div className="w-7 h-7 rounded-lg bg-[#01959f] text-white flex items-center justify-center font-bold text-xs shrink-0">
+                <div className="absolute bottom-1 left-1 right-1 z-20 bg-white/95 backdrop-blur-md rounded-md py-0.5 px-1.5 border border-white/60 shadow-2xs flex items-center gap-1">
+                  <div className="w-3.5 h-3.5 rounded bg-[#01959f] text-white flex items-center justify-center font-bold text-[8px] shrink-0">
                     ✓
                   </div>
-                  <div className="min-w-0">
-                    <p className="text-xs font-bold text-slate-900 leading-none truncate">
-                      {imageFloatingBadge.title}
-                    </p>
-                    <p className="text-[10px] text-slate-500 mt-0.5 truncate">
-                      {imageFloatingBadge.subtitle}
-                    </p>
-                  </div>
+                  <p className="text-[9px] font-bold text-slate-900 leading-none truncate">
+                    {imageFloatingBadge.title}
+                  </p>
                 </div>
               )}
             </div>

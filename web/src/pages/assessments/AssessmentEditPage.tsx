@@ -33,7 +33,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { ArrowLeft, Plus, Loader2, Trash2, Clock, Sparkles, Layers } from "lucide-react";
+import { ArrowLeft, Plus, Loader2, Trash2, Clock, Sparkles, Layers, Globe } from "lucide-react";
 import { assessmentsApi } from "@/services/assessments";
 import { TIME_LIMIT_OPTIONS } from "@/utils/constants";
 import type { AssessmentSkill } from "@/types";
@@ -123,26 +123,7 @@ export default function AssessmentEditPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8 pb-12">
-      {/* Hero Banner with Rakamin program photo */}
-      <HeroBanner
-        badgeText="⭐️ Assessment & Rubric Editor"
-        title="Edit Technical Assessment"
-        highlightText="Rubrik B7"
-        subtitle="Sesuaikan judul role, batas durasi sesi, dan susunan rubrik kompetensi terstandarisasi."
-        bulletPoints={[
-          "Penetapan kriteria anchor kompetensi terstruktur (L1 s/d L5)",
-          "Reorganisasi urutan prioritas probing wawancara AI",
-          "Sinkronisasi langsung ke pembuatan token undangan kandidat",
-        ]}
-        imageSrc="/images/program.png"
-        imageAlt="Rakamin Edit Assessment"
-        imageFloatingBadge={{
-          title: "B7 Rubric Matrix",
-          subtitle: "Standardized Anchors",
-        }}
-      />
-
+    <div className="max-w-4xl mx-auto space-y-6 pb-12">
       {/* Breadcrumb & Navigation */}
       <div className="flex items-center justify-between gap-4 pb-2 border-b border-slate-200">
         <div className="flex items-center gap-2">
@@ -173,23 +154,40 @@ export default function AssessmentEditPage() {
                 Konfirmasi Hapus Assessment?
               </AlertDialogTitle>
               <AlertDialogDescription className="text-sm text-slate-600">
-                Tindakan ini akan menghapus assessment &quot;{form.watch("name")}&quot; secara permanen. Pastikan assessment ini tidak memiliki sesi wawancara yang sedang aktif.
+                Tindakan ini akan menghapus assessment ini secara permanen dari sistem. Sesi kandidat yang terhubung tidak akan dapat diakses kembali.
               </AlertDialogDescription>
             </AlertDialogHeader>
-            <AlertDialogFooter className="mt-4 gap-2">
-              <AlertDialogCancel className="rounded-xl">Batal</AlertDialogCancel>
+            <AlertDialogFooter>
+              <AlertDialogCancel className="rounded-xl text-xs">Batal</AlertDialogCancel>
               <AlertDialogAction
                 onClick={handleDelete}
-                disabled={deleting}
-                className="bg-destructive hover:bg-destructive/90 text-white font-semibold rounded-xl"
+                className="bg-destructive hover:bg-destructive/90 text-white rounded-xl text-xs font-bold"
               >
-                {deleting && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
-                Ya, Hapus
+                Ya, Hapus Permanen
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
       </div>
+
+      {/* Hero Banner with Rakamin program photo */}
+      <HeroBanner
+        badgeText="⭐️ Assessment & Rubric Editor"
+        title="Edit Technical Assessment"
+        highlightText="Rubrik B7"
+        subtitle="Sesuaikan judul role, batas durasi sesi, dan susunan rubrik kompetensi terstandarisasi."
+        bulletPoints={[
+          "Penetapan kriteria anchor kompetensi terstruktur (L1 s/d L5)",
+          "Reorganisasi urutan prioritas probing wawancara AI",
+          "Sinkronisasi langsung ke pembuatan token undangan kandidat",
+        ]}
+        imageSrc="/images/program.png"
+        imageAlt="Rakamin Edit Assessment"
+        imageFloatingBadge={{
+          title: "B7 Rubric Matrix",
+          subtitle: "Standardized Anchors",
+        }}
+      />
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Card 1: Basic Config */}
@@ -215,9 +213,9 @@ export default function AssessmentEditPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
             <div className="space-y-2">
-              <Label className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
-                <Clock className="h-3.5 w-3.5 text-slate-400" />
-                Batas Waktu Sesi (Menit) <span className="text-destructive">*</span>
+              <Label className="h-5 flex items-center gap-1.5 text-xs font-bold text-slate-700 uppercase tracking-wider">
+                <Clock className="h-3.5 w-3.5 text-slate-400 shrink-0" />
+                <span>Batas Waktu Sesi (Menit) <span className="text-destructive">*</span></span>
               </Label>
               <Select
                 value={String(form.watch("time_limit_min"))}
@@ -237,8 +235,9 @@ export default function AssessmentEditPage() {
             </div>
 
             <div className="space-y-2">
-              <Label className="text-xs font-bold text-slate-700 uppercase tracking-wider">
-                Bahasa Wawancara AI
+              <Label className="h-5 flex items-center gap-1.5 text-xs font-bold text-slate-700 uppercase tracking-wider">
+                <Globe className="h-3.5 w-3.5 text-slate-400 shrink-0" />
+                <span>Bahasa Wawancara AI</span>
               </Label>
               <Select
                 value={form.watch("language") || "en"}

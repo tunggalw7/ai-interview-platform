@@ -101,26 +101,7 @@ export default function VacancyEditPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8 pb-12">
-      {/* Hero Banner */}
-      <HeroBanner
-        badgeText="⭐️ Role Vacancy & Rubric Editor"
-        title="Edit Profil Lowongan Pekerjaan"
-        highlightText="Standar B7"
-        subtitle="Perbarui target rubrik kompetensi, dimensi budaya kerja, dan ekspektasi performa kandidat."
-        bulletPoints={[
-          "Penetapan dimensi kesesuaian kultur (Culture Dimensions)",
-          "Ekspektasi kompetensi B7 terstandarisasi per level",
-          "Sinkronisasi langsung dengan perbandingan fit/gap otomatis",
-        ]}
-        imageSrc="/images/counseling.png"
-        imageAlt="Rakamin Edit Vacancy"
-        imageFloatingBadge={{
-          title: "Standar Role",
-          subtitle: "B7 Taxonomy",
-        }}
-      />
-
+    <div className="max-w-4xl mx-auto space-y-6 pb-12">
       {/* Breadcrumb & Navigation */}
       <div className="flex items-center justify-between gap-4 pb-2 border-b border-slate-200">
         <div className="flex items-center gap-2">
@@ -151,23 +132,40 @@ export default function VacancyEditPage() {
                 Konfirmasi Hapus Lowongan?
               </AlertDialogTitle>
               <AlertDialogDescription className="text-sm text-slate-600">
-                Tindakan ini akan menghapus profil lowongan &quot;{watch("role_title")}&quot; beserta target benchmark rubrik dan laporan fit/gap terkait secara permanen.
+                Tindakan ini akan menghapus data lowongan dan target rubrik kompetensi dari sistem secara permanen.
               </AlertDialogDescription>
             </AlertDialogHeader>
-            <AlertDialogFooter className="mt-4 gap-2">
-              <AlertDialogCancel className="rounded-xl">Batal</AlertDialogCancel>
+            <AlertDialogFooter>
+              <AlertDialogCancel className="rounded-xl text-xs">Batal</AlertDialogCancel>
               <AlertDialogAction
                 onClick={handleDelete}
-                disabled={deleting}
-                className="bg-destructive hover:bg-destructive/90 text-white font-semibold rounded-xl"
+                className="bg-destructive hover:bg-destructive/90 text-white rounded-xl text-xs font-bold"
               >
-                {deleting && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
-                Ya, Hapus
+                Ya, Hapus Permanen
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
       </div>
+
+      {/* Hero Banner */}
+      <HeroBanner
+        badgeText="⭐️ Role Vacancy & Rubric Editor"
+        title="Edit Profil Lowongan Pekerjaan"
+        highlightText="Standar B7"
+        subtitle="Perbarui target rubrik kompetensi, dimensi budaya kerja, dan ekspektasi performa kandidat."
+        bulletPoints={[
+          "Penetapan dimensi kesesuaian kultur (Culture Dimensions)",
+          "Ekspektasi kompetensi B7 terstandarisasi per level",
+          "Sinkronisasi langsung dengan perbandingan fit/gap otomatis",
+        ]}
+        imageSrc="/images/counseling.png"
+        imageAlt="Rakamin Edit Vacancy"
+        imageFloatingBadge={{
+          title: "Standar Role",
+          subtitle: "B7 Taxonomy",
+        }}
+      />
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Card 1: Role Information */}

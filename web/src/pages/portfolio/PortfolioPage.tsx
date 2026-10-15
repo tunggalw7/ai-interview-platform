@@ -105,40 +105,7 @@ export default function PortfolioPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8 py-4 pb-12">
-      {/* Hero Banner */}
-      <HeroBanner
-        badgeText="⭐️ Candidate Competency Dossier"
-        title={candidateName ? `Portfolio AI: ${candidateName}` : "Portfolio Hasil Wawancara AI"}
-        highlightText="Rakamin B7"
-        subtitle="Dossier bukti kompetensi teknis dari rekaman wawancara suara kandidat, dilengkapi level AI, kutipan verbatim, dan assessor override."
-        bulletPoints={[
-          "Analisis bukti transkrip verbatim per skill anchor B7",
-          "Deteksi kompetensi tambahan (Discovered Skills)",
-          "Dukungan Assessor Human Override sesuai standar UU PDP & Monozukuri",
-        ]}
-        primaryAction={
-          !generating && portfolio
-            ? {
-                label: "Export PDF Portfolio",
-                onClick: () => handleExport("pdf"),
-                icon: <Download className="h-4 w-4 mr-1.5" />,
-              }
-            : undefined
-        }
-        secondaryAction={{
-          label: "Transkrip Percakapan",
-          onClick: () => navigate(`/assessments/${id}/sessions/${sessionId}/transcript`),
-          icon: <FileText className="h-4 w-4 mr-1.5" />,
-        }}
-        imageSrc="/images/resume.png"
-        imageAlt="Rakamin Competency Portfolio"
-        imageFloatingBadge={{
-          title: "Verbatim Evidence",
-          subtitle: "Auditable Signals",
-        }}
-      />
-
+    <div className="max-w-4xl mx-auto space-y-6 py-2 pb-12">
       {/* Header */}
       <div className="flex items-start justify-between pb-2 border-b border-slate-200">
         <div className="flex items-center gap-2">
@@ -192,6 +159,25 @@ export default function PortfolioPage() {
           )}
         </div>
       </div>
+
+      {/* Hero Banner */}
+      <HeroBanner
+        badgeText="⭐️ Candidate Competency Dossier"
+        title={candidateName ? `Portfolio AI: ${candidateName}` : "Portfolio Hasil Wawancara AI"}
+        highlightText="Rakamin B7"
+        subtitle="Dossier bukti kompetensi teknis dari rekaman wawancara suara kandidat, dilengkapi level AI, kutipan verbatim, dan assessor override."
+        bulletPoints={[
+          "Analisis bukti transkrip verbatim per skill anchor B7",
+          "Deteksi kompetensi tambahan (Discovered Skills)",
+          "Dukungan Assessor Human Override sesuai standar UU PDP & Monozukuri",
+        ]}
+        imageSrc="/images/resume.png"
+        imageAlt="Rakamin Competency Portfolio"
+        imageFloatingBadge={{
+          title: "Verbatim Evidence",
+          subtitle: "Auditable Signals",
+        }}
+      />
 
       {/* Generating state */}
       {generating && (

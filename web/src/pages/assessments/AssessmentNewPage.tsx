@@ -23,7 +23,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Separator } from "@/components/ui/separator";
 import SkillCard from "@/components/assessment/SkillCard";
 import SkillPicker from "@/components/assessment/SkillPicker";
-import { ArrowLeft, Plus, Loader2 } from "lucide-react";
+import { ArrowLeft, Plus, Loader2, Clock, Globe } from "lucide-react";
 import { assessmentsApi } from "@/services/assessments";
 import { TIME_LIMIT_OPTIONS } from "@/utils/constants";
 import type { AssessmentSkill } from "@/types";
@@ -108,7 +108,17 @@ export default function AssessmentNewPage() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto space-y-8 pb-12">
+    <div className="max-w-4xl mx-auto space-y-6 pb-12">
+      {/* Breadcrumb */}
+      <div className="flex items-center gap-2 pb-2 border-b border-slate-200">
+        <Link to="/assessments" className="p-1 rounded-md text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors">
+          <ArrowLeft className="h-4 w-4" />
+        </Link>
+        <span className="text-xs text-slate-500">Assessments</span>
+        <span className="text-xs text-slate-400">/</span>
+        <span className="text-xs font-bold text-slate-900">Buat Assessment Baru</span>
+      </div>
+
       {/* Hero Banner */}
       <HeroBanner
         badgeText="⭐️ Assessment & Rubric Builder"
@@ -127,16 +137,6 @@ export default function AssessmentNewPage() {
           subtitle: "Standardized Anchors",
         }}
       />
-
-      {/* Breadcrumb */}
-      <div className="flex items-center gap-2 pb-2 border-b border-slate-200">
-        <Link to="/assessments" className="p-1 rounded-md text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors">
-          <ArrowLeft className="h-4 w-4" />
-        </Link>
-        <span className="text-xs text-slate-500">Assessments</span>
-        <span className="text-xs text-slate-400">/</span>
-        <span className="text-xs font-bold text-slate-900">Buat Assessment Baru</span>
-      </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Card 1: Main Configuration */}
@@ -167,8 +167,9 @@ export default function AssessmentNewPage() {
           {/* 2-col for Time Limit and Language */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
             <div className="space-y-2">
-              <Label className="text-xs font-bold text-slate-700 uppercase tracking-wider">
-                Batas Waktu Sesi (Menit) <span className="text-destructive">*</span>
+              <Label className="h-5 flex items-center gap-1.5 text-xs font-bold text-slate-700 uppercase tracking-wider">
+                <Clock className="h-3.5 w-3.5 text-slate-400 shrink-0" />
+                <span>Batas Waktu Sesi (Menit) <span className="text-destructive">*</span></span>
               </Label>
               <Select
                 defaultValue="45"
@@ -188,8 +189,9 @@ export default function AssessmentNewPage() {
             </div>
 
             <div className="space-y-2">
-              <Label className="text-xs font-bold text-slate-700 uppercase tracking-wider">
-                Bahasa Wawancara AI
+              <Label className="h-5 flex items-center gap-1.5 text-xs font-bold text-slate-700 uppercase tracking-wider">
+                <Globe className="h-3.5 w-3.5 text-slate-400 shrink-0" />
+                <span>Bahasa Wawancara AI</span>
               </Label>
               <Select
                 defaultValue="en"

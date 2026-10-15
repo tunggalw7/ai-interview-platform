@@ -133,40 +133,7 @@ export default function FitGapReportPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8 py-4 pb-12">
-      {/* Hero Banner */}
-      <HeroBanner
-        badgeText="⭐️ Multi-Model Fit/Gap Analysis"
-        title={vacancy?.role_title ? `Fit/Gap Evaluation: ${vacancy.role_title}` : "Fit/Gap Assessment Report"}
-        highlightText="Rakamin AI"
-        subtitle="Komparasi terverifikasi antara capaian kompetensi kandidat terhadap ekspektasi rubric lowongan kerja."
-        bulletPoints={[
-          "Analisis delta level skill (Match, Exceed, Gap, Not Assessed)",
-          "Narasi kesesuaian kultur (Culture Fit) terstruktur",
-          "Human override audit trail & PDF export compliant",
-        ]}
-        primaryAction={
-          report
-            ? {
-                label: "Export Dokumen PDF",
-                onClick: () => handleExport("pdf"),
-                icon: <Download className="h-4 w-4 mr-1.5" />,
-              }
-            : undefined
-        }
-        secondaryAction={{
-          label: "Kembali ke Portfolio",
-          onClick: () => window.history.back(),
-          icon: <ArrowLeft className="h-4 w-4 mr-1.5" />,
-        }}
-        imageSrc="/images/counseling.png"
-        imageAlt="Rakamin Fit/Gap Evaluation"
-        imageFloatingBadge={{
-          title: "100% Objektif",
-          subtitle: "Multi-model Validated",
-        }}
-      />
-
+    <div className="max-w-4xl mx-auto space-y-6 py-2 pb-12">
       {/* Navigation & Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200">
         <div className="space-y-1">
@@ -242,6 +209,25 @@ export default function FitGapReportPage() {
           </div>
         )}
       </div>
+
+      {/* Hero Banner */}
+      <HeroBanner
+        badgeText="⭐️ Multi-Model Fit/Gap Analysis"
+        title={vacancy?.role_title ? `Fit/Gap Evaluation: ${vacancy.role_title}` : "Fit/Gap Assessment Report"}
+        highlightText="Rakamin AI"
+        subtitle="Komparasi terverifikasi antara capaian kompetensi kandidat terhadap ekspektasi rubric lowongan kerja."
+        bulletPoints={[
+          "Analisis delta level skill (Match, Exceed, Gap, Not Assessed)",
+          "Narasi kesesuaian kultur (Culture Fit) terstruktur",
+          "Human override audit trail & PDF export compliant",
+        ]}
+        imageSrc="/images/counseling.png"
+        imageAlt="Rakamin Fit/Gap Evaluation"
+        imageFloatingBadge={{
+          title: "100% Objektif",
+          subtitle: "Multi-model Validated",
+        }}
+      />
 
       {/* Error alert if any */}
       {fetchError && (
