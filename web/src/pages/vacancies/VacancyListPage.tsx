@@ -31,6 +31,31 @@ import HeroBanner from "@/components/common/HeroBanner";
 import RakaminSpinner from "@/components/common/RakaminSpinner";
 import { motion } from "framer-motion";
 
+interface RoleCategory {
+  id: string;
+  label: string;
+  keywords?: string[];
+}
+
+const ROLE_CATEGORIES: RoleCategory[] = [
+  { id: "all", label: "Semua Kategori" },
+  {
+    id: "engineering",
+    label: "Engineering & Tech",
+    keywords: ["engineer", "developer", "frontend", "backend", "fullstack", "software", "devops", "qa", "tech"],
+  },
+  {
+    id: "product",
+    label: "Product & Design",
+    keywords: ["product", "design", "ui", "ux", "pm", "owner"],
+  },
+  {
+    id: "data",
+    label: "Data & AI",
+    keywords: ["data", "analyst", "analytics", "ai", "machine learning", "bi", "scientist"],
+  },
+];
+
 export default function VacancyListPage() {
   const [vacancies, setVacancies] = useState<Vacancy[]>([]);
   const [loading, setLoading] = useState(true);
@@ -38,7 +63,7 @@ export default function VacancyListPage() {
   const [deleteError, setDeleteError] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedFilter, setSelectedFilter] = useState("all");
+  const [selectedFilter, setSelectedFilter] = useState<string>("all");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -67,13 +92,30 @@ export default function VacancyListPage() {
 
   const filteredVacancies = useMemo(() => {
     return vacancies.filter((v) => {
+      // 1. Text search matching
+      const query = searchQuery.trim().toLowerCase();
       const matchSearch =
-        v.role_title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        v.culture_dimensions?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        v.skills?.some((s) => s.skill_label.toLowerCase().includes(searchQuery.toLowerCase()));
-      return matchSearch;
+        !query ||
+        v.role_title.toLowerCase().includes(query) ||
+        v.culture_dimensions?.toLowerCase().includes(query) ||
+        v.competency_expectations?.toLowerCase().includes(query) ||
+        v.skills?.some((s) => s.skill_label.toLowerCase().includes(query));
+
+      if (!matchSearch) return false;
+
+      // 2. Functional Category matching
+      if (selectedFilter === "all") return true;
+
+      const cat = ROLE_CATEGORIES.find((c) => c.id === selectedFilter);
+      if (!cat || !cat.keywords) return true;
+
+      const titleLower = v.role_title.toLowerCase();
+      const skillsLower = v.skills?.map((s) => s.skill_label.toLowerCase()).join(" ") || "";
+      const combined = `${titleLower} ${skillsLower}`;
+
+      return cat.keywords.some((kw) => combined.includes(kw));
     });
-  }, [vacancies, searchQuery]);
+  }, [vacancies, searchQuery, selectedFilter]);
 
   return (
     <div className="space-y-8 max-w-6xl mx-auto pb-12">
@@ -125,13 +167,14 @@ export default function VacancyListPage() {
               placeholder="Cari berdasarkan judul role, skill, atau kata kunci..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full text-xs sm:text-sm bg-transparent outline-hidden text-slate-800 placeholder:text-slate-400"
+              className="w-full text-xs sm:text-sm bg-transparent outline-none focus:outline-none focus-visible:outline-none ring-0 focus:ring-0 border-none shadow-none text-slate-800 placeholder:text-slate-400"
+              style={{ outline: "none", boxShadow: "none" }}
             />
           </div>
           {searchQuery && (
             <button
               onClick={() => setSearchQuery("")}
-              className="text-xs text-slate-400 hover:text-slate-600 px-2"
+              className="text-xs text-slate-400 hover:text-slate-600 px-2 cursor-pointer"
             >
               Clear
             </button>
@@ -144,19 +187,19 @@ export default function VacancyListPage() {
           </Button>
         </div>
 
-        {/* Quick Filter Pills */}
+        {/* Quick Filter Pills by Functional Role Category */}
         <div className="flex items-center justify-center gap-2 flex-wrap pt-1">
-          {["all", "Penuh Waktu", "Hybrid", "Engineering", "Product"].map((filter) => (
+          {ROLE_CATEGORIES.map((cat) => (
             <button
-              key={filter}
-              onClick={() => setSelectedFilter(filter)}
-              className={`px-3 py-1 rounded-full text-xs font-semibold transition-all ${
-                selectedFilter === filter
-                  ? "bg-[#01959f] text-white shadow-xs"
+              key={cat.id}
+              onClick={() => setSelectedFilter(cat.id)}
+              className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
+                selectedFilter === cat.id
+                  ? "bg-[#01959f] text-white shadow-xs scale-102"
                   : "bg-slate-100 text-slate-600 hover:bg-slate-200"
               }`}
             >
-              {filter === "all" ? "Semua Kategori" : filter}
+              {cat.label}
             </button>
           ))}
         </div>
@@ -282,15 +325,16 @@ export default function VacancyListPage() {
                   </div>
                 </div>
 
-                {/* Tags (matching Reference Image 1 & 2) */}
+                {/* Tags based on real B7 rubric and vacancy state */}
                 <div className="flex items-center gap-1.5 flex-wrap pt-0.5">
                   <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-teal-50 text-[#01808a] border border-teal-200/60">
-                    Penuh Waktu
+                    Standar Rubrik B7
                   </span>
-                  <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-teal-50 text-[#01808a] border border-teal-200/60">
-                    Hybrid
+                  <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-50 text-amber-800 border border-amber-200/60">
+                    {v.skills?.length || 0} Target Benchmark
                   </span>
-                  <span className="text-[11px] text-slate-400 ml-auto font-medium">
+                  <span className="text-[11px] text-emerald-600 ml-auto font-bold flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                     Aktif
                   </span>
                 </div>
