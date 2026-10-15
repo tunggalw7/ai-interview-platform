@@ -12,7 +12,20 @@ import {
   Edit3,
   Layers,
   Building2,
+  Trash2,
+  Loader2,
 } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import type { Vacancy } from "@/types";
 import HeroBanner from "@/components/common/HeroBanner";
 import RakaminSpinner from "@/components/common/RakaminSpinner";
@@ -22,6 +35,8 @@ export default function VacancyListPage() {
   const [vacancies, setVacancies] = useState<Vacancy[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFilter, setSelectedFilter] = useState("all");
   const navigate = useNavigate();
@@ -33,6 +48,22 @@ export default function VacancyListPage() {
       .catch(() => setError(true))
       .finally(() => setLoading(false));
   }, []);
+
+  const handleDelete = async (id: number) => {
+    setDeletingId(id);
+    setDeleteError(null);
+    try {
+      await vacanciesApi.delete(id);
+      setVacancies((prev) => prev.filter((v) => v.id !== id));
+    } catch (e: any) {
+      setDeleteError(
+        e?.response?.data?.errors?.[0]?.message ||
+          "Gagal menghapus lowongan pekerjaan."
+      );
+    } finally {
+      setDeletingId(null);
+    }
+  };
 
   const filteredVacancies = useMemo(() => {
     return vacancies.filter((v) => {
@@ -138,6 +169,14 @@ export default function VacancyListPage() {
         </div>
       )}
 
+      {/* Delete error notification */}
+      {deleteError && (
+        <div className="border border-destructive/30 rounded-xl p-4 bg-destructive/5 text-sm text-destructive font-medium flex items-center justify-between gap-2">
+          <span>{deleteError}</span>
+          <button onClick={() => setDeleteError(null)} className="text-xs underline text-destructive">Tutup</button>
+        </div>
+      )}
+
       {/* Loading state with beautiful spinner */}
       {loading ? (
         <RakaminSpinner text="Memuat daftar lowongan karir..." size="lg" />
@@ -176,8 +215,8 @@ export default function VacancyListPage() {
               className="group bg-white rounded-2xl border border-slate-200/90 hover:border-[#01959f]/50 p-5 shadow-xs hover:shadow-lg hover:shadow-teal-900/5 transition-all duration-200 flex flex-col justify-between"
             >
               <div className="space-y-3.5">
-                {/* Header: Logo & Org */}
-                <div className="flex items-start justify-between gap-3">
+                {/* Header: Logo, Org & Delete Action */}
+                <div className="flex items-start justify-between gap-2">
                   <div className="flex items-center gap-2.5">
                     <div className="w-9 h-9 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center p-1.5 group-hover:scale-105 transition-transform">
                       <img
@@ -195,6 +234,40 @@ export default function VacancyListPage() {
                       </h3>
                     </div>
                   </div>
+
+                  {/* Delete lowongan trigger */}
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <button
+                        type="button"
+                        className="p-1.5 rounded-lg text-slate-400 hover:text-destructive hover:bg-destructive/10 transition-colors"
+                        title="Hapus Lowongan"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent className="rounded-2xl">
+                      <AlertDialogHeader>
+                        <AlertDialogTitle className="text-lg font-bold text-slate-900">
+                          Hapus Lowongan &quot;{v.role_title}&quot;?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription className="text-sm text-slate-600">
+                          Tindakan ini tidak dapat dibatalkan. Profil lowongan, benchmark rubrik, dan laporan fit/gap terkait akan dihapus secara permanen.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter className="mt-4 gap-2">
+                        <AlertDialogCancel className="rounded-xl">Batal</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() => handleDelete(v.id)}
+                          disabled={deletingId === v.id}
+                          className="bg-destructive hover:bg-destructive/90 text-white font-semibold rounded-xl"
+                        >
+                          {deletingId === v.id && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+                          Hapus
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </div>
 
                 {/* Location & Metadata */}
@@ -269,6 +342,93 @@ export default function VacancyListPage() {
               </div>
             </motion.div>
           ))}
+
+          {/* Issue 6: If only 1 vacancy, add an inviting creation card and guidance card to balance the 3-column grid */}
+          {filteredVacancies.length === 1 && !searchQuery && (
+            <>
+              <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1, duration: 0.25 }}
+                onClick={() => navigate("/vacancies/new")}
+                className="rounded-2xl border-2 border-dashed border-[#01959f]/30 hover:border-[#01959f] bg-teal-50/20 hover:bg-teal-50/50 p-6 flex flex-col items-center justify-center text-center gap-3 transition-all cursor-pointer min-h-[260px] group shadow-2xs hover:shadow-md"
+              >
+                <div className="w-12 h-12 rounded-2xl bg-[#01959f]/10 text-[#01959f] group-hover:bg-[#01959f] group-hover:text-white flex items-center justify-center transition-all duration-200 shadow-2xs">
+                  <Plus className="h-6 w-6" />
+                </div>
+                <div className="space-y-1">
+                  <h4 className="font-extrabold text-sm sm:text-base text-slate-900 group-hover:text-[#01959f] transition-colors">
+                    Buka Lowongan Role Baru
+                  </h4>
+                  <p className="text-xs text-slate-500 max-w-[220px] mx-auto leading-relaxed">
+                    Petakan standar rubrik L1-L5 untuk role lain seperti Backend, Product, atau QA.
+                  </p>
+                </div>
+                <span className="text-xs font-bold text-[#01959f] bg-white px-3.5 py-1 rounded-full border border-[#01959f]/30 group-hover:border-[#01959f] shadow-2xs">
+                  + Buat Role Baru
+                </span>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.15, duration: 0.25 }}
+                className="rounded-2xl border border-amber-200/80 bg-linear-to-br from-amber-50/50 via-yellow-50/25 to-white p-5 flex flex-col justify-between shadow-2xs min-h-[260px]"
+              >
+                <div className="space-y-2.5">
+                  <div className="flex items-center gap-2 text-amber-700 font-extrabold text-xs tracking-wider uppercase">
+                    <Sparkles className="h-4 w-4 text-[#fbc036]" />
+                    Panduan Standar Rakamin
+                  </div>
+                  <h4 className="font-extrabold text-sm sm:text-base text-slate-900">
+                    Benchmark Rubrik Objektif B7
+                  </h4>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    Platform AI Interview membandingkan hasil wawancara kandidat secara langsung terhadap target level kompetensi role ini untuk menghasilkan laporan Fit/Gap yang presisi.
+                  </p>
+                </div>
+                <div className="pt-3 border-t border-amber-200/50 flex items-center justify-between text-xs font-bold text-amber-900">
+                  <span className="flex items-center gap-1.5 text-slate-600">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                    Sistem Terkalibrasi
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => navigate("/assessments")}
+                    className="text-[#01959f] hover:underline flex items-center gap-1 font-extrabold cursor-pointer"
+                  >
+                    Daftar Asesmen →
+                  </button>
+                </div>
+              </motion.div>
+            </>
+          )}
+
+          {/* If 2 vacancies, add 1 creation card to complete the row */}
+          {filteredVacancies.length === 2 && !searchQuery && (
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1, duration: 0.25 }}
+              onClick={() => navigate("/vacancies/new")}
+              className="rounded-2xl border-2 border-dashed border-[#01959f]/30 hover:border-[#01959f] bg-teal-50/20 hover:bg-teal-50/50 p-6 flex flex-col items-center justify-center text-center gap-3 transition-all cursor-pointer min-h-[260px] group shadow-2xs hover:shadow-md"
+            >
+              <div className="w-12 h-12 rounded-2xl bg-[#01959f]/10 text-[#01959f] group-hover:bg-[#01959f] group-hover:text-white flex items-center justify-center transition-all duration-200 shadow-2xs">
+                <Plus className="h-6 w-6" />
+              </div>
+              <div className="space-y-1">
+                <h4 className="font-extrabold text-sm sm:text-base text-slate-900 group-hover:text-[#01959f] transition-colors">
+                  Buka Lowongan Role Baru
+                </h4>
+                <p className="text-xs text-slate-500 max-w-[220px] mx-auto leading-relaxed">
+                  Tambah posisi lowongan kerja lainnya untuk memetakan ekspektasi skill.
+                </p>
+              </div>
+              <span className="text-xs font-bold text-[#01959f] bg-white px-3.5 py-1 rounded-full border border-[#01959f]/30 group-hover:border-[#01959f] shadow-2xs">
+                + Buat Role Baru
+              </span>
+            </motion.div>
+          )}
         </div>
       )}
     </div>

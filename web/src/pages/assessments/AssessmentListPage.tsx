@@ -13,7 +13,20 @@ import {
   Briefcase,
   PlayCircle,
   FileCheck2,
+  Trash2,
+  Loader2,
 } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import type { Assessment } from "@/types";
 import HeroBanner from "@/components/common/HeroBanner";
 import RakaminSpinner from "@/components/common/RakaminSpinner";
@@ -64,6 +77,8 @@ export default function AssessmentListPage() {
   const [assessments, setAssessments] = useState<Assessment[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -73,6 +88,22 @@ export default function AssessmentListPage() {
       .catch(() => setError(true))
       .finally(() => setLoading(false));
   }, []);
+
+  const handleDelete = async (id: number) => {
+    setDeletingId(id);
+    setDeleteError(null);
+    try {
+      await assessmentsApi.delete(id);
+      setAssessments((prev) => prev.filter((a) => a.id !== id));
+    } catch (e: any) {
+      setDeleteError(
+        e?.response?.data?.errors?.[0]?.message ||
+          "Gagal menghapus assessment. Pastikan tidak ada sesi wawancara yang sedang aktif."
+      );
+    } finally {
+      setDeletingId(null);
+    }
+  };
 
   return (
     <div className="space-y-8 max-w-5xl mx-auto pb-12">
@@ -128,6 +159,13 @@ export default function AssessmentListPage() {
       {error && (
         <div className="border border-destructive/30 rounded-xl p-4 bg-destructive/5 text-sm text-destructive flex items-center gap-2">
           <span>Gagal memuat assessment dari API. Pastikan server backend Rails berjalan di port 3001.</span>
+        </div>
+      )}
+
+      {deleteError && (
+        <div className="border border-destructive/30 rounded-xl p-4 bg-destructive/5 text-sm text-destructive font-medium flex items-center justify-between gap-2">
+          <span>{deleteError}</span>
+          <button onClick={() => setDeleteError(null)} className="text-xs underline text-destructive">Tutup</button>
         </div>
       )}
 
@@ -194,7 +232,7 @@ export default function AssessmentListPage() {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3 shrink-0">
+                  <div className="flex items-center gap-2 sm:gap-3 shrink-0">
                     <Button
                       variant="outline"
                       size="sm"
@@ -203,6 +241,42 @@ export default function AssessmentListPage() {
                       <PlayCircle className="h-3.5 w-3.5 mr-1 text-[#01959f]" />
                       Kelola Sesi
                     </Button>
+
+                    {/* Delete dialog */}
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <button
+                          type="button"
+                          onClick={(e) => e.stopPropagation()}
+                          className="p-2 rounded-xl text-slate-400 hover:text-destructive hover:bg-destructive/10 transition-colors"
+                          title="Hapus Assessment"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent className="rounded-2xl" onClick={(e) => e.stopPropagation()}>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle className="text-lg font-bold text-slate-900">
+                            Hapus Assessment &quot;{a.name}&quot;?
+                          </AlertDialogTitle>
+                          <AlertDialogDescription className="text-sm text-slate-600">
+                            Tindakan ini tidak dapat dibatalkan. Assessment dan rubrik yang terkait akan dihapus secara permanen.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter className="mt-4 gap-2">
+                          <AlertDialogCancel className="rounded-xl">Batal</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={() => handleDelete(a.id)}
+                            disabled={deletingId === a.id}
+                            className="bg-destructive hover:bg-destructive/90 text-white font-semibold rounded-xl"
+                          >
+                            {deletingId === a.id && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+                            Hapus
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+
                     <div className="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center group-hover:bg-[#01959f]/10 group-hover:text-[#01959f] transition-colors">
                       <ChevronRight className="h-4 w-4" />
                     </div>

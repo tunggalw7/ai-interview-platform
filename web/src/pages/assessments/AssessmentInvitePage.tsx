@@ -209,15 +209,23 @@ export default function AssessmentInvitePage() {
     }
   };
 
+  const resolveInviteUrl = (session?: Session | null) => {
+    if (!session) return "";
+    if (session.invite_token) {
+      return `${window.location.origin}/interview/${session.invite_token}`;
+    }
+    return (session.invite_url || "").replace(/http:\/\/localhost:3001/, window.location.origin);
+  };
+
   const copyLink = (session: Session, id: number) => {
-    navigator.clipboard.writeText(session.invite_url);
+    navigator.clipboard.writeText(resolveInviteUrl(session));
     setCopiedId(id);
     setTimeout(() => setCopiedId(null), 2000);
   };
 
   const copyNewSessionLink = () => {
-    if (!newSession?.invite_url) return;
-    navigator.clipboard.writeText(newSession.invite_url);
+    if (!newSession) return;
+    navigator.clipboard.writeText(resolveInviteUrl(newSession));
     setNewSessionCopied(true);
     setTimeout(() => setNewSessionCopied(false), 2000);
   };
@@ -364,7 +372,7 @@ export default function AssessmentInvitePage() {
 
             <div className="flex items-center gap-2">
               <div className="flex-1 rounded-md border border-teal-200 bg-white px-3 py-2 text-xs font-mono truncate text-slate-700 shadow-2xs">
-                {newSession.invite_url}
+                {resolveInviteUrl(newSession)}
               </div>
               <Button
                 variant="default"

@@ -81,33 +81,73 @@ export default function VacancyNewPage() {
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        <div className="space-y-1.5">
-          <Label htmlFor="role_title">Role title <span className="text-destructive">*</span></Label>
-          <Input id="role_title" placeholder="Senior Frontend Engineer" {...register("role_title", { required: true })} />
+        {/* Card 1: Role Information */}
+        <div className="bg-white rounded-2xl border border-slate-200/80 p-6 sm:p-7 shadow-xs space-y-5">
+          <div className="flex items-center gap-2 pb-3 border-b border-slate-100">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#01959f]" />
+            <h3 className="font-extrabold text-sm sm:text-base text-slate-900">
+              Informasi Posisi Lowongan
+            </h3>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="role_title" className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+              Judul Role / Lowongan <span className="text-destructive">*</span>
+            </Label>
+            <Input
+              id="role_title"
+              placeholder="Contoh: Senior Frontend Engineer"
+              className="h-12 text-sm sm:text-base font-semibold rounded-xl bg-slate-50/50 border-slate-200 focus:bg-white transition-all"
+              {...register("role_title", { required: "Judul lowongan wajib diisi" })}
+            />
+            {errors.role_title && (
+              <p className="text-xs text-destructive font-medium">{errors.role_title.message}</p>
+            )}
+          </div>
         </div>
 
-        <Separator />
+        {/* Card 2: Expected skills */}
+        <div className="bg-white rounded-2xl border border-slate-200/80 p-6 sm:p-7 shadow-xs space-y-5">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-100 flex-wrap gap-2">
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#fbc036]" />
+              <h3 className="font-extrabold text-sm sm:text-base text-slate-900">
+                Target Benchmark Rubrik Kompetensi (B7)
+              </h3>
+            </div>
+            <span className="text-xs font-semibold bg-teal-50 text-[#01808a] px-2.5 py-0.5 rounded-full border border-teal-100">
+              {fields.length} Skill Terdaftar
+            </span>
+          </div>
 
-        {/* Expected skills */}
-        <div className="space-y-3">
-          <Label>Expected skills</Label>
+          <p className="text-xs text-slate-500">
+            Tentukan ekspektasi minimum level kompetensi (L1 Beginner hingga L5 Expert) yang dibutuhkan untuk role ini.
+          </p>
 
           {fields.length === 0 ? (
-            <div className="border rounded-lg p-4 text-center text-sm text-muted-foreground">
-              No skills added yet.
+            <div className="border-2 border-dashed border-slate-200 rounded-2xl p-8 text-center space-y-2 bg-slate-50/50">
+              <p className="text-sm font-semibold text-slate-700">Belum ada target skill ditambahkan</p>
+              <p className="text-xs text-slate-500">
+                Tambahkan target benchmark rubrik kompetensi untuk kalkulasi Fit/Gap report otomatis.
+              </p>
             </div>
           ) : (
-            <div className="space-y-2">
+            <div className="space-y-3">
               {fields.map((field, index) => (
-                <div key={field.id} className="border rounded-lg p-3 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">{watch(`skills.${index}.skill_label`)}</span>
-                    <button type="button" onClick={() => remove(index)} className="text-muted-foreground hover:text-destructive">
+                <div key={field.id} className="border border-slate-200/80 rounded-xl p-4 bg-slate-50/40 hover:bg-white transition-colors space-y-3">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-sm font-bold text-slate-900">{watch(`skills.${index}.skill_label`)}</span>
+                    <button
+                      type="button"
+                      onClick={() => remove(index)}
+                      className="p-1 rounded-lg text-slate-400 hover:text-destructive hover:bg-destructive/10 transition-colors"
+                      title="Hapus skill"
+                    >
                       <X className="h-4 w-4" />
                     </button>
                   </div>
-                  <div className="space-y-1">
-                    <span className="text-xs text-muted-foreground">Expected level:</span>
+                  <div className="space-y-1.5 pt-1 border-t border-slate-100">
+                    <span className="text-xs font-semibold text-slate-600">Target Level yang Diharapkan:</span>
                     <LevelRadio
                       value={watch(`skills.${index}.expected_level`) ?? 3}
                       onChange={(v) => setValue(`skills.${index}.expected_level`, v)}
@@ -118,38 +158,83 @@ export default function VacancyNewPage() {
             </div>
           )}
 
-          <Button type="button" variant="outline" size="sm" onClick={() => setPickerOpen(true)}>
-            <Plus className="h-3.5 w-3.5 mr-1" /> Add skill expectation
+          <div className="pt-1">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => setPickerOpen(true)}
+              className="rounded-xl text-xs font-semibold h-10 px-4 border-[#01959f]/40 text-[#01959f] hover:bg-teal-50"
+            >
+              <Plus className="h-4 w-4 mr-1.5" /> Tambah dari Taksonomi Standar B7
+            </Button>
+          </div>
+        </div>
+
+        {/* Card 3: Culture & Competency narrative */}
+        <div className="bg-white rounded-2xl border border-slate-200/80 p-6 sm:p-7 shadow-xs space-y-5">
+          <div className="flex items-center gap-2 pb-3 border-b border-slate-100">
+            <Sparkles className="h-4 w-4 text-[#01959f]" />
+            <h3 className="font-extrabold text-sm sm:text-base text-slate-900">
+              Dimensi Kultur Perusahaan &amp; Konteks Naratif AI
+            </h3>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="culture_dimensions" className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+              Dimensi Kultur Perusahaan (Culture Dimensions)
+            </Label>
+            <Textarea
+              id="culture_dimensions"
+              placeholder="Contoh: Tim berorientasi kepemilikan tinggi (ownership), komunikasi asinkron, transparan, dan mengutamakan umpan balik langsung..."
+              rows={3}
+              className="rounded-xl p-3.5 text-sm bg-slate-50/50 border-slate-200 focus:bg-white resize-none"
+              {...register("culture_dimensions")}
+            />
+            <p className="text-[11px] text-slate-400">
+              Digunakan oleh LLM untuk mengevaluasi kesesuaian nilai kerja kandidat pada Laporan Fit/Gap.
+            </p>
+          </div>
+
+          <div className="space-y-2 pt-1">
+            <Label htmlFor="competency_expectations" className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+              Ekspektasi Kompetensi Tambahan (Competency Expectations)
+            </Label>
+            <Textarea
+              id="competency_expectations"
+              placeholder="Contoh: Mampu memimpin arsitektur sistem berskala besar dan membimbing engineer junior secara efektif..."
+              rows={3}
+              className="rounded-xl p-3.5 text-sm bg-slate-50/50 border-slate-200 focus:bg-white resize-none"
+              {...register("competency_expectations")}
+            />
+            <p className="text-[11px] text-slate-400">
+              Konteks kualitatif tambahan yang dipertimbangkan AI dalam menyusun rekomendasi keputusan hiring.
+            </p>
+          </div>
+        </div>
+
+        {error && (
+          <div className="border border-destructive/30 rounded-xl p-4 bg-destructive/5 text-sm text-destructive font-medium">
+            {error}
+          </div>
+        )}
+
+        {/* Footer Actions */}
+        <div className="flex items-center justify-end gap-3 pt-2">
+          <Button
+            type="button"
+            variant="outline"
+            className="rounded-xl h-11 px-5 font-semibold"
+            onClick={() => navigate("/vacancies")}
+          >
+            Batal
           </Button>
-        </div>
-
-        <Separator />
-
-        <div className="space-y-1.5">
-          <Label htmlFor="culture_dimensions">Company culture (used in AI narrative)</Label>
-          <Textarea
-            id="culture_dimensions"
-            placeholder="Ownership-driven, async-first, direct feedback culture..."
-            rows={3}
-            {...register("culture_dimensions")}
-          />
-        </div>
-
-        <div className="space-y-1.5">
-          <Label htmlFor="competency_expectations">Competency expectations (used in AI narrative)</Label>
-          <Textarea
-            id="competency_expectations"
-            placeholder="Strong communicator who can align cross-functional teams..."
-            rows={3}
-            {...register("competency_expectations")}
-          />
-        </div>
-
-        {error && <p className="text-sm text-destructive">{error}</p>}
-
-        <div className="flex justify-end gap-2">
-          <Button type="button" variant="outline" className="rounded-xl" onClick={() => navigate("/vacancies")}>Batal</Button>
-          <Button type="submit" variant="cta" className="rounded-xl shadow-xs" disabled={submitting}>
+          <Button
+            type="submit"
+            variant="cta"
+            className="rounded-xl h-11 px-6 font-bold shadow-xs"
+            disabled={submitting}
+          >
             {submitting && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
             Simpan Lowongan
           </Button>

@@ -20,10 +20,20 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { Skeleton } from "@/components/ui/skeleton";
 import SkillCard from "@/components/assessment/SkillCard";
 import SkillPicker from "@/components/assessment/SkillPicker";
-import { ArrowLeft, Plus, Loader2 } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { ArrowLeft, Plus, Loader2, Trash2, Clock, Sparkles, Layers } from "lucide-react";
 import { assessmentsApi } from "@/services/assessments";
 import { TIME_LIMIT_OPTIONS } from "@/utils/constants";
 import type { AssessmentSkill } from "@/types";
@@ -36,11 +46,12 @@ export default function AssessmentEditPage() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [pickerOpen, setPickerOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const form = useForm<AssessmentFormValues>({
-    defaultValues: { name: "", time_limit_min: 45, skills: [] },
+    defaultValues: { name: "", time_limit_min: 45, language: "en", skills: [] },
   });
 
   const { register, handleSubmit, control, setValue, reset, formState: { errors } } = form;
@@ -51,7 +62,7 @@ export default function AssessmentEditPage() {
       .get(Number(id))
       .then((res) => {
         const a = res.data.assessment;
-        reset({ name: a.name, time_limit_min: a.time_limit_min, skills: a.skills });
+        reset({ name: a.name, time_limit_min: a.time_limit_min, language: a.language || "en", skills: a.skills });
       })
       .catch(() => {})
       .finally(() => setLoading(false));
@@ -72,34 +83,48 @@ export default function AssessmentEditPage() {
   };
 
   const onSubmit = async (data: AssessmentFormValues) => {
-    if (data.skills.length === 0) { setError("Add at least one skill."); return; }
+    if (data.skills.length === 0) { setError("Tambahkan minimal 1 skill rubrik kompetensi."); return; }
     setError(null);
     setSubmitting(true);
     try {
       await assessmentsApi.update(Number(id), {
         name: data.name,
         time_limit_min: data.time_limit_min,
+        language: data.language,
         assessment_skills_attributes: data.skills.map((s, i) => ({ ...s, display_order: i })),
       });
       navigate(`/assessments/${id}/invite`);
     } catch (e: any) {
-      setError(e?.response?.data?.errors?.[0]?.message ?? "Failed to save.");
+      setError(e?.response?.data?.errors?.[0]?.message ?? "Gagal menyimpan perubahan assessment.");
     } finally {
       setSubmitting(false);
     }
   };
 
+  const handleDelete = async () => {
+    setDeleting(true);
+    setError(null);
+    try {
+      await assessmentsApi.delete(Number(id));
+      navigate("/assessments");
+    } catch (e: any) {
+      setError(e?.response?.data?.errors?.[0]?.message ?? "Gagal menghapus assessment. Pastikan tidak ada sesi wawancara aktif.");
+    } finally {
+      setDeleting(false);
+    }
+  };
+
   if (loading) {
     return (
-      <div className="max-w-3xl mx-auto py-12">
+      <div className="max-w-4xl mx-auto py-12">
         <RakaminSpinner text="Memuat konfigurasi assessment..." size="lg" />
       </div>
     );
   }
 
   return (
-    <div className="max-w-3xl mx-auto space-y-8 pb-12">
-      {/* Hero Banner */}
+    <div className="max-w-4xl mx-auto space-y-8 pb-12">
+      {/* Hero Banner with Rakamin program photo */}
       <HeroBanner
         badgeText="⭐️ Assessment & Rubric Editor"
         title="Edit Technical Assessment"
@@ -110,7 +135,7 @@ export default function AssessmentEditPage() {
           "Reorganisasi urutan prioritas probing wawancara AI",
           "Sinkronisasi langsung ke pembuatan token undangan kandidat",
         ]}
-        imageSrc="/images/hero-bg.png"
+        imageSrc="/images/program.png"
         imageAlt="Rakamin Edit Assessment"
         imageFloatingBadge={{
           title: "B7 Rubric Matrix",
@@ -118,48 +143,146 @@ export default function AssessmentEditPage() {
         }}
       />
 
-      <div className="flex items-center gap-2 pb-2 border-b border-slate-200">
-        <Link to="/assessments" className="p-1 rounded-md text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors">
-          <ArrowLeft className="h-4 w-4" />
-        </Link>
-        <span className="text-xs text-slate-500">Assessments</span>
-        <span className="text-xs text-slate-400">/</span>
-        <span className="text-xs font-bold text-slate-900">Edit Assessment</span>
+      {/* Breadcrumb & Navigation */}
+      <div className="flex items-center justify-between gap-4 pb-2 border-b border-slate-200">
+        <div className="flex items-center gap-2">
+          <Link to="/assessments" className="p-1 rounded-md text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors">
+            <ArrowLeft className="h-4 w-4" />
+          </Link>
+          <span className="text-xs text-slate-500">Assessments</span>
+          <span className="text-xs text-slate-400">/</span>
+          <span className="text-xs font-bold text-slate-900">Edit Assessment #{id}</span>
+        </div>
+
+        {/* Delete button trigger */}
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="rounded-xl text-xs font-semibold text-destructive border-destructive/30 hover:bg-destructive/10 hover:border-destructive/60"
+            >
+              <Trash2 className="h-3.5 w-3.5 mr-1.5" />
+              Hapus Assessment
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent className="rounded-2xl">
+            <AlertDialogHeader>
+              <AlertDialogTitle className="text-lg font-bold text-slate-900">
+                Konfirmasi Hapus Assessment?
+              </AlertDialogTitle>
+              <AlertDialogDescription className="text-sm text-slate-600">
+                Tindakan ini akan menghapus assessment &quot;{form.watch("name")}&quot; secara permanen. Pastikan assessment ini tidak memiliki sesi wawancara yang sedang aktif.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter className="mt-4 gap-2">
+              <AlertDialogCancel className="rounded-xl">Batal</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={handleDelete}
+                disabled={deleting}
+                className="bg-destructive hover:bg-destructive/90 text-white font-semibold rounded-xl"
+              >
+                {deleting && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+                Ya, Hapus
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        <div className="space-y-1.5">
-          <Label htmlFor="name">Role title <span className="text-destructive">*</span></Label>
-          <Input id="name" {...register("name", { required: true })} />
+        {/* Card 1: Basic Config */}
+        <div className="bg-white rounded-2xl border border-slate-200/80 p-6 sm:p-7 shadow-xs space-y-5">
+          <div className="flex items-center gap-2 pb-3 border-b border-slate-100">
+            <Sparkles className="h-4 w-4 text-[#01959f]" />
+            <h3 className="font-extrabold text-sm sm:text-base text-slate-900">
+              Konfigurasi Utama Sesi Assessment
+            </h3>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="name" className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+              Judul Role / Posisi <span className="text-destructive">*</span>
+            </Label>
+            <Input
+              id="name"
+              placeholder="Contoh: Senior Frontend Engineer"
+              className="h-12 text-sm sm:text-base font-semibold rounded-xl bg-slate-50/50 border-slate-200 focus:bg-white transition-all"
+              {...register("name", { required: true })}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+            <div className="space-y-2">
+              <Label className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                <Clock className="h-3.5 w-3.5 text-slate-400" />
+                Batas Waktu Sesi (Menit) <span className="text-destructive">*</span>
+              </Label>
+              <Select
+                value={String(form.watch("time_limit_min"))}
+                onValueChange={(v) => setValue("time_limit_min", Number(v))}
+              >
+                <SelectTrigger className="w-full h-12 rounded-xl text-sm font-semibold bg-slate-50/50 border-slate-200">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="rounded-xl">
+                  {TIME_LIMIT_OPTIONS.map((min) => (
+                    <SelectItem key={min} value={String(min)} className="font-medium text-sm">
+                      {min} menit {min === 45 ? "(Standar Rakamin)" : ""}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+                Bahasa Wawancara AI
+              </Label>
+              <Select
+                value={form.watch("language") || "en"}
+                onValueChange={(v) => setValue("language", v as "en" | "id")}
+              >
+                <SelectTrigger className="w-full h-12 rounded-xl text-sm font-semibold bg-slate-50/50 border-slate-200">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="rounded-xl">
+                  <SelectItem value="en" className="font-medium text-sm">English (Global Standard)</SelectItem>
+                  <SelectItem value="id" className="font-medium text-sm">Bahasa Indonesia</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
         </div>
 
-        <div className="space-y-1.5">
-          <Label>Session time limit <span className="text-destructive">*</span></Label>
-          <Select
-            value={String(form.watch("time_limit_min"))}
-            onValueChange={(v) => setValue("time_limit_min", Number(v))}
-          >
-            <SelectTrigger className="w-40"><SelectValue /></SelectTrigger>
-            <SelectContent>
-              {TIME_LIMIT_OPTIONS.map((min) => (
-                <SelectItem key={min} value={String(min)}>{min} min</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+        {/* Card 2: Skill Rubrics */}
+        <div className="bg-white rounded-2xl border border-slate-200/80 p-6 sm:p-7 shadow-xs space-y-5">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-100 flex-wrap gap-2">
+            <div className="flex items-center gap-2">
+              <Layers className="h-4 w-4 text-[#01959f]" />
+              <h3 className="font-extrabold text-sm sm:text-base text-slate-900">
+                Rubrik Kompetensi Standar B7
+              </h3>
+            </div>
+            <span className="text-xs text-slate-500 font-semibold bg-teal-50 text-[#01808a] px-2.5 py-0.5 rounded-full border border-teal-100">
+              {fields.length} Rubrik Terdaftar
+            </span>
+          </div>
 
-        <Separator />
+          <p className="text-xs text-slate-500">
+            Urutkan prioritas rubrik dengan menarik handle di sebelah kiri. AI interviewer akan mengeksplorasi kompetensi dari atas ke bawah.
+          </p>
 
-        <div className="space-y-3">
-          <Label>Skills to assess</Label>
           {fields.length === 0 ? (
-            <div className="border rounded-lg p-6 text-center text-sm text-muted-foreground">
-              No skills added yet.
+            <div className="border-2 border-dashed border-slate-200 rounded-2xl p-8 text-center space-y-2 bg-slate-50/50">
+              <p className="text-sm font-semibold text-slate-700">Belum ada rubrik kompetensi</p>
+              <p className="text-xs text-slate-500">Tambahkan minimal 1 skill dari taksonomi B7 atau kustom.</p>
             </div>
           ) : (
             <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
               <SortableContext items={fields.map((f) => f.id)} strategy={verticalListSortingStrategy}>
-                <div className="space-y-2">
+                <div className="space-y-3">
                   {fields.map((field, index) => (
                     <SkillCard key={field.id} id={field.id} index={index} form={form} onRemove={() => remove(index)} />
                   ))}
@@ -167,22 +290,51 @@ export default function AssessmentEditPage() {
               </SortableContext>
             </DndContext>
           )}
-          <div className="flex gap-2">
-            <Button type="button" variant="outline" size="sm" onClick={() => setPickerOpen(true)}>
-              <Plus className="h-3.5 w-3.5 mr-1" /> Add from B7 taxonomy
+
+          <div className="flex gap-2.5 flex-wrap pt-2">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => setPickerOpen(true)}
+              className="rounded-xl text-xs font-semibold h-10 px-4 border-[#01959f]/40 text-[#01959f] hover:bg-teal-50"
+            >
+              <Plus className="h-4 w-4 mr-1.5" /> Tambah dari Taksonomi B7
             </Button>
-            <Button type="button" variant="outline" size="sm" onClick={() => append({ skill_label: "", is_custom: true, expected_level: 3, display_order: fields.length })}>
-              <Plus className="h-3.5 w-3.5 mr-1" /> Add custom skill
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => append({ skill_label: "", is_custom: true, expected_level: 3, display_order: fields.length })}
+              className="rounded-xl text-xs font-semibold h-10 px-4 border-slate-200 hover:bg-slate-50"
+            >
+              <Plus className="h-4 w-4 mr-1.5" /> Tambah Skill Kustom
             </Button>
           </div>
         </div>
 
-        <Separator />
-        {error && <p className="text-sm text-destructive">{error}</p>}
+        {error && (
+          <div className="border border-destructive/30 rounded-xl p-4 bg-destructive/5 text-sm text-destructive font-medium">
+            {error}
+          </div>
+        )}
 
-        <div className="flex justify-end gap-2">
-          <Button type="button" variant="outline" className="rounded-xl" onClick={() => navigate(`/assessments/${id}/invite`)}>Batal</Button>
-          <Button type="submit" variant="cta" className="rounded-xl shadow-xs" disabled={submitting}>
+        {/* Footer Actions */}
+        <div className="flex items-center justify-end gap-3 pt-2">
+          <Button
+            type="button"
+            variant="outline"
+            className="rounded-xl h-11 px-5 font-semibold"
+            onClick={() => navigate(`/assessments/${id}/invite`)}
+          >
+            Batal
+          </Button>
+          <Button
+            type="submit"
+            variant="cta"
+            className="rounded-xl h-11 px-6 font-bold shadow-xs"
+            disabled={submitting}
+          >
             {submitting && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
             Simpan Perubahan
           </Button>

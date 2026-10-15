@@ -4,6 +4,12 @@ Rails.application.routes.draw do
   root to: proc { [200, { 'Content-Type' => 'application/json' }, [{ status: 'ok', service: 'AI Interview Platform API', version: 'v1', health: '/health' }.to_json]] }
   get '/health', to: proc { [200, {}, [{ status: 'ok' }.to_json]] }
 
+  # Redirect browser visits to /interview/:token from Rails API (port 3001) to Web Frontend (port 5173)
+  get '/interview/:token', to: redirect { |params, _req|
+    frontend = ENV.fetch('FRONTEND_URL', 'http://localhost:5173')
+    "#{frontend}/interview/#{params[:token]}"
+  }
+
   namespace :api do
     namespace :v1 do
       # Auth
