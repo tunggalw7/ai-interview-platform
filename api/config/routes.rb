@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  root to: proc { [200, { 'Content-Type' => 'application/json' }, [{ status: 'ok', service: 'AI Interview Platform API', version: 'v1', health: '/health' }.to_json]] }
   get '/health', to: proc { [200, {}, [{ status: 'ok' }.to_json]] }
 
   namespace :api do
