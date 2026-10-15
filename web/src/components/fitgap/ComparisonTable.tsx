@@ -1,7 +1,7 @@
 import { LEVEL_LABELS, FIT_GAP_RESULT_LABELS, FIT_GAP_RESULT_CLASSES } from "@/utils/constants";
 import { cn } from "@/lib/utils";
 import type { SkillComparison } from "@/types";
-import { CheckCircle2, TrendingUp, AlertTriangle, HelpCircle, UserCheck } from "lucide-react";
+import { CheckCircle2, TrendingUp, AlertTriangle, HelpCircle, UserCheck, Sparkles } from "lucide-react";
 
 interface ComparisonTableProps {
   comparisons: SkillComparison[];
@@ -47,9 +47,47 @@ export default function ComparisonTable({ comparisons }: ComparisonTableProps) {
   const gapCount = comparisons.filter((c) => c.result === "gap").length;
   const notAssessedCount = comparisons.filter((c) => c.result === "not_assessed").length;
   const totalCount = comparisons.length;
+  const benchmarkRate = totalCount > 0 ? Math.round(((matchCount + exceedCount) / totalCount) * 100) : 0;
 
   return (
     <div className="space-y-4">
+      {/* Visual Alignment Score Meter */}
+      <div className="p-4 rounded-xl border border-border/80 bg-gradient-to-r from-card via-card to-primary/5 shadow-xs space-y-2">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Sparkles className="h-4 w-4 text-primary" />
+            <span className="text-xs font-bold uppercase tracking-wider text-foreground">
+              Overall Benchmark Alignment
+            </span>
+          </div>
+          <span className="text-sm font-extrabold text-primary">
+            {benchmarkRate}% Met or Exceeded
+          </span>
+        </div>
+        <div className="w-full bg-muted/80 rounded-full h-2.5 overflow-hidden flex shadow-inner">
+          <div
+            className="bg-emerald-500 h-full transition-all duration-500"
+            style={{ width: `${(matchCount / (totalCount || 1)) * 100}%` }}
+            title={`Matches: ${matchCount}`}
+          />
+          <div
+            className="bg-sky-500 h-full transition-all duration-500"
+            style={{ width: `${(exceedCount / (totalCount || 1)) * 100}%` }}
+            title={`Exceeds: ${exceedCount}`}
+          />
+          <div
+            className="bg-amber-400 h-full transition-all duration-500"
+            style={{ width: `${(gapCount / (totalCount || 1)) * 100}%` }}
+            title={`Gaps: ${gapCount}`}
+          />
+          <div
+            className="bg-slate-300 h-full transition-all duration-500"
+            style={{ width: `${(notAssessedCount / (totalCount || 1)) * 100}%` }}
+            title={`Not Evaluated: ${notAssessedCount}`}
+          />
+        </div>
+      </div>
+
       {/* Executive Metric Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
         <div className="p-3 rounded-lg border bg-emerald-50/50 border-emerald-200/60 flex flex-col justify-between">
