@@ -65,4 +65,42 @@ test.describe("Technical Assessment Lifecycle & Input Alignment", () => {
     await page.getByRole("button", { name: /Batal/i }).click();
     await expect(page.getByRole("heading", { name: /Konfirmasi Hapus Assessment\?/i })).not.toBeVisible();
   });
+
+  test("should display validation error when submitting assessment with empty role title (Failure Path)", async ({ page }) => {
+    await page.goto("/assessments/new");
+
+    // Clear role input if any, then attempt to submit immediately
+    const roleInput = page.locator("#name");
+    await roleInput.fill("");
+    await page.getByRole("button", { name: /Simpan & Buat Sesi/i }).click();
+
+    // Validation error message should be displayed
+    await expect(page.getByText("Judul role wajib diisi", { exact: true })).toBeVisible();
+    await expect(page).toHaveURL(/.*\/assessments\/new/);
+  });
+
+  test("should successfully create a new assessment with B7 rubric and redirect to invite page", async ({ page }) => {
+    await page.goto("/assessments/new");
+
+    // Fill valid role title
+    await page.locator("#name").fill("Fullstack Product Engineer (E2E)");
+
+    // Open B7 rubric picker
+    const addRubricBtn = page.getByRole("button", { name: /Pilih dari Taksonomi B7/i });
+    await expect(addRubricBtn).toBeVisible();
+    await addRubricBtn.click();
+
+    // Select the first standard B7 competency rubric from inside the list container
+    const rubricItem = page.locator("div.max-h-64 button").first();
+    await expect(rubricItem).toBeVisible();
+    await rubricItem.click();
+
+    // Submit form
+    await page.getByRole("button", { name: /Simpan & Buat Sesi/i }).click();
+
+    // Should redirect to invite page
+    await page.waitForURL(/.*\/assessments\/\d+\/invite/, { timeout: 15000 });
+    await expect(page).toHaveURL(/.*\/assessments\/\d+\/invite/);
+    await expect(page.getByRole("heading", { name: /Daftar Sesi Wawancara Kandidat/i })).toBeVisible();
+  });
 });

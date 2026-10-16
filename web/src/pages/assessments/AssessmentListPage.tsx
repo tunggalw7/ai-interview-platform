@@ -35,7 +35,7 @@ import { motion } from "framer-motion";
 function SessionStatusBadge({ session }: { session?: Assessment["latest_session"] }) {
   if (!session) {
     return (
-      <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full">
+      <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full whitespace-nowrap">
         Belum ada sesi
       </span>
     );
@@ -43,31 +43,31 @@ function SessionStatusBadge({ session }: { session?: Assessment["latest_session"
 
   if (session.status === "active") {
     return (
-      <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#01959f] bg-teal-50 border border-teal-200 px-2.5 py-0.5 rounded-full shadow-2xs">
+      <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-[#01959f] bg-teal-50 border border-teal-200 px-2.5 py-0.5 rounded-full shadow-2xs whitespace-nowrap">
         <span className="w-1.5 h-1.5 rounded-full bg-[#01959f] animate-ping" />
-        Sesi Aktif Sedang Berjalan
+        Sesi Aktif
       </span>
     );
   }
 
   if (session.status === "ended" && session.end_reason === "error") {
     return (
-      <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-destructive bg-destructive/10 px-2.5 py-0.5 rounded-full">
-        Sesi Dihentikan (Error)
+      <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-destructive bg-destructive/10 px-2.5 py-0.5 rounded-full whitespace-nowrap">
+        Sesi Error
       </span>
     );
   }
 
   if (session.status === "ended") {
     return (
-      <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">
-        ✓ Wawancara Selesai
+      <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full whitespace-nowrap">
+        ✓ Selesai
       </span>
     );
   }
 
   return (
-    <span className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-800 bg-amber-50 border border-amber-200 px-2.5 py-0.5 rounded-full">
+    <span className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-800 bg-amber-50 border border-amber-200 px-2.5 py-0.5 rounded-full whitespace-nowrap">
       Menunggu Kandidat
     </span>
   );
@@ -150,7 +150,7 @@ export default function AssessmentListPage() {
         <Button
           variant="cta"
           onClick={() => navigate("/assessments/new")}
-          className="shadow-sm self-start sm:self-auto rounded-xl"
+          className="shadow-sm w-full sm:w-auto rounded-xl"
         >
           <Plus className="h-4 w-4 mr-1.5" /> Assessment Baru
         </Button>
@@ -200,26 +200,30 @@ export default function AssessmentListPage() {
               transition={{ delay: idx * 0.04, duration: 0.2 }}
             >
               <Card
-                className="group cursor-pointer hover:border-[#01959f]/50 hover:shadow-md transition-all duration-200 border-slate-200/90 bg-white rounded-2xl"
+                className="group cursor-pointer hover:border-[#01959f]/50 hover:shadow-md transition-all duration-200 border-slate-200/90 bg-white rounded-2xl overflow-hidden"
                 onClick={() => navigate(`/assessments/${a.id}/invite`)}
               >
-                <CardContent className="p-4 sm:p-5 flex items-center justify-between gap-4">
-                  <div className="space-y-2.5 flex-1 min-w-0">
-                    <div className="flex items-center gap-2.5 flex-wrap">
-                      <h2 className="font-bold text-base sm:text-lg text-slate-900 group-hover:text-[#01959f] transition-colors truncate">
+                <CardContent className="p-3.5 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+                  <div className="space-y-2 flex-1 min-w-0 w-full">
+                    {/* Title and Session Status Badge */}
+                    <div className="flex items-start sm:items-center justify-between gap-2">
+                      <h2 className="font-bold text-sm sm:text-base text-slate-900 group-hover:text-[#01959f] transition-colors line-clamp-1 break-words flex-1 min-w-0">
                         {a.name}
                       </h2>
-                      <SessionStatusBadge session={a.latest_session} />
+                      <div className="shrink-0">
+                        <SessionStatusBadge session={a.latest_session} />
+                      </div>
                     </div>
 
-                    <div className="flex items-center gap-3 text-xs text-slate-500 flex-wrap">
-                      <span className="flex items-center gap-1.5 bg-slate-100 text-slate-700 px-2.5 py-1 rounded-md font-semibold">
+                    {/* Metadata chips (Duration, Target Skills, Pipeline) */}
+                    <div className="flex items-center gap-2 text-xs text-slate-500 flex-wrap">
+                      <span className="flex items-center gap-1.5 bg-slate-100 text-slate-700 px-2.5 py-1 rounded-md font-semibold text-[11px]">
                         <Clock className="h-3.5 w-3.5 text-slate-500" />
                         {a.time_limit_min} Menit
                       </span>
 
                       {a.skills && (
-                        <span className="flex items-center gap-1.5 bg-teal-50 text-[#01808a] px-2.5 py-1 rounded-md font-semibold border border-teal-100">
+                        <span className="flex items-center gap-1.5 bg-teal-50 text-[#01808a] px-2.5 py-1 rounded-md font-semibold text-[11px] border border-teal-100">
                           <Layers className="h-3.5 w-3.5 text-[#01959f]" />
                           {a.skills.length} Target Skills
                         </span>
@@ -232,11 +236,12 @@ export default function AssessmentListPage() {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+                  {/* Actions Row */}
+                  <div className="flex items-center justify-end sm:justify-start gap-2 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100 w-full sm:w-auto shrink-0">
                     <Button
                       variant="outline"
                       size="sm"
-                      className="hidden sm:flex rounded-xl text-xs font-bold border-slate-200 hover:bg-[#fbc036]/20 hover:border-[#fbc036]"
+                      className="flex-1 sm:flex-none rounded-xl text-xs font-bold border-slate-200 hover:bg-[#fbc036]/20 hover:border-[#fbc036] h-8 px-2.5"
                     >
                       <PlayCircle className="h-3.5 w-3.5 mr-1 text-[#01959f]" />
                       Kelola Sesi
@@ -248,7 +253,7 @@ export default function AssessmentListPage() {
                         <button
                           type="button"
                           onClick={(e) => e.stopPropagation()}
-                          className="p-2 rounded-xl text-slate-400 hover:text-destructive hover:bg-destructive/10 transition-colors"
+                          className="p-1.5 sm:p-2 rounded-xl text-slate-400 hover:text-destructive hover:bg-destructive/10 transition-colors"
                           title="Hapus Assessment"
                         >
                           <Trash2 className="h-4 w-4" />
@@ -277,8 +282,8 @@ export default function AssessmentListPage() {
                       </AlertDialogContent>
                     </AlertDialog>
 
-                    <div className="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center group-hover:bg-[#01959f]/10 group-hover:text-[#01959f] transition-colors">
-                      <ChevronRight className="h-4 w-4" />
+                    <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-slate-100 flex items-center justify-center group-hover:bg-[#01959f]/10 group-hover:text-[#01959f] transition-colors shrink-0">
+                      <ChevronRight className="h-4 w-4 text-slate-400 group-hover:text-[#01959f] transition-colors" />
                     </div>
                   </div>
                 </CardContent>

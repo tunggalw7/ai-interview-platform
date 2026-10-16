@@ -120,6 +120,12 @@ class AudioWebSocketMiddleware
     state.cached_coverage_text = injector.injection_text
     state.last_coverage_digest = injector.coverage_fingerprint
 
+    if ENV['SIMULATE_AI_INTERVIEW'] == 'true'
+      Rails.logger.info("[AudioWS] SIMULATE_AI_INTERVIEW active — using SimulatedLiveClient")
+      activate_simulated_client(browser_ws, state)
+      return
+    end
+
     build_gemini_client(browser_ws, state)
     state.gemini_client.connect(resumption_handle: session.gemini_resumption_token.presence)
   end
@@ -377,6 +383,14 @@ class AudioWebSocketMiddleware
     # Normal close (1000) is intentional unless flagged as inactivity_close (which also uses 1000).
     return if code == 1000 && !state.gemini_client&.inactivity_close
 
+    # Code 1008 indicates policy/unsupported model/unwhitelisted API key for Gemini Live.
+    # Seamlessly activate fallback simulated AI interviewer so the candidate session never dies.
+    if code == 1008
+      Rails.logger.warn("[AudioWS] Gemini Live closed with code 1008 (#{reason}) — activating SimulatedLiveClient fallback")
+      activate_simulated_client(browser_ws, state)
+      return
+    end
+
     state.proactive_reconnect_timer&.cancel
     state.reconnect_attempts ||= 0
 
@@ -389,6 +403,26 @@ class AudioWebSocketMiddleware
                             message: 'The session encountered a problem. Please contact the interviewer.')
       browser_ws.close
     end
+  end
+
+  def activate_simulated_client(browser_ws, state)
+    state.proactive_reconnect_timer&.cancel
+    session = state.session
+    state.gemini_client&.supersede!
+
+    state.gemini_client = Gemini::SimulatedLiveClient.new(
+      system_prompt: session.assessment.system_prompt,
+      on_audio: build_on_audio(browser_ws, state),
+      on_input_transcription: build_on_input_transcription(browser_ws, state, session),
+      on_output_transcription: build_on_output_transcription(browser_ws, state, session),
+      on_model_turn_complete: build_on_model_turn_complete(browser_ws, state, session),
+      on_go_away: ->(time_left:, resumption_token:) { handle_go_away(browser_ws, state, resumption_token) },
+      on_close: ->(code:, reason:) { handle_gemini_close(browser_ws, state, code: code, reason: reason) },
+      on_error: ->(message) { Rails.logger.error("[AudioWS] Simulated client error: session=#{session.id} #{message}") },
+      on_resumption_token_update: build_on_resumption_token_update(state, session),
+      on_ready: build_on_ready(browser_ws, state, session)
+    )
+    state.gemini_client.connect
   end
 
   def schedule_gemini_reconnect(browser_ws, state, code)

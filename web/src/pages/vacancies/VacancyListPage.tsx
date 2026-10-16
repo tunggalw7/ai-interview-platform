@@ -56,6 +56,38 @@ const ROLE_CATEGORIES: RoleCategory[] = [
   },
 ];
 
+function VacancyCardSkeleton() {
+  return (
+    <div className="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-xs flex flex-col justify-between space-y-4 animate-pulse">
+      <div className="space-y-3.5">
+        <div className="flex items-start justify-between gap-2">
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-xl bg-slate-200" />
+            <div className="space-y-1.5">
+              <div className="h-2.5 w-16 bg-slate-200 rounded" />
+              <div className="h-4 w-36 bg-slate-200 rounded" />
+            </div>
+          </div>
+          <div className="w-6 h-6 rounded-lg bg-slate-100" />
+        </div>
+        <div className="space-y-1.5">
+          <div className="h-3 w-full bg-slate-100 rounded" />
+          <div className="h-3 w-4/5 bg-slate-100 rounded" />
+        </div>
+        <div className="flex flex-wrap gap-1.5 pt-1">
+          <div className="h-6 w-20 bg-slate-100 rounded-full" />
+          <div className="h-6 w-24 bg-slate-100 rounded-full" />
+          <div className="h-6 w-16 bg-slate-100 rounded-full" />
+        </div>
+      </div>
+      <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
+        <div className="h-3 w-20 bg-slate-100 rounded" />
+        <div className="h-8 w-24 bg-slate-200 rounded-xl" />
+      </div>
+    </div>
+  );
+}
+
 export default function VacancyListPage() {
   const [vacancies, setVacancies] = useState<Vacancy[]>([]);
   const [loading, setLoading] = useState(true);
@@ -63,8 +95,27 @@ export default function VacancyListPage() {
   const [deleteError, setDeleteError] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
+  const [isFiltering, setIsFiltering] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState<string>("all");
   const navigate = useNavigate();
+
+  // Debounce search query by 280ms to provide smooth skeleton feedback
+  useEffect(() => {
+    setIsFiltering(true);
+    const timer = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+      setIsFiltering(false);
+    }, 280);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  const handleFilterSelect = (catId: string) => {
+    if (catId === selectedFilter) return;
+    setIsFiltering(true);
+    setSelectedFilter(catId);
+    setTimeout(() => setIsFiltering(false), 200);
+  };
 
   useEffect(() => {
     vacanciesApi
@@ -92,8 +143,8 @@ export default function VacancyListPage() {
 
   const filteredVacancies = useMemo(() => {
     return vacancies.filter((v) => {
-      // 1. Text search matching
-      const query = searchQuery.trim().toLowerCase();
+      // 1. Text search matching with debounced query
+      const query = debouncedSearchQuery.trim().toLowerCase();
       const matchSearch =
         !query ||
         v.role_title.toLowerCase().includes(query) ||
@@ -115,7 +166,7 @@ export default function VacancyListPage() {
 
       return cat.keywords.some((kw) => combined.includes(kw));
     });
-  }, [vacancies, searchQuery, selectedFilter]);
+  }, [vacancies, debouncedSearchQuery, selectedFilter]);
 
   return (
     <div className="space-y-8 max-w-6xl mx-auto pb-12">
@@ -161,7 +212,11 @@ export default function VacancyListPage() {
 
         <div className="max-w-2xl mx-auto flex items-center gap-2 p-1.5 rounded-2xl border border-slate-200 bg-white shadow-sm focus-within:border-[#01959f] focus-within:ring-2 focus-within:ring-[#01959f]/15 transition-all">
           <div className="flex-1 flex items-center gap-2 px-3">
-            <Search className="h-4 w-4 text-slate-400 shrink-0" />
+            {isFiltering ? (
+              <Loader2 className="h-4 w-4 text-[#01959f] animate-spin shrink-0" />
+            ) : (
+              <Search className="h-4 w-4 text-slate-400 shrink-0" />
+            )}
             <input
               type="text"
               placeholder="Cari berdasarkan judul role, skill, atau kata kunci..."
@@ -192,7 +247,7 @@ export default function VacancyListPage() {
           {ROLE_CATEGORIES.map((cat) => (
             <button
               key={cat.id}
-              onClick={() => setSelectedFilter(cat.id)}
+              onClick={() => handleFilterSelect(cat.id)}
               className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all cursor-pointer ${
                 selectedFilter === cat.id
                   ? "bg-[#01959f] text-white shadow-xs scale-102"
@@ -220,9 +275,25 @@ export default function VacancyListPage() {
         </div>
       )}
 
-      {/* Loading state with beautiful spinner */}
+      {/* Loading & Filtering states with Skeleton cards */}
       {loading ? (
-        <RakaminSpinner text="Memuat daftar lowongan karir..." size="lg" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <VacancyCardSkeleton key={i} />
+          ))}
+        </div>
+      ) : isFiltering ? (
+        <div className="space-y-3">
+          <div className="flex items-center justify-center gap-2 text-xs font-bold text-[#01959f] py-1">
+            <Loader2 className="h-3.5 w-3.5 animate-spin" />
+            <span>Memperbarui daftar lowongan...</span>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {[1, 2, 3].map((i) => (
+              <VacancyCardSkeleton key={i} />
+            ))}
+          </div>
+        </div>
       ) : filteredVacancies.length === 0 ? (
         <div className="border-2 border-dashed border-slate-200 rounded-3xl p-12 text-center space-y-4 bg-white/60">
           <div className="w-14 h-14 rounded-2xl bg-[#01959f]/10 text-[#01959f] flex items-center justify-center mx-auto">

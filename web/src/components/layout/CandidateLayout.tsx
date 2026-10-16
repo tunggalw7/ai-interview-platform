@@ -10,7 +10,7 @@ export default function CandidateLayout() {
 
       {/* Minimal header */}
       <header className="border-b border-border/70 bg-white/90 backdrop-blur-md sticky top-0 z-40">
-        <div className="max-w-4xl mx-auto px-4 h-14 flex items-center justify-between">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <img
               src="/images/rakamin-logo.png"

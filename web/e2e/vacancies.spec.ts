@@ -60,4 +60,28 @@ test.describe("Role Vacancies and Category Filtering Flow", () => {
     await page.getByRole("button", { name: /Batal/i }).click();
     await expect(page.getByRole("heading", { name: /Konfirmasi Hapus Lowongan\?/i })).not.toBeVisible();
   });
+
+  test("should display empty search state when query has no matching roles (Negative Path)", async ({ page }) => {
+    await page.goto("/vacancies");
+
+    const searchInput = page.locator("input[placeholder*='Cari berdasarkan judul']");
+    await searchInput.fill("XYZNonExistentKeyword999");
+
+    // Empty state heading and guidance should be visible
+    await expect(page.getByText("Tidak ada role yang cocok")).toBeVisible();
+    await expect(page.getByText("Coba ubah kata kunci pencarian Anda.")).toBeVisible();
+  });
+
+  test("should display validation error when submitting new vacancy with empty title (Failure Path)", async ({ page }) => {
+    await page.goto("/vacancies/new");
+
+    // Clear role title input if any, then attempt submit
+    const roleInput = page.locator("#role_title");
+    await roleInput.fill("");
+    await page.getByRole("button", { name: /Simpan Lowongan/i }).click();
+
+    // Required validation error must be displayed
+    await expect(page.getByText("Judul lowongan wajib diisi", { exact: true })).toBeVisible();
+    await expect(page).toHaveURL(/.*\/vacancies\/new/);
+  });
 });

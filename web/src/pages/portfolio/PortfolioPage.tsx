@@ -13,6 +13,7 @@ import { ArrowLeft, Download, Loader2, RefreshCw, Zap, FileText } from "lucide-r
 import type { Portfolio, AssessorOverride, Vacancy } from "@/types";
 import HeroBanner from "@/components/common/HeroBanner";
 import RakaminSpinner from "@/components/common/RakaminSpinner";
+import { downloadFile } from "@/utils/fileUtils";
 
 export default function PortfolioPage() {
   const { id, sessionId } = useParams<{ id: string; sessionId: string }>();
@@ -74,23 +75,8 @@ export default function PortfolioPage() {
         format,
         selectedVacancy ? Number(selectedVacancy) : undefined
       );
-      if (format === "json") {
-        const blob = new Blob([JSON.stringify(res.data, null, 2)], { type: "application/json" });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = `portfolio-${sessionId}.json`;
-        a.click();
-        URL.revokeObjectURL(url);
-      } else {
-        const blob = new Blob([res.data as BlobPart], { type: "application/pdf" });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = `portfolio-${sessionId}.pdf`;
-        a.click();
-        URL.revokeObjectURL(url);
-      }
+      const mime = format === "json" ? "application/json" : "application/pdf";
+      downloadFile(res.data, `portfolio-${sessionId}.${format}`, mime);
     } finally {
       setExporting(null);
     }
@@ -98,14 +84,14 @@ export default function PortfolioPage() {
 
   if (loading) {
     return (
-      <div className="max-w-4xl mx-auto py-12">
+      <div className="max-w-6xl mx-auto py-12">
         <RakaminSpinner text="Memuat portfolio hasil wawancara AI..." size="lg" />
       </div>
     );
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6 py-2 pb-12">
+    <div className="max-w-6xl mx-auto space-y-6 py-2 pb-12">
       {/* Header */}
       <div className="flex items-start justify-between pb-2 border-b border-slate-200">
         <div className="flex items-center gap-2">

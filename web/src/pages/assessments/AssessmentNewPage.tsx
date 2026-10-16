@@ -108,7 +108,7 @@ export default function AssessmentNewPage() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6 pb-12">
+    <div className="max-w-6xl mx-auto space-y-6 pb-12">
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 pb-2 border-b border-slate-200">
         <Link to="/assessments" className="p-1 rounded-md text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors">

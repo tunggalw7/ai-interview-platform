@@ -191,7 +191,7 @@ export default function InterviewPage() {
   // ── State A: Pre-start ──────────────────────────────────────────────────
   if (interviewState === "idle") {
     return (
-      <div className="max-w-2xl mx-auto px-4 py-8 space-y-6">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 space-y-6">
         <HeroBanner
           badgeText="⭐️ Sesi Wawancara Teknis Interaktif"
           title={candidateInfo?.role_title ? `Wawancara AI: ${candidateInfo.role_title}` : "AI Technical Interview"}

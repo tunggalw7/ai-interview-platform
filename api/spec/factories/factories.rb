@@ -133,4 +133,10 @@ FactoryBot.define do
     l4_anchor { "L4 Anchor" }
     l5_anchor { "L5 Anchor" }
   end
+
+  factory :user do
+    sequence(:email) { |n| "user#{n}@rakamin.com" }
+    password { "password123" }
+    role { "admin" }
+  end
 end

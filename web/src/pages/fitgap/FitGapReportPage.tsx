@@ -22,6 +22,7 @@ import {
 import type { FitGapReport, Portfolio, Vacancy } from "@/types";
 import HeroBanner from "@/components/common/HeroBanner";
 import RakaminSpinner from "@/components/common/RakaminSpinner";
+import { downloadFile } from "@/utils/fileUtils";
 
 export default function FitGapReportPage() {
   const { id, sessionId, vacancyId } = useParams<{
@@ -108,17 +109,8 @@ export default function FitGapReportPage() {
     setExporting(format);
     try {
       const res = await portfoliosApi.exportPortfolio(portfolio.id, format, Number(vacancyId));
-      const ext = format;
-      const blob =
-        format === "pdf"
-          ? new Blob([res.data as BlobPart], { type: "application/pdf" })
-          : new Blob([JSON.stringify(res.data, null, 2)], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `fitgap-session-${sessionId}-vacancy-${vacancyId}.${ext}`;
-      a.click();
-      URL.revokeObjectURL(url);
+      const mime = format === "pdf" ? "application/pdf" : "application/json";
+      downloadFile(res.data, `fitgap-session-${sessionId}-vacancy-${vacancyId}.${format}`, mime);
     } finally {
       setExporting(null);
     }
@@ -133,7 +125,7 @@ export default function FitGapReportPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6 py-2 pb-12">
+    <div className="max-w-6xl mx-auto space-y-6 py-2 pb-12">
       {/* Navigation & Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200">
         <div className="space-y-1">

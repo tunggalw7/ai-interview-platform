@@ -21,7 +21,10 @@ export default function SkillPortfolioCard({
 }: SkillPortfolioCardProps) {
   const [showAllQuotes, setShowAllQuotes] = useState(false);
   const effectiveLevel = override?.override_level ?? parseLevel(skill.ai_level);
-  const quotes = skill.evidence || [];
+  const rawEvidence = skill.evidence || [];
+  const quotes: string[] = rawEvidence.map((e: any) =>
+    typeof e === "string" ? e : (e?.quote ?? String(e))
+  );
   const displayQuotes = showAllQuotes ? quotes : quotes.slice(0, 2);
 
   return (

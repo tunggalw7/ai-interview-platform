@@ -141,7 +141,7 @@ export default function LiveMonitorPage() {
   const discoveredSkills = coverageMap?.discovered ?? [];
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8 py-4 pb-12">
+    <div className="max-w-6xl mx-auto space-y-8 py-4 pb-12">
       {/* Hero Banner */}
       <HeroBanner
         badgeText="⭐️ Real-Time AI Interview Observer"
