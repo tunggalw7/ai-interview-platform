@@ -177,20 +177,32 @@
       color: #01959f;
       text-decoration: none;
     }
+    .page-break {
+      page-break-before: always;
+      margin-top: 0;
+    }
+    .screenshot-section {
+      page-break-inside: avoid;
+    }
     .screenshot-card {
       border: 1px solid #cbd5e1;
       border-radius: 8px;
-      padding: 10px;
-      margin: 14px 0 20px 0;
+      padding: 8px 10px;
+      margin: 10px auto 16px auto;
       background: #f8fafc;
       page-break-inside: avoid;
+      text-align: center;
     }
     .screenshot-card img {
-      width: 100%;
+      max-width: 100%;
+      max-height: 470px;
+      width: auto;
       height: auto;
       border-radius: 5px;
       border: 1px solid #94a3b8;
       display: block;
+      margin: 0 auto;
+      object-fit: contain;
     }
     .screenshot-caption {
       font-size: 11px;
@@ -247,7 +259,7 @@
 <li><a href="#8-claimed-engineering-depth--production-verification">8. Claimed Engineering Depth &amp; Production Verification</a></li>
 </ol>
 <hr>
-<h2 id="1-domain-immersion--regional-realities">1. Domain Immersion &amp; Regional Realities</h2>
+<h2 id="1-domain-immersion--regional-realities" class="page-break">1. Domain Immersion &amp; Regional Realities</h2>
 <h3>1.1 The 5 Core Pillars</h3>
 <ol>
 <li><strong>Conversational AI Probing</strong>: Replacing static multiple-choice tests with a Gemini-powered conversational agent that probes depth across technical competencies.</li>
@@ -263,7 +275,7 @@
 <li><strong>Compliance with UU No. 27/2022 (UU Perlindungan Data Pribadi)</strong>: Mandates explicit purpose limitation, non-disclosure of candidate PII, and data minimization. Logging raw candidate names, phone numbers, NIK, or unredacted CV data in server logs or Gemini prompt traces breaches compliance.</li>
 </ul>
 <hr>
-<h2 id="2-severity-ranked-problem--gap-analysis">2. Severity-Ranked Problem &amp; Gap Analysis</h2>
+<h2 id="2-severity-ranked-problem--gap-analysis" class="page-break">2. Severity-Ranked Problem &amp; Gap Analysis</h2>
 <p>Through fullstack static analysis and dynamic runtime inspection, eight critical gaps were identified and categorized:</p>
 <table class="gap-table">
 <thead>
@@ -337,7 +349,7 @@
 <p><strong>Architectural Signal to Tech Lead</strong>: In multi-tenant environments, default scopes (<code>TenantScoped</code>) ensure complete database row isolation. However, relying on implicit background job arguments without explicit tenant context risks worker execution errors. All asynchronous workers (<code>PortfolioGeneratorWorker</code>, <code>FitGapGeneratorWorker</code>) must maintain explicit tenant boundaries.</p>
 </blockquote>
 <hr>
-<h2 id="3-revamp-strategy--acceptance-criteria">3. Revamp Strategy &amp; Acceptance Criteria</h2>
+<h2 id="3-revamp-strategy--acceptance-criteria" class="page-break">3. Revamp Strategy &amp; Acceptance Criteria</h2>
 <h3>3.1 Self-Derived Acceptance Criteria (AC)</h3>
 <ul>
 <li><strong>AC-01 (Unassessed Skills)</strong>: Skills required by a vacancy that were not explored during the session must be explicitly marked as <code>not_assessed</code> with <code>candidate_level: nil</code> and <code>delta: nil</code>. They must never be penalized as 0.</li>
@@ -383,7 +395,7 @@
 </tr>
 </tbody></table>
 <hr>
-<h2 id="4-monozukuri-implementation-details">4. Monozukuri Implementation Details</h2>
+<h2 id="4-monozukuri-implementation-details" class="page-break">4. Monozukuri Implementation Details</h2>
 <h3>4.1 Backend Hardening (<a href="file:///Volumes/SSD%20External/PERSONAL/ai-interview-platform/api"><code>api/</code></a>)</h3>
 <ol>
 <li><strong><a href="file:///Volumes/SSD%20External/PERSONAL/ai-interview-platform/api/app/services/portfolios/generator.rb"><code>Portfolios::Generator</code></a></strong>:<ul>
@@ -445,7 +457,7 @@
 <h3>5.3 AI Verification Moment</h3>
 <p>The discovery of <code>&quot;L3&quot;.to_i == 0</code> demonstrates the critical necessity of manual code inspection over blind model reliance. AI models frequently write concise parsing code that behaves unexpectedly across language boundaries. Catching and resolving this bug saved candidates from systematic wrongful disqualification.</p>
 <hr>
-<h2 id="6-video-demonstration-walkthrough">6. Video Demonstration Walkthrough</h2>
+<h2 id="6-video-demonstration-walkthrough" class="page-break">6. Video Demonstration Walkthrough</h2>
 <p><strong>Loom Walkthrough Link</strong>: <a href="https://www.loom.com/share/11dcd0ced750444f8a6a31e7e5841c08" target="_blank">https://www.loom.com/share/11dcd0ced750444f8a6a31e7e5841c08</a></p>
 <blockquote>
 <p><strong>Assessor Note on Video Duration</strong>:<br>
@@ -461,51 +473,63 @@ In accordance with <strong>Monozukuri craftsmanship standards</strong>, this vid
 <li><strong>Export &amp; Verification</strong>: Generating PDF dossiers, CSV matrices, and verifying automated test harnesses (<code>bundle exec rspec</code> and <code>npx playwright test</code>).</li>
 </ol>
 <hr>
-<h2 id="7-visual-evidence--ui-screenshots">7. Visual Evidence &amp; UI Screenshots</h2>
+<h2 id="7-visual-evidence--ui-screenshots" class="page-break">7. Visual Evidence &amp; UI Screenshots</h2>
 <p>The following embedded high-resolution screenshots document the platform's core workflows, interaction states, responsive views, and test suites:</p>
 
-<h3>7.1 Fit/Gap Benchmark Analytics &amp; Executive Decision Matrix</h3>
-<div class="screenshot-card">
-  <img src="screenshots/04_fitgap_report.png" alt="Fit/Gap Evaluation Report" />
-  <div class="screenshot-caption">Figure 7.1: Executive metric cards (Matches 1/2, Exceeds 1, Gaps 0, Not Evaluated 0), 100% benchmark alignment progress bar, and verified skill comparison matrix.</div>
+<div class="screenshot-section">
+  <h3>7.1 Fit/Gap Benchmark Analytics &amp; Executive Decision Matrix</h3>
+  <div class="screenshot-card">
+    <img src="screenshots/04_fitgap_report.png" alt="Fit/Gap Evaluation Report" />
+    <div class="screenshot-caption">Figure 7.1: Executive metric cards (Matches 1/2, Exceeds 1, Gaps 0, Not Evaluated 0), 100% benchmark alignment progress bar, and verified skill comparison matrix.</div>
+  </div>
 </div>
 
-<h3>7.2 Candidate Competency Portfolio &amp; Evidence Quotes</h3>
-<div class="screenshot-card">
-  <img src="screenshots/03_candidate_portfolio.png" alt="Candidate Portfolio" />
-  <div class="screenshot-caption">Figure 7.2: Candidate Competency Dossier (Budi Santoso) displaying extracted verbatim evidence quotes per competency, AI level determinations (L4 Advanced, L3 Proficient), and human assessor override controls.</div>
+<div class="screenshot-section">
+  <h3>7.2 Candidate Competency Portfolio &amp; Evidence Quotes</h3>
+  <div class="screenshot-card">
+    <img src="screenshots/03_candidate_portfolio.png" alt="Candidate Portfolio" />
+    <div class="screenshot-caption">Figure 7.2: Candidate Competency Dossier (Budi Santoso) displaying extracted verbatim evidence quotes per competency, AI level determinations (L4 Advanced, L3 Proficient), and human assessor override controls.</div>
+  </div>
 </div>
 
-<h3>7.3 Live Multimodal AI Interview &amp; Real-Time Voice Waveform</h3>
-<div class="screenshot-card">
-  <img src="screenshots/07_live_interview_room.png" alt="Live AI Interview Room" />
-  <div class="screenshot-caption">Figure 7.3: Real-time multimodal interview stage with pulsing voice visualizer, active listening state, 9 live conversation turns, and connection telemetry.</div>
+<div class="screenshot-section">
+  <h3>7.3 Live Multimodal AI Interview &amp; Real-Time Voice Waveform</h3>
+  <div class="screenshot-card">
+    <img src="screenshots/07_live_interview_room.png" alt="Live AI Interview Room" />
+    <div class="screenshot-caption">Figure 7.3: Real-time multimodal interview stage with pulsing voice visualizer, active listening state, 9 live conversation turns, and connection telemetry.</div>
+  </div>
 </div>
 
-<h3>7.4 Modern Role Vacancy &amp; Assessment Catalog</h3>
-<div class="screenshot-card">
-  <img src="screenshots/02_vacancies_list.png" alt="Vacancy Management" />
-  <div class="screenshot-caption">Figure 7.4: Role vacancies catalog with gold CTA action buttons, category filter pills, benchmark targets, and authenticated user profile (Tunggal).</div>
+<div class="screenshot-section">
+  <h3>7.4 Modern Role Vacancy &amp; Assessment Catalog</h3>
+  <div class="screenshot-card">
+    <img src="screenshots/02_vacancies_list.png" alt="Vacancy Management" />
+    <div class="screenshot-caption">Figure 7.4: Role vacancies catalog with gold CTA action buttons, category filter pills, benchmark targets, and authenticated user profile (Tunggal).</div>
+  </div>
 </div>
 
-<h3>7.5 Mobile Responsive Adaptation (390px Viewport)</h3>
-<div class="screenshot-card" style="max-width: 420px; margin: 14px auto;">
-  <img src="screenshots/05_mobile_responsive.png" alt="Mobile Responsive" />
-  <div class="screenshot-caption">Figure 7.5: Mobile-first responsive adaptation on 390px viewport demonstrating fluid touch targets, collapsible evidence quotes, and clean typography.</div>
+<div class="screenshot-section">
+  <h3>7.5 Mobile Responsive Adaptation (390px Viewport)</h3>
+  <div class="screenshot-card" style="max-width: 270px; margin: 10px auto;">
+    <img src="screenshots/05_mobile_responsive.png" alt="Mobile Responsive" style="max-height: 460px; width: auto;" />
+    <div class="screenshot-caption">Figure 7.5: Mobile-first responsive adaptation on 390px viewport demonstrating fluid touch targets, candidate dossier cards, and clean typography hierarchy.</div>
+  </div>
 </div>
 
-<h3>7.6 Automated Test Suite Execution (100% Pass Rate)</h3>
-<div class="screenshot-card">
-  <img src="screenshots/08_terminal_playwright_pass.png" alt="Playwright E2E Test Suite Pass" />
-  <div class="screenshot-caption">Figure 7.6a: End-to-end browser test execution — 30 Playwright scenarios passing on headless Chromium (56.2s).</div>
-</div>
-<div class="screenshot-card">
-  <img src="screenshots/09_terminal_rspec_pass.png" alt="RSpec Backend Test Suite Pass" />
-  <div class="screenshot-caption">Figure 7.6b: Backend test harness — 32 RSpec unit, model, and request specs passing with 0 failures (0.61s).</div>
+<div class="screenshot-section">
+  <h3>7.6 Automated Test Suite Execution (100% Pass Rate)</h3>
+  <div class="screenshot-card">
+    <img src="screenshots/08_terminal_playwright_pass.png" alt="Playwright E2E Test Suite Pass" style="max-height: 420px;" />
+    <div class="screenshot-caption">Figure 7.6a: End-to-end browser test execution — 30 Playwright scenarios passing on headless Chromium (56.2s).</div>
+  </div>
+  <div class="screenshot-card">
+    <img src="screenshots/09_terminal_rspec_pass.png" alt="RSpec Backend Test Suite Pass" style="max-height: 180px;" />
+    <div class="screenshot-caption">Figure 7.6b: Backend test harness — 32 RSpec unit, model, and request specs passing with 0 failures (0.61s).</div>
+  </div>
 </div>
 
 <hr>
-<h2 id="8-claimed-engineering-depth--production-verification">8. Claimed Engineering Depth &amp; Production Verification</h2>
+<h2 id="8-claimed-engineering-depth--production-verification" class="page-break">8. Claimed Engineering Depth &amp; Production Verification</h2>
 <ul>
   <li><strong>Claimed Engineering Depth</strong>: <strong>Fullstack Engineer with Frontend Depth</strong></li>
   <li><strong>Frontend Architecture &amp; Craftsmanship (50%)</strong>:
