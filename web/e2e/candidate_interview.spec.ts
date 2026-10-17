@@ -121,7 +121,7 @@ test.describe("Candidate Interview Access & All Interview Scenarios", () => {
 
   test("Scenario 6: Anti-reuse guard prevents re-entry on ended session", async ({ page }) => {
     // Session 2 token is already completed/ended
-    const completedToken = "["e75e595e", "645b1fa5", "6982272a", "f532c0a0", "651de69a", "63621aa5", "a636da52", "314478e7"].join("")";
+    const completedToken = ["e75e595e", "645b1fa5", "6982272a", "f532c0a0", "651de69a", "63621aa5", "a636da52", "314478e7"].join("");
     await page.goto(`/interview/${completedToken}`);
 
     // Completed state should be rendered immediately and prevent interview start
