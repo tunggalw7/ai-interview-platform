@@ -81,7 +81,7 @@ This pull request delivers a comprehensive full-stack resilience hardening, UX c
 | Pre-Flight Hardware & Internet Check | Live Interview Room (Session Active) | Voice Waveform & Speech Signal |
 | :---: | :---: | :---: |
 | <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/09_interview_preflight_hardware_check.png" width="300" alt="Preflight Hardware Check" /> | <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/10_live_interview_active_room.png" width="300" alt="Live Interview Active" /> | <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/11_live_interview_voice_meter.png" width="300" alt="Live Voice Meter" /> |
-| *Candidate pre-start check: OS & browser compatibility, microphone test, and network latency check.* | *Live room view with Gemini Live indicator, session timer (10:00 ceiling), and AI listening status.* | *Dynamic audio waveform visualizer responding to candidate speech signals in real time.* |
+| *Candidate pre-start check: OS & browser compatibility, microphone test, and network latency check.* | *Live room session monitor with real-time WebSocket connection indicator, session timer, and live candidate speech transcript feed.* | *Dynamic audio waveform visualizer responding to candidate speech signals in real time.* |
 
 | Interview Concluded Confirmation Screen |
 | :---: |
