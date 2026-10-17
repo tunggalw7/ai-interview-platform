@@ -167,27 +167,34 @@ The discovery of `"L3".to_i == 0` demonstrates the critical necessity of manual 
 
 ## 7. Visual Evidence & UI Screenshots
 
-The following embedded screenshots document the platform's user workflows, interaction states, and responsive views:
+The following embedded high-resolution screenshots document the platform's core workflows, interaction states, responsive views, and test suites:
 
 ### 7.1 Fit/Gap Benchmark Analytics & Executive Decision Matrix
 ![Fit/Gap Evaluation Report](screenshots/04_fitgap_report.png)
-*Executive metric cards (Matches, Exceeds, Gaps, Not Evaluated), delta matrix with distinct status badges, and narrative summary.*
+*Figure 7.1: Executive metric cards (Matches 1/2, Exceeds 1, Gaps 0, Not Evaluated 0), 100% benchmark alignment progress bar, and verified skill comparison matrix.*
 
-### 7.2 Candidate Competency Portfolio & Human Assessor Override
+### 7.2 Candidate Competency Portfolio & Evidence Quotes
 ![Candidate Portfolio](screenshots/03_candidate_portfolio.png)
-*Verbatim candidate quotes extracted from transcript turns, AI competency levels, and Human Assessor Override with mandatory rationale banner.*
+*Figure 7.2: Candidate Competency Dossier (Budi Santoso) displaying extracted verbatim evidence quotes per competency, AI level determinations (L4 Advanced, L3 Proficient), and human assessor override controls.*
 
-### 7.3 Live Multimodal AI Interview & Real-Time Waveform Stage
+### 7.3 Live Multimodal AI Interview & Real-Time Voice Waveform
 ![Live AI Interview Room](screenshots/07_live_interview_room.png)
-*Real-time audio interaction stage with responsive visualizer, live conversation turns, and adaptive connection status.*
+*Figure 7.3: Real-time multimodal interview stage with pulsing voice visualizer, active listening state, 9 live conversation turns, and connection telemetry.*
 
-### 7.4 Modern Role Vacancy & Assessment Management
+### 7.4 Modern Role Vacancy & Assessment Catalog
 ![Vacancy Management](screenshots/02_vacancies_list.png)
-*HeroBanner with gold CTA action buttons, category filter pills, and B7 rubric configuration cards.*
+*Figure 7.4: Role vacancies catalog with gold CTA action buttons, category filter pills, benchmark targets, and authenticated user profile (Tunggal).*
 
 ### 7.5 Mobile Responsive Adaptation (390px Viewport)
 ![Mobile Responsive](screenshots/05_mobile_responsive.png)
-*Mobile-first viewport verification showing full-width touch targets, responsive metric cards, and clean typography.*
+*Figure 7.5: Mobile-first responsive adaptation on 390px viewport demonstrating fluid touch targets, collapsible evidence quotes, and clean typography.*
+
+### 7.6 Automated Test Suite Execution (100% Pass Rate)
+![Playwright E2E Test Suite Pass](screenshots/08_terminal_playwright_pass.png)
+*Figure 7.6a: End-to-end browser test execution — 30 Playwright scenarios passing on headless Chromium (56.2s).*
+
+![RSpec Backend Test Suite Pass](screenshots/09_terminal_rspec_pass.png)
+*Figure 7.6b: Backend test harness — 32 RSpec unit, model, and request specs passing with 0 failures (0.61s).*
 
 ---
 
