@@ -75,21 +75,90 @@
       width: 100%;
       border-collapse: collapse;
       margin: 14px 0;
-      font-size: 12px;
+      font-size: 11.5px;
       page-break-inside: avoid;
     }
     th, td {
       border: 1px solid #cbd5e1;
       padding: 7px 9px;
       text-align: left;
+      vertical-align: top;
     }
     th {
-      background-color: #f8fafc;
+      background-color: #f1f5f9;
       font-weight: 600;
       color: #0f172a;
     }
     tr:nth-child(even) td {
       background-color: #f8fafc;
+    }
+    .gap-table th:first-child,
+    .gap-table td:first-child {
+      white-space: nowrap;
+      text-align: center;
+      width: 65px;
+      vertical-align: middle;
+    }
+    .gap-table th:nth-child(2),
+    .gap-table td:nth-child(2) {
+      white-space: nowrap;
+      text-align: center;
+      width: 75px;
+      vertical-align: middle;
+    }
+    .gap-table th:nth-child(3),
+    .gap-table td:nth-child(3) {
+      width: 135px;
+      white-space: nowrap;
+    }
+    .gap-table th:nth-child(4),
+    .gap-table td:nth-child(4) {
+      width: 120px;
+    }
+    .badge-id {
+      display: inline-block;
+      font-family: "JetBrains Mono", monospace;
+      font-weight: 700;
+      font-size: 11px;
+      padding: 2px 6px;
+      background: #f1f5f9;
+      color: #0f172a;
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+    .badge-p0 {
+      display: inline-block;
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+      font-weight: 700;
+      font-size: 10.5px;
+      padding: 2px 7px;
+      border-radius: 9999px;
+      white-space: nowrap;
+    }
+    .badge-p1 {
+      display: inline-block;
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
+      font-weight: 700;
+      font-size: 10.5px;
+      padding: 2px 7px;
+      border-radius: 9999px;
+      white-space: nowrap;
+    }
+    .badge-p2 {
+      display: inline-block;
+      background: #e0f2fe;
+      color: #0369a1;
+      border: 1px solid #bae6fd;
+      font-weight: 700;
+      font-size: 10.5px;
+      padding: 2px 7px;
+      border-radius: 9999px;
+      white-space: nowrap;
     }
     blockquote {
       border-left: 4px solid #01959f;
@@ -194,71 +263,71 @@
 <hr>
 <h2>2. Severity-Ranked Problem &amp; Gap Analysis</h2>
 <p>Through fullstack static analysis and dynamic runtime inspection, eight critical gaps were identified and categorized:</p>
-<table>
+<table class="gap-table">
 <thead>
 <tr>
-<th align="left">ID</th>
-<th align="left">Severity</th>
-<th align="left">Category</th>
-<th align="left">Seam</th>
-<th align="left">Description</th>
+<th style="text-align: center;">ID</th>
+<th style="text-align: center;">Severity</th>
+<th>Category</th>
+<th>Seam</th>
+<th>Description</th>
 </tr>
 </thead>
 <tbody><tr>
-<td align="left"><strong>F-01</strong></td>
-<td align="left"><strong>P0</strong></td>
-<td align="left">Defective Implementation</td>
-<td align="left">Backend Data Layer</td>
-<td align="left">String-to-integer conversion bug (<code>&quot;L3&quot;.to_i == 0</code>) silently downgraded candidate scores to <code>L1</code>.</td>
+<td align="center"><span class="badge-id">F-01</span></td>
+<td align="center"><span class="badge-p0">P0</span></td>
+<td>Defective Implementation</td>
+<td>Backend Data Layer</td>
+<td>String-to-integer conversion bug (<code>&quot;L3&quot;.to_i == 0</code>) silently downgraded candidate scores to <code>L1</code>.</td>
 </tr>
 <tr>
-<td align="left"><strong>F-02</strong></td>
-<td align="left"><strong>P0</strong></td>
-<td align="left">Defective Implementation</td>
-<td align="left">Backend API</td>
-<td align="left">Destructive fit/gap regeneration destroyed previous reports before background worker completed.</td>
+<td align="center"><span class="badge-id">F-02</span></td>
+<td align="center"><span class="badge-p0">P0</span></td>
+<td>Defective Implementation</td>
+<td>Backend API</td>
+<td>Destructive fit/gap regeneration destroyed previous reports before background worker completed.</td>
 </tr>
 <tr>
-<td align="left"><strong>F-03</strong></td>
-<td align="left"><strong>P0</strong></td>
-<td align="left">Missing Spec</td>
-<td align="left">Backend / Infra</td>
-<td align="left">Zero automated test coverage across both Rails backend and React frontend.</td>
+<td align="center"><span class="badge-id">F-03</span></td>
+<td align="center"><span class="badge-p0">P0</span></td>
+<td>Missing Spec</td>
+<td>Backend / Infra</td>
+<td>Zero automated test coverage across both Rails backend and React frontend.</td>
 </tr>
 <tr>
-<td align="left"><strong>F-04</strong></td>
-<td align="left"><strong>P1</strong></td>
-<td align="left">Defective Implementation</td>
-<td align="left">Fullstack Seam</td>
-<td align="left">Vacancy skills not probed during the interview were rendered as gaps (-3 delta) or caused frontend crashes.</td>
+<td align="center"><span class="badge-id">F-04</span></td>
+<td align="center"><span class="badge-p1">P1</span></td>
+<td>Defective Implementation</td>
+<td>Fullstack Seam</td>
+<td>Vacancy skills not probed during the interview were rendered as gaps (-3 delta) or caused frontend crashes.</td>
 </tr>
 <tr>
-<td align="left"><strong>F-05</strong></td>
-<td align="left"><strong>P1</strong></td>
-<td align="left">Defective Implementation</td>
-<td align="left">Data Pipeline</td>
-<td align="left">Non-transactional DB writes left orphaned records when Gemini timed out.</td>
+<td align="center"><span class="badge-id">F-05</span></td>
+<td align="center"><span class="badge-p1">P1</span></td>
+<td>Defective Implementation</td>
+<td>Data Pipeline</td>
+<td>Non-transactional DB writes left orphaned records when Gemini timed out.</td>
 </tr>
 <tr>
-<td align="left"><strong>F-06</strong></td>
-<td align="left"><strong>P1</strong></td>
-<td align="left">Missing Spec</td>
-<td align="left">Compliance</td>
-<td align="left">Production server logs printed unredacted candidate personal information violating UU PDP.</td>
+<td align="center"><span class="badge-id">F-06</span></td>
+<td align="center"><span class="badge-p1">P1</span></td>
+<td>Missing Spec</td>
+<td>Compliance</td>
+<td>Production server logs printed unredacted candidate personal information violating UU PDP.</td>
 </tr>
 <tr>
-<td align="left"><strong>F-07</strong></td>
-<td align="left"><strong>P2</strong></td>
-<td align="left">Defective Implementation</td>
-<td align="left">Fullstack Seam</td>
-<td align="left">Inconsistent attribute naming (<code>expected_level</code> vs <code>required_level</code>) between Rails serializer and React types.</td>
+<td align="center"><span class="badge-id">F-07</span></td>
+<td align="center"><span class="badge-p2">P2</span></td>
+<td>Defective Implementation</td>
+<td>Fullstack Seam</td>
+<td>Inconsistent attribute naming (<code>expected_level</code> vs <code>required_level</code>) between Rails serializer and React types.</td>
 </tr>
 <tr>
-<td align="left"><strong>F-08</strong></td>
-<td align="left"><strong>P2</strong></td>
-<td align="left">Defective Implementation</td>
-<td align="left">Frontend UI/UX</td>
-<td align="left">Text overflow and cramped layout on long candidate quotes and lack of visual audit trail for overrides.</td>
+<td align="center"><span class="badge-id">F-08</span></td>
+<td align="center"><span class="badge-p2">P2</span></td>
+<td>Defective Implementation</td>
+<td>Frontend UI/UX</td>
+<td>Text overflow and cramped layout on long candidate quotes and lack of visual audit trail for overrides.</td>
 </tr>
 </tbody></table>
 <h3>Technical Lead Constraint Signal</h3>
