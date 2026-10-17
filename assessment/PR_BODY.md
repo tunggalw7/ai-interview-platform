@@ -38,81 +38,85 @@ This pull request delivers a comprehensive full-stack resilience hardening, UX c
 
 ---
 
-## 📸 Complete Visual Evidence & UI Showcase (27 Curated Screenshots)
+## 📸 Complete Visual Evidence & UI Showcase (Audited & Verified)
 
 <details open>
-<summary><b>1. 🔐 Core Authentication & Google OAuth Flow</b> (3 screenshots)</summary>
+<summary><b>1. 🔐 Core Authentication & Access Portal</b></summary>
 
-| Login Portal with 1-Click Demo | Google OAuth 2.0 Consent | Interactive Account Chooser Modal |
-| :---: | :---: | :---: |
-| <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/01_login_authentication.png" width="300" /> | <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/14_google_oauth_consent_dialog.png" width="300" /> | <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/15_google_account_chooser_modal.png" width="300" /> |
+| Login Portal with 1-Click Demo & Google Sign-In |
+| :---: |
+| <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/01_login_portal.png" width="480" alt="Login Portal with 1-Click Demo" /> |
+| *Sign In page featuring Rakamin branding lockup, demo credential autofill (`admin@rakamin.com`), Google OAuth chooser trigger, and UU PDP statutory footer.* |
 
 </details>
 
 <details open>
-<summary><b>2. 💼 Vacancies & Interactive Category Filtering</b> (2 screenshots)</summary>
+<summary><b>2. 💼 Role Vacancies & Rubric Definition</b></summary>
 
-| Vacancies Catalog Overview Grid | Filter Pills in Action (Engineering, Product, Design) |
+| Role Vacancies Catalog & Category Filters | Role Vacancy & Rubric Creator Form |
 | :---: | :---: |
-| <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/02_vacancies_overview_grid.png" width="450" /> | <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/03_vacancies_category_filters.png" width="450" /> |
-
-</details>
-
-<details>
-<summary><b>3. 📋 Assessment Architecture & Rubric Matrix</b> (6 screenshots)</summary>
-
-| Assessment Management List | Role Benchmark Overview | Pixel-Aligned Assessment Form |
-| :---: | :---: | :---: |
-| <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/04_assessments_management_dashboard.png" width="300" /> | <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/05_assessment_role_overview.png" width="300" /> | <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/06_assessment_form_configuration.png" width="300" /> |
-
-| Rubric Weight Balancing | Benchmark Proficiency Matrix (L1–L5) | Competency Requirements Detail |
-| :---: | :---: | :---: |
-| <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/07_assessment_rubric_weights.png" width="300" /> | <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/08_assessment_rubric_benchmark_matrix.png" width="300" /> | <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/09_assessment_competency_details.png" width="300" /> |
-
-</details>
-
-<details>
-<summary><b>4. 👥 Candidate Session Management & Invitations</b> (4 screenshots)</summary>
-
-| Assessor Invitations Portal | Dynamic Invite Token Generator | Session Audit Management Table | Candidate Portfolio Overview |
-| :---: | :---: | :---: | :---: |
-| <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/10_candidate_invitations_portal.png" width="220" /> | <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/11_candidate_session_link_generator.png" width="220" /> | <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/12_candidate_session_management_table.png" width="220" /> | <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/13_candidate_portfolio_summary.png" width="220" /> |
+| <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/02_vacancies_catalog.png" width="450" alt="Role Vacancies Catalog" /> | <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/03_create_vacancy_form.png" width="450" alt="Create Vacancy Form" /> |
+| *Vacancies catalog with compact HeroBanner, active role count, and category filter pills (Engineering, Product, Design).* | *Form builder to configure role target proficiency (L1–L5), core B7 anchors, and company culture dimensions.* |
 
 </details>
 
 <details open>
-<summary><b>5. 🎙️ Live Video Interview & Pre-Flight Diagnostics</b> (5 screenshots)</summary>
+<summary><b>3. 📋 Assessments Hub & Candidate Session Management</b></summary>
 
-| Hardware Pre-Flight Diagnostics | Statutory Biometric Audio Consent | Active Live Interview Room | Real-Time Voice Waveform Meter | Live Observer Monitor Dashboard |
-| :---: | :---: | :---: | :---: | :---: |
-| <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/23_hardware_preflight_diagnostics.png" width="180" /> | <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/24_hardware_permission_consent_dialog.png" width="180" /> | <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/19_live_interview_active_room.png" width="180" /> | <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/22_live_interview_voice_meter_active.png" width="180" /> | <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/18_live_monitor_observer_dashboard.png" width="180" /> |
-
-</details>
-
-<details>
-<summary><b>6. 💬 Verbatim Conversation & AI Evaluation Transcript</b> (2 screenshots)</summary>
-
-| Real-Time Transcript Stream Buffer | Verbatim Multi-Turn Q&A Exchange |
+| Technical Assessments Hub | Candidate Sessions Management |
 | :---: | :---: |
-| <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/20_live_interview_transcript_stream.png" width="450" /> | <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/21_live_interview_dialog_exchange.png" width="450" /> |
+| <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/04_assessments_hub_list.png" width="450" alt="Assessments Hub" /> | <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/06_assessment_candidate_sessions.png" width="450" alt="Candidate Sessions" /> |
+| *Assessments management table showing 4-level coverage badges, duration ceiling, and rubric mapping.* | *Role session view showing candidates, interview status, duration limits, and action links.* |
 
-</details>
-
-<details open>
-<summary><b>7. 📊 Fit/Gap Analysis & Assessor Audit Trails</b> (2 screenshots)</summary>
-
-| Executive KPI Cards & Overall Fit Score | Competency Delta Matrix with Human Override Audit |
-| :---: | :---: |
-| <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/16_fitgap_analysis_executive_summary.png" width="450" /> | <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/17_fitgap_competency_delta_matrix.png" width="450" /> |
-
-</details>
-
-<details open>
-<summary><b>8. 📱 Mobile Responsiveness (Viewport: 390px iOS/Android)</b> (3 screenshots)</summary>
-
-| Mobile Vacancies Catalog | Mobile Live Interview Room | Mobile Fit/Gap Breakdown |
+| Assessment & Rubric Builder Form | Generate Single-Use Token Modal | Active Invite Link Ready Banner |
 | :---: | :---: | :---: |
-| <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/25_mobile_responsive_vacancies.png" width="280" /> | <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/26_mobile_responsive_interview_room.png" width="280" /> | <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/27_mobile_responsive_fitgap_report.png" width="280" /> |
+| <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/05_create_assessment_builder.png" width="300" alt="Create Assessment Builder" /> | <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/07_generate_invite_modal.png" width="300" alt="Generate Token Modal" /> | <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/08_invite_link_ready_banner.png" width="300" alt="Invite Token Ready Banner" /> |
+| *Assessment builder with rubric weights & time limits.* | *Single-use invitation token modal.* | *Copyable session invite URL with token protection.* |
+
+</details>
+
+<details open>
+<summary><b>4. 🎙️ Live Audio/Video Interview & Realtime Interaction</b></summary>
+
+| Pre-Flight Hardware & Internet Check | Live Interview Room (Session Active) | Voice Waveform & Speech Signal |
+| :---: | :---: | :---: |
+| <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/09_interview_preflight_hardware_check.png" width="300" alt="Preflight Hardware Check" /> | <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/10_live_interview_active_room.png" width="300" alt="Live Interview Active" /> | <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/11_live_interview_voice_meter.png" width="300" alt="Live Voice Meter" /> |
+| *Candidate pre-start check: OS & browser compatibility, microphone test, and network latency check.* | *Live room view with Gemini Live indicator, session timer (10:00 ceiling), and AI listening status.* | *Dynamic audio waveform visualizer responding to candidate speech signals in real time.* |
+
+| Interview Concluded Confirmation Screen |
+| :---: |
+| <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/12_interview_completed_state.png" width="480" alt="Interview Completed State" /> |
+| *Session completion screen with anti-reuse protection preventing re-entry and UU PDP compliance badge.* |
+
+</details>
+
+<details open>
+<summary><b>5. 📊 Portfolios, Transcripts & Fit/Gap Analysis</b></summary>
+
+| Candidate Competency Dossier | Verbatim Conversation Record | Multi-Model Fit/Gap Report |
+| :---: | :---: | :---: |
+| <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/13_candidate_competency_portfolio.png" width="300" alt="Candidate Portfolio" /> | <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/14_verbatim_transcript_record.png" width="300" alt="Verbatim Transcript" /> | <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/15_multi_model_fitgap_report.png" width="300" alt="FitGap Report" /> |
+| *Portfolio dossier with B7 skill levels, verbatim quotes, and Assessor Human Override.* | *Full verbatim transcript with timestamps, speaker labels, and TXT download export.* | *Multi-model fit/gap report with competency delta matrix, score meters, and culture evaluation.* |
+
+</details>
+
+<details open>
+<summary><b>6. 📱 Mobile Responsiveness (Viewport 390px iOS / Android)</b></summary>
+
+| Mobile Assessments Hub | Mobile Vacancies Catalog | Mobile Competency Dossier |
+| :---: | :---: | :---: |
+| <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/16_mobile_assessments_view.png" width="280" alt="Mobile Assessments" /> | <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/17_mobile_vacancies_view.png" width="280" alt="Mobile Vacancies" /> | <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/18_mobile_portfolio_dossier_view.png" width="280" alt="Mobile Dossier" /> |
+| *Fluid mobile layout for assessment cards and navigation.* | *Responsive category filter pills and mobile role cards.* | *Compact mobile dossier with expandable verbatim quotes.* |
+
+</details>
+
+<details open>
+<summary><b>7. 🧪 Terminal Test Verification Proof (100% Green Test Suite)</b></summary>
+
+| Playwright E2E Suite (30/30 Passed) | RSpec Backend Suite (32/32 Passed) | Vitest Frontend Suite (11/11 Passed) |
+| :---: | :---: | :---: |
+| <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/19_terminal_playwright_e2e_pass.png" width="300" alt="Playwright E2E 30 Passed" /> | <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/20_terminal_rspec_backend_pass.png" width="300" alt="RSpec 32 Passed" /> | <img src="https://raw.githubusercontent.com/tunggalw7/ai-interview-platform/feature/monozukuri-fullstack-revamp/assessment/screenshots/showcase/21_terminal_vitest_frontend_pass.png" width="300" alt="Vitest Passed" /> |
+| *Execution of 30 browser E2E specs across all flows.* | *Execution of 32 unit, service, & integration specs.* | *Execution of component & state unit specs.* |
 
 </details>
 
