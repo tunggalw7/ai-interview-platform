@@ -2,7 +2,7 @@
 
 This pull request delivers a comprehensive full-stack resilience hardening, UX craftsmanship overhaul, and architectural stabilization for the AI Interview Platform assessment. Built under **Monozukuri** engineering principles, the implementation bridges system reliability, fault-tolerant AI orchestration, end-to-end test guarantees, and legal compliance.
 
-- **Candidate**: Tunggal
+- **Candidate**: Tunggal Wigati ([@tunggalw7](https://github.com/tunggalw7))
 - **Claimed Depth**: Fullstack Engineer with Frontend Depth
 - **Video Walkthrough (Loom)**: [Watch 10-Minute Technical Demo](https://www.loom.com/share/11dcd0ced750444f8a6a31e7e5841c08)
 - **Comprehensive Master Deliverable**: Stored under `assessment/FINAL_SUBMISSION_REPORT.pdf`

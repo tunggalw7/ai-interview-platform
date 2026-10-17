@@ -1,6 +1,6 @@
 # Monozukuri Fullstack Revamp: AI-Powered Technical Interview Platform
 **Assessment Deliverable & Executive Engineering Submission**
-*Candidate: Fullstack Product Engineer*  
+*Candidate: Tunggal Wigati (GitHub: [@tunggalw7](https://github.com/tunggalw7))*  
 *Role Focus: Fullstack Engineer (Frontend Depth)*  
 *Target Repository: rakamin-ai-interview-platform*  
 *Branch: `feature/monozukuri-fullstack-revamp`*  
