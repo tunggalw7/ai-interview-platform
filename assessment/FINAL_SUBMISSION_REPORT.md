@@ -4,6 +4,7 @@
 *Role Focus: Fullstack Engineer (Frontend Depth)*  
 *Target Repository: rakamin-ai-interview-platform*  
 *Branch: `feature/monozukuri-fullstack-revamp`*  
+*Pull Request (GitHub): [https://github.com/rakamindev/ai-interview-platform/pull/162](https://github.com/rakamindev/ai-interview-platform/pull/162)*  
 *Video Demonstration (Loom): [https://www.loom.com/share/11dcd0ced750444f8a6a31e7e5841c08](https://www.loom.com/share/11dcd0ced750444f8a6a31e7e5841c08)*  
 
 ---
