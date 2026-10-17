@@ -8,8 +8,8 @@ test.describe("Authentication and Layout Navigation Flow", () => {
     const logo = page.locator("img[alt='Rakamin']");
     await expect(logo).toBeVisible();
 
-    // Check header pill
-    await expect(page.getByText("Talent Assessment Suite")).toBeVisible();
+    // Check header
+    await expect(page.getByRole("heading", { name: "Sign In" })).toBeVisible();
 
     // Check Quick Demo Login pill
     await expect(page.getByText("admin@rakamin.com • admin123")).toBeVisible();

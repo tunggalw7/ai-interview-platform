@@ -111,7 +111,7 @@ export default function HeroBanner({
       initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.25, ease: "easeOut" }}
-      className="w-full relative overflow-hidden rounded-2xl sm:rounded-3xl border border-teal-100/90 bg-gradient-to-r from-teal-50/80 via-white to-amber-50/40 p-4 sm:p-7 lg:p-8 shadow-xs mb-6"
+      className="w-full relative overflow-hidden rounded-2xl sm:rounded-3xl border border-teal-100/90 bg-gradient-to-r from-teal-50/80 via-white to-amber-50/40 p-4 sm:p-7 lg:p-8 shadow-xs mb-6 sm:min-h-[380px] flex flex-col justify-center"
     >
       {/* Decorative ambient radial orbs */}
       <div className="absolute top-[-25%] right-[-10%] w-[280px] h-[280px] rounded-full bg-primary/10 blur-3xl pointer-events-none" />

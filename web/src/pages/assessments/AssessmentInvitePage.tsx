@@ -79,38 +79,38 @@ function SessionRow({
         </div>
       </div>
 
-      <div className="flex items-center justify-between sm:justify-end gap-3 self-stretch sm:self-auto pt-2 sm:pt-0 border-t sm:border-t-0 border-border/50">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between sm:justify-end gap-2.5 self-stretch sm:self-auto pt-2.5 sm:pt-0 border-t sm:border-t-0 border-border/50">
         {/* Status Pill */}
         {isPending && (
-          <span className="inline-flex items-center gap-1.5 text-xs font-medium text-amber-800 bg-amber-50 border border-amber-200 px-2.5 py-0.5 rounded-full">
+          <span className="inline-flex items-center justify-center gap-1.5 text-xs font-semibold text-amber-800 bg-amber-50 border border-amber-200 px-3 py-1.5 rounded-xl shrink-0 whitespace-nowrap w-full sm:w-auto text-center">
             <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
             Awaiting Candidate
           </span>
         )}
         {isLive && (
-          <span className="inline-flex items-center gap-1.5 text-xs font-medium text-primary bg-primary/10 border border-primary/20 px-2.5 py-0.5 rounded-full">
+          <span className="inline-flex items-center justify-center gap-1.5 text-xs font-semibold text-primary bg-primary/10 border border-primary/20 px-3 py-1.5 rounded-xl shrink-0 whitespace-nowrap w-full sm:w-auto text-center">
             <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
             Interview in Progress
           </span>
         )}
         {isEnded && session.end_reason === "error" && (
-          <span className="inline-flex items-center gap-1.5 text-xs font-medium text-destructive bg-destructive/10 border border-destructive/20 px-2.5 py-0.5 rounded-full">
+          <span className="inline-flex items-center justify-center gap-1.5 text-xs font-semibold text-destructive bg-destructive/10 border border-destructive/20 px-3 py-1.5 rounded-xl shrink-0 whitespace-nowrap w-full sm:w-auto text-center">
             Session Error
           </span>
         )}
         {isEnded && session.end_reason !== "error" && (
-          <span className="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-800 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">
+          <span className="inline-flex items-center justify-center gap-1.5 text-xs font-semibold text-emerald-800 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-xl shrink-0 whitespace-nowrap w-full sm:w-auto text-center">
             ✓ Evaluation Complete
           </span>
         )}
 
         {/* Action Buttons */}
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto">
           {isPending && (
             <Button
               variant="outline"
               size="sm"
-              className="h-8 px-2.5 text-xs"
+              className="h-9 px-3 text-xs w-full sm:w-auto justify-center rounded-xl font-medium"
               onClick={() => onCopy(session.id)}
             >
               {copiedId === session.id ? (
@@ -128,7 +128,7 @@ function SessionRow({
           {isLive && (
             <Button
               size="sm"
-              className="h-8 px-3 text-xs bg-[#01959f] hover:bg-[#01808a] text-white shadow-xs font-bold"
+              className="h-9 px-3.5 text-xs bg-[#01959f] hover:bg-[#01808a] text-white shadow-xs font-bold w-full sm:w-auto justify-center rounded-xl"
               onClick={() => navigate(`/assessments/${assessmentId}/sessions/${session.id}/monitor`)}
             >
               <Eye className="h-3.5 w-3.5 mr-1" /> Live Monitor
@@ -139,10 +139,10 @@ function SessionRow({
             <Button
               variant="cta"
               size="sm"
-              className="h-8 px-3 text-xs shadow-xs"
+              className="h-9 px-3.5 text-xs shadow-xs font-bold w-full sm:w-auto justify-center rounded-xl"
               onClick={() => navigate(`/assessments/${assessmentId}/sessions/${session.id}/portfolio`)}
             >
-              <FileCheck2 className="h-3.5 w-3.5 mr-1.5" /> View Portfolio &amp; Fit/Gap
+              <FileCheck2 className="h-3.5 w-3.5 mr-1.5 shrink-0" /> View Portfolio &amp; Fit/Gap
             </Button>
           )}
         </div>
@@ -265,7 +265,7 @@ export default function AssessmentInvitePage() {
           </div>
         </div>
 
-        <div className="flex items-center gap-2 self-start sm:self-auto">
+        <div className="flex flex-wrap items-center justify-center sm:justify-end gap-2.5 w-full sm:w-auto">
           <Button
             variant="outline"
             size="sm"
@@ -350,12 +350,12 @@ export default function AssessmentInvitePage() {
       {newSession && (
         <Card className="border-teal-200 bg-teal-50/50 shadow-xs animate-in fade-in-50 duration-200">
           <CardContent className="p-4 space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-semibold text-teal-900 flex items-center gap-1.5">
-                <LinkIcon className="h-4 w-4 text-primary" />
-                Invite Link Ready for {newSession.candidate_name || "Candidate"}
+            <div className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-2">
+              <span className="text-sm font-semibold text-teal-900 flex items-center gap-1.5 min-w-0">
+                <LinkIcon className="h-4 w-4 text-primary shrink-0" />
+                <span className="truncate">Invite Link Ready for {newSession.candidate_name || "Candidate"}</span>
               </span>
-              <span className="text-xs text-teal-700 bg-teal-100 px-2 py-0.5 rounded font-medium">
+              <span className="text-xs text-teal-700 bg-teal-100 px-2 py-0.5 rounded font-medium whitespace-nowrap shrink-0">
                 Single-use Token
               </span>
             </div>
@@ -442,10 +442,10 @@ export default function AssessmentInvitePage() {
             {assessment.skills.map((s) => (
               <div
                 key={s.id ?? s.skill_label}
-                className="p-2.5 rounded-lg bg-muted/30 border border-border/50 flex items-center justify-between text-xs"
+                className="p-2.5 rounded-lg bg-muted/30 border border-border/50 flex items-center justify-between text-xs gap-2"
               >
-                <span className="font-medium text-foreground">{s.skill_label}</span>
-                <span className="px-2 py-0.5 rounded bg-primary/10 text-primary font-semibold">
+                <span className="font-medium text-foreground truncate">{s.skill_label}</span>
+                <span className="px-2 py-0.5 rounded bg-primary/10 text-primary font-semibold whitespace-nowrap shrink-0">
                   Expected {LEVEL_LABELS[s.expected_level] || `L${s.expected_level}`}
                 </span>
               </div>

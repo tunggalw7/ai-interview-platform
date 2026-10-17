@@ -208,6 +208,7 @@ class AudioWebSocketMiddleware
   # generationComplete when Gemini flushes mid-model-turn, which would trigger a dual response.
   def maybe_inject_coverage(state, session)
     return if state.model_speaking
+    return if state.gemini_client&.model_emitting_audio?
     return unless state.cached_coverage_text.present?
     return if state.last_coverage_digest == state.last_injected_digest
 
@@ -274,18 +275,27 @@ class AudioWebSocketMiddleware
     }
   end
 
-  # Strips coverage/time metadata that leaks into output transcription via realtimeInput.text echoes.
+  # Strips coverage/time metadata and stream artifacts that leak into output transcription via realtimeInput.text echoes.
   def sanitize_output_transcription(text)
     text = text.gsub(/\[COVERAGE[_ ]MAP\][\s\S]*?\[\/COVERAGE[_ ]MAP\]/m, '').strip
     text = text.gsub(/\[COVERAGE[_ ]MAP[^\]]*\]/m, '').strip
-    text = text.sub(/\A\s*\{.*?"discovered"\s*:\s*\[.*?\].*?\}\s*/m, '').strip
-    # Skip up to the last }] (or }) immediately followed by an uppercase letter — covers partial JSON echoes.
-    text = text.sub(/\A[\s\S]*?[\}\]]+[\s\}\]]*(?=\p{Lu})/m, '').strip
+    # If "skills" JSON is at the beginning, strip up to the closing }] and any trailing symbols before real words
+    text = text.sub(/\A[\s\S]*?\{[\s\S]*?"skills"[\s\S]*?[\}\]]+[\s\}\]\$]*(?=[[:alpha:]"'’‘“”`])/m, '').strip
+    # If {"skills" appears anywhere else (e.g. in middle or at end of turn like "Using `useEffect` {\"skills\":..."), strip it to the end
+    text = text.sub(/\s*\{.*?"skills"[\s\S]*\z/m, '').strip
+    # Strip any standalone JSON
+    text = text.sub(/\A\s*[\{\[][\s\S]*[\}\]]\s*\z/m, '').strip
+    # Strip leading brackets/symbols
+    text = text.sub(/\A[\s\S]*?[\}\]]+[\s\}\]\$]*(?=[[:alpha:]"'’‘“”`])/m, '').strip
+    text = text.sub(/\A\s*[\{\}\[\]\$\s\-\>:]+(?=[[:alpha:]"'’‘“”`])/m, '').strip
     text = text.gsub(/\[TIME[_ ]CONTROL[^\]]*\][^\n]*/m, '').strip
     text = text.gsub(/pacing=\S+\s*priority_next=\S*/m, '').strip
     text = text.gsub(/\[Start the interview[^\]]*\]/m, '').strip
     text = text.gsub(/\[SESSION RESUME\][^\n]*/m, '').strip
-    text.gsub(/\[SISTEM\][^\n]*/m, '').strip
+    text = text.gsub(/\[SISTEM\][^\n]*/m, '').strip
+    return '' unless text =~ /[[:alnum:]]/
+
+    text.strip
   end
 
   # Fires after the model's turnComplete — safe to tell the frontend to unmute the mic.

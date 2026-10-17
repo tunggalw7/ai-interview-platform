@@ -106,7 +106,7 @@ export default function AssessmentListPage() {
   };
 
   return (
-    <div className="space-y-8 max-w-5xl mx-auto pb-12">
+    <div className="space-y-8 max-w-6xl mx-auto pb-12">
       {/* Hero Banner matching Reference Image 2 */}
       <HeroBanner
         badgeText="⭐️ Rakamin AI Assessment Hub"
@@ -203,31 +203,30 @@ export default function AssessmentListPage() {
                 className="group cursor-pointer hover:border-[#01959f]/50 hover:shadow-md transition-all duration-200 border-slate-200/90 bg-white rounded-2xl overflow-hidden"
                 onClick={() => navigate(`/assessments/${a.id}/invite`)}
               >
-                <CardContent className="p-3.5 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+                <CardContent className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
                   <div className="space-y-2 flex-1 min-w-0 w-full">
-                    {/* Title and Session Status Badge */}
-                    <div className="flex items-start sm:items-center justify-between gap-2">
-                      <h2 className="font-bold text-sm sm:text-base text-slate-900 group-hover:text-[#01959f] transition-colors line-clamp-1 break-words flex-1 min-w-0">
-                        {a.name}
-                      </h2>
-                      <div className="shrink-0">
-                        <SessionStatusBadge session={a.latest_session} />
-                      </div>
-                    </div>
+                    {/* Title */}
+                    <h2 className="font-bold text-sm sm:text-base text-slate-900 group-hover:text-[#01959f] transition-colors">
+                      {a.name}
+                    </h2>
 
-                    {/* Metadata chips (Duration, Target Skills, Pipeline) */}
+                    {/* Metadata chips (Duration, Target Skills, Status, Pipeline) */}
                     <div className="flex items-center gap-2 text-xs text-slate-500 flex-wrap">
-                      <span className="flex items-center gap-1.5 bg-slate-100 text-slate-700 px-2.5 py-1 rounded-md font-semibold text-[11px]">
+                      <span className="flex items-center gap-1.5 bg-slate-100 text-slate-700 px-2.5 py-1 rounded-md font-semibold text-[11px] whitespace-nowrap">
                         <Clock className="h-3.5 w-3.5 text-slate-500" />
                         {a.time_limit_min} Menit
                       </span>
 
                       {a.skills && (
-                        <span className="flex items-center gap-1.5 bg-teal-50 text-[#01808a] px-2.5 py-1 rounded-md font-semibold text-[11px] border border-teal-100">
+                        <span className="flex items-center gap-1.5 bg-teal-50 text-[#01808a] px-2.5 py-1 rounded-md font-semibold text-[11px] border border-teal-100 whitespace-nowrap">
                           <Layers className="h-3.5 w-3.5 text-[#01959f]" />
                           {a.skills.length} Target Skills
                         </span>
                       )}
+
+                      <div className="shrink-0">
+                        <SessionStatusBadge session={a.latest_session} />
+                      </div>
 
                       <span className="hidden sm:inline-flex items-center gap-1.5 text-slate-500 font-medium">
                         <Users className="h-3.5 w-3.5" />
@@ -237,14 +236,15 @@ export default function AssessmentListPage() {
                   </div>
 
                   {/* Actions Row */}
-                  <div className="flex items-center justify-end sm:justify-start gap-2 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100 w-full sm:w-auto shrink-0">
+                  <div className="flex items-center justify-between sm:justify-end gap-2.5 pt-2.5 sm:pt-0 border-t sm:border-t-0 border-slate-100 w-full sm:w-auto shrink-0">
+
                     <Button
                       variant="outline"
                       size="sm"
-                      className="flex-1 sm:flex-none rounded-xl text-xs font-bold border-slate-200 hover:bg-[#fbc036]/20 hover:border-[#fbc036] h-8 px-2.5"
+                      className="flex-1 sm:flex-initial rounded-xl text-xs font-bold border-slate-200 hover:bg-[#01959f]/10 hover:border-[#01959f]/50 hover:text-[#01959f] h-10 sm:h-9 min-h-[40px] sm:min-h-[36px] px-4 flex items-center justify-center gap-1.5 shadow-2xs"
                     >
-                      <PlayCircle className="h-3.5 w-3.5 mr-1 text-[#01959f]" />
-                      Kelola Sesi
+                      <PlayCircle className="h-4 w-4 text-[#01959f]" />
+                      <span>Kelola Sesi</span>
                     </Button>
 
                     {/* Delete dialog */}
@@ -253,7 +253,7 @@ export default function AssessmentListPage() {
                         <button
                           type="button"
                           onClick={(e) => e.stopPropagation()}
-                          className="p-1.5 sm:p-2 rounded-xl text-slate-400 hover:text-destructive hover:bg-destructive/10 transition-colors"
+                          className="h-10 w-10 sm:h-9 sm:w-9 flex items-center justify-center rounded-xl text-slate-400 hover:text-destructive hover:bg-destructive/10 transition-colors shrink-0"
                           title="Hapus Assessment"
                         >
                           <Trash2 className="h-4 w-4" />
@@ -281,10 +281,6 @@ export default function AssessmentListPage() {
                         </AlertDialogFooter>
                       </AlertDialogContent>
                     </AlertDialog>
-
-                    <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-slate-100 flex items-center justify-center group-hover:bg-[#01959f]/10 group-hover:text-[#01959f] transition-colors shrink-0">
-                      <ChevronRight className="h-4 w-4 text-slate-400 group-hover:text-[#01959f] transition-colors" />
-                    </div>
                   </div>
                 </CardContent>
               </Card>

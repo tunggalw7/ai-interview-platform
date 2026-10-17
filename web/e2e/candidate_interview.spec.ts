@@ -141,7 +141,7 @@ test.describe("Candidate Interview Access & All Interview Scenarios", () => {
     await expect(page.getByRole("heading", { name: /Daftar Sesi Wawancara Kandidat/i })).toBeVisible();
 
     // Verify candidate sessions are listed
-    await expect(page.getByText(/Candidate Sessions/i)).toBeVisible();
+    await expect(page.getByRole("heading", { name: /Candidate Sessions/i })).toBeVisible();
 
     // Verify presence of invite candidate trigger button
     await expect(page.getByRole("button", { name: /Undang Kandidat/i })).toBeVisible();

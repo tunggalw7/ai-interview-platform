@@ -259,13 +259,12 @@ export default function AssessmentNewPage() {
             </DndContext>
           )}
 
-          <div className="flex gap-2.5 flex-wrap pt-2">
+          <div className="flex flex-col sm:flex-row gap-2.5 pt-2">
             <Button
               type="button"
               variant="outline"
-              size="sm"
               onClick={() => setPickerOpen(true)}
-              className="rounded-xl text-xs font-semibold h-10 px-4 border-[#01959f]/40 text-[#01959f] hover:bg-teal-50"
+              className="w-full sm:w-auto flex-1 rounded-xl text-xs sm:text-sm font-semibold h-11 min-h-[44px] px-4 border-[#01959f]/40 text-[#01959f] hover:bg-teal-50 justify-center shadow-2xs"
             >
               <Plus className="h-4 w-4 mr-1.5" />
               Pilih dari Taksonomi B7
@@ -273,9 +272,8 @@ export default function AssessmentNewPage() {
             <Button
               type="button"
               variant="outline"
-              size="sm"
               onClick={addCustomSkill}
-              className="rounded-xl text-xs font-semibold h-10 px-4 border-slate-200 hover:bg-slate-50"
+              className="w-full sm:w-auto flex-1 rounded-xl text-xs sm:text-sm font-semibold h-11 min-h-[44px] px-4 border-slate-200 hover:bg-slate-50 justify-center shadow-2xs"
             >
               <Plus className="h-4 w-4 mr-1.5" />
               Tambah Skill Kustom
@@ -290,11 +288,11 @@ export default function AssessmentNewPage() {
         )}
 
         {/* Actions Footer */}
-        <div className="flex items-center justify-end gap-3 pt-2">
+        <div className="flex items-center justify-center sm:justify-end gap-3 pt-3 w-full">
           <Button
             type="button"
             variant="outline"
-            className="rounded-xl h-11 px-5 font-semibold"
+            className="rounded-xl h-11 px-6 font-semibold"
             onClick={() => navigate("/assessments")}
           >
             Batal

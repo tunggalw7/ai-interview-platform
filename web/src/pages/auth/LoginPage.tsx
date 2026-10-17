@@ -173,17 +173,13 @@ export default function LoginPage() {
         transition={{ duration: 0.35, ease: "easeOut" }}
         className="w-full max-w-[450px] space-y-6 relative z-10"
       >
-        {/* Brand header — Optical & Baseline Balanced Lockup */}
-        <div className="flex items-center justify-center gap-2.5 sm:gap-3">
+        {/* Brand header — Clean Rakamin Logo */}
+        <div className="flex items-center justify-center">
           <img
             src="/images/rakamin-logo.png"
             alt="Rakamin"
-            className="h-[20px] sm:h-[22px] w-auto object-contain shrink-0"
+            className="h-7 sm:h-8 w-auto object-contain"
           />
-          <div className="h-4 sm:h-[18px] w-[1.5px] bg-slate-300 shrink-0" />
-          <span className="text-[16px] sm:text-[18px] font-bold text-slate-800 tracking-tight whitespace-nowrap leading-none flex items-center translate-y-[1px]">
-            Talent&nbsp;<span className="font-extrabold text-[#01959f]">Assessment</span>&nbsp;Suite
-          </span>
         </div>
 
         {/* Main Card — Pure white, modern soft radius and shadow */}

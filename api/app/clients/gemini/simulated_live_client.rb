@@ -14,10 +14,11 @@ module Gemini
     SINE_FRAME = (Array.new(SILENCE_FRAME_SAMPLES) { |i| (Math.sin(i * 0.1) * 3000).to_i }.pack('s*')).freeze
 
     # Voice Activity Detection (VAD) configuration
-    VAD_RMS_THRESHOLD   = 1200  # Minimum RMS energy to register vocal sound vs mic ambient noise
-    SPEECH_FRAMES_MIN   = 6     # Minimum speech frames (~0.4s) to confirm vocal speech started
-    SILENCE_PAUSE_SEC   = 2.0   # Silence pause duration required AFTER speech to mark answer complete
-    MAX_SPEECH_SEC      = 6.0   # Max speech window (or for headless tests) before auto-submitting
+    # Raised threshold to require genuine vocal sound and ignore ambient/mic noise
+    VAD_RMS_THRESHOLD   = 3200  # Minimum vocal RMS energy (normal human voice is 3500-10000; mic noise is <2000)
+    SPEECH_FRAMES_MIN   = 25    # Require ~1s of sustained vocal frames before marking speech started
+    SILENCE_PAUSE_SEC   = 2.5   # Silence pause duration required AFTER speech to mark answer complete
+    MAX_SPEECH_SEC      = 20.0  # Max speech window before auto-submitting
 
     attr_reader :connected, :connected_at, :inactivity_close, :resumption_token
 
@@ -116,6 +117,8 @@ module Gemini
         end
       else
         # Audio is silence or ambient noise below threshold
+        @speech_frame_count = [@speech_frame_count - 1, 0].max unless @candidate_has_spoken
+
         if @candidate_has_spoken && @silence_after_speech_timer.nil?
           # Candidate was speaking and has now paused — wait for pause confirmation
           @silence_after_speech_timer = EM::Timer.new(SILENCE_PAUSE_SEC) do

@@ -19,7 +19,7 @@ test.describe("Candidate Portfolio, Human Override, Fit/Gap Report, and Transcri
     await expect(page.getByText("API Testing")).toBeVisible();
 
     // Verify verbatim quote evidence
-    await expect(page.getByText(/Playwright regression suite/i)).toBeVisible();
+    await expect(page.getByText(/Playwright regression suite/i).first()).toBeVisible();
   });
 
   test("should perform Assessor Human Override with justification notes (UU PDP Compliance)", async ({ page }) => {
@@ -64,14 +64,14 @@ test.describe("Candidate Portfolio, Human Override, Fit/Gap Report, and Transcri
 
     // Header and role benchmark
     await expect(page.getByText(/Detail Laporan Fit\/Gap/i)).toBeVisible();
-    await expect(page.getByRole("heading", { name: /Senior Frontend Engineer/i })).toBeVisible();
+    await expect(page.getByRole("heading", { name: /Senior Backend Engineer/i })).toBeVisible();
 
     // Delta skill comparison statuses
-    await expect(page.getByText(/React \/ Frontend Development Core/i)).toBeVisible();
-    await expect(page.getByText(/TypeScript & Type Systems/i)).toBeVisible();
+    await expect(page.getByText(/Node\.js \/ Backend Development/i).first()).toBeVisible();
+    await expect(page.getByText(/System Design & Architecture/i).first()).toBeVisible();
 
     // Culture fit narrative synthesis
-    await expect(page.getByText(/Evaluasi Budaya Kerja & Rekomendasi/i).or(page.getByText(/Culture Fit/i))).toBeVisible();
+    await expect(page.getByText(/Evaluasi Budaya Kerja & Rekomendasi/i).or(page.getByText(/Culture Fit/i)).first()).toBeVisible();
 
     // Export PDF & CSV triggers
     await expect(page.getByRole("button", { name: /Export PDF/i })).toBeVisible();

@@ -107,10 +107,17 @@ export default function FitGapReportPage() {
   const handleExport = async (format: "pdf" | "json") => {
     if (!portfolio) return;
     setExporting(format);
+    setFetchError(null);
     try {
       const res = await portfoliosApi.exportPortfolio(portfolio.id, format, Number(vacancyId));
       const mime = format === "pdf" ? "application/pdf" : "application/json";
       downloadFile(res.data, `fitgap-session-${sessionId}-vacancy-${vacancyId}.${format}`, mime);
+    } catch (err: any) {
+      console.error("Export error:", err);
+      setFetchError(
+        err?.response?.data?.errors?.[0]?.message ||
+          `Gagal mengunduh berkas ${format.toUpperCase()}. Pastikan analisis fit/gap sudah selesai.`
+      );
     } finally {
       setExporting(null);
     }
@@ -151,18 +158,18 @@ export default function FitGapReportPage() {
         </div>
 
         {portfolio && (
-          <div className="flex items-center gap-2 self-start sm:self-auto">
+          <div className="grid grid-cols-3 sm:flex sm:items-center gap-2 w-full sm:w-auto">
             <Button
               variant="outline"
               size="sm"
               onClick={handleRegenerate}
               disabled={regenerating || generating}
-              className="text-xs rounded-xl"
+              className="text-xs rounded-xl w-full sm:w-auto h-9 px-2 sm:px-3.5 font-semibold whitespace-nowrap justify-center"
             >
               {regenerating ? (
-                <Loader2 className="h-3.5 w-3.5 animate-spin mr-1.5" />
+                <Loader2 className="h-3.5 w-3.5 animate-spin mr-1.5 shrink-0" />
               ) : (
-                <RefreshCw className="h-3.5 w-3.5 mr-1.5" />
+                <RefreshCw className="h-3.5 w-3.5 mr-1.5 shrink-0" />
               )}
               Hitung Ulang
             </Button>
@@ -173,12 +180,12 @@ export default function FitGapReportPage() {
                   size="sm"
                   onClick={() => handleExport("pdf")}
                   disabled={!!exporting}
-                  className="text-xs rounded-xl shadow-xs"
+                  className="text-xs rounded-xl shadow-xs w-full sm:w-auto h-9 px-2 sm:px-3.5 font-bold whitespace-nowrap justify-center"
                 >
                   {exporting === "pdf" ? (
-                    <Loader2 className="h-3.5 w-3.5 animate-spin mr-1.5" />
+                    <Loader2 className="h-3.5 w-3.5 animate-spin mr-1.5 shrink-0" />
                   ) : (
-                    <Download className="h-3.5 w-3.5 mr-1.5" />
+                    <Download className="h-3.5 w-3.5 mr-1.5 shrink-0" />
                   )}
                   Export PDF
                 </Button>
@@ -187,12 +194,12 @@ export default function FitGapReportPage() {
                   size="sm"
                   onClick={() => handleExport("json")}
                   disabled={!!exporting}
-                  className="text-xs rounded-xl"
+                  className="text-xs rounded-xl w-full sm:w-auto h-9 px-2 sm:px-3 font-semibold whitespace-nowrap justify-center"
                 >
                   {exporting === "json" ? (
-                    <Loader2 className="h-3.5 w-3.5 animate-spin mr-1.5" />
+                    <Loader2 className="h-3.5 w-3.5 animate-spin mr-1.5 shrink-0" />
                   ) : (
-                    <Download className="h-3.5 w-3.5 mr-1.5" />
+                    <Download className="h-3.5 w-3.5 mr-1.5 shrink-0" />
                   )}
                   JSON
                 </Button>

@@ -77,6 +77,7 @@ export default function CustomSkillForm({ index, form }: CustomSkillFormProps) {
           Target Level Minimum yang Diharapkan
         </Label>
         <LevelRadio
+          name={`custom-skill-${index}`}
           value={expectedLevel ?? 3}
           onChange={(v) => setValue(`skills.${index}.expected_level`, v)}
         />

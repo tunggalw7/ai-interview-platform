@@ -150,6 +150,7 @@ export default function VacancyNewPage() {
                   <div className="space-y-1.5 pt-1 border-t border-slate-100">
                     <span className="text-xs font-semibold text-slate-600">Target Level yang Diharapkan:</span>
                     <LevelRadio
+                      name={`skill-${index}`}
                       value={watch(`skills.${index}.expected_level`) ?? 3}
                       onChange={(v) => setValue(`skills.${index}.expected_level`, v)}
                     />
@@ -163,9 +164,8 @@ export default function VacancyNewPage() {
             <Button
               type="button"
               variant="outline"
-              size="sm"
               onClick={() => setPickerOpen(true)}
-              className="rounded-xl text-xs font-semibold h-10 px-4 border-[#01959f]/40 text-[#01959f] hover:bg-teal-50"
+              className="w-full rounded-xl text-xs sm:text-sm font-semibold h-11 min-h-[44px] px-4 border-[#01959f]/40 text-[#01959f] hover:bg-teal-50 justify-center shadow-2xs"
             >
               <Plus className="h-4 w-4 mr-1.5" /> Tambah dari Taksonomi Standar B7
             </Button>
@@ -221,11 +221,11 @@ export default function VacancyNewPage() {
         )}
 
         {/* Footer Actions */}
-        <div className="flex items-center justify-end gap-3 pt-2">
+        <div className="flex items-center justify-center sm:justify-end gap-3 pt-3 w-full">
           <Button
             type="button"
             variant="outline"
-            className="rounded-xl h-11 px-5 font-semibold"
+            className="rounded-xl h-11 px-6 font-semibold"
             onClick={() => navigate("/vacancies")}
           >
             Batal

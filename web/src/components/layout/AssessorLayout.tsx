@@ -123,19 +123,17 @@ export default function AssessorLayout() {
           <div className="flex items-center gap-4 sm:gap-6 min-w-0">
             <Link
               to="/assessments"
-              className="flex items-center gap-2.5 sm:gap-3 group shrink-0"
+              className="flex items-center group shrink-0"
               onClick={() => setMobileMenuOpen(false)}
             >
               <img
                 src="/images/rakamin-logo.png"
                 alt="Rakamin"
-                className="h-[18px] sm:h-[19px] w-auto object-contain transition-transform group-hover:scale-102 shrink-0"
+                className="h-5 sm:h-[21px] w-auto object-contain transition-transform group-hover:scale-102 shrink-0"
               />
-              <div className="hidden lg:block h-3.5 sm:h-4 w-[1.5px] bg-slate-300 shrink-0" />
-              <span className="hidden lg:flex items-center text-[14px] sm:text-[15px] font-bold text-slate-800 tracking-tight whitespace-nowrap leading-none translate-y-[3px]">
-                Talent&nbsp;<span className="font-extrabold text-[#01959f]">Assessment</span>&nbsp;Suite
-              </span>
             </Link>
+
+            <div className="hidden md:block h-4 w-[1px] bg-slate-200 shrink-0" />
 
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center gap-1 shrink-0">
@@ -153,7 +151,7 @@ export default function AssessorLayout() {
                     )}
                   >
                     <Icon className="h-3.5 w-3.5 shrink-0" />
-                    <span>{label}</span>
+                    <span className="leading-none">{label}</span>
                   </Link>
                 );
               })}

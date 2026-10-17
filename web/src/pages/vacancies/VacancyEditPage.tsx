@@ -103,7 +103,7 @@ export default function VacancyEditPage() {
   return (
     <div className="max-w-6xl mx-auto space-y-6 pb-12">
       {/* Breadcrumb & Navigation */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-200">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200">
         <div className="flex items-center gap-2">
           <Link to="/vacancies" className="p-1 rounded-md text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors">
             <ArrowLeft className="h-4 w-4" />
@@ -120,7 +120,7 @@ export default function VacancyEditPage() {
               type="button"
               variant="outline"
               size="sm"
-              className="rounded-xl text-xs font-semibold text-destructive border-destructive/30 hover:bg-destructive/10 hover:border-destructive/60"
+              className="w-full sm:w-auto h-10 sm:h-9 rounded-xl text-xs font-semibold text-destructive border-destructive/30 hover:bg-destructive/10 hover:border-destructive/60 justify-center"
             >
               <Trash2 className="h-3.5 w-3.5 mr-1.5" />
               Hapus Lowongan
@@ -233,6 +233,7 @@ export default function VacancyEditPage() {
                   <div className="space-y-1.5 pt-1 border-t border-slate-100">
                     <span className="text-xs font-semibold text-slate-600">Target Level yang Diharapkan:</span>
                     <LevelRadio
+                      name={`skill-${index}`}
                       value={watch(`skills.${index}.expected_level`) ?? 3}
                       onChange={(v) => setValue(`skills.${index}.expected_level`, v)}
                     />
@@ -246,9 +247,8 @@ export default function VacancyEditPage() {
             <Button
               type="button"
               variant="outline"
-              size="sm"
               onClick={() => setPickerOpen(true)}
-              className="rounded-xl text-xs font-semibold h-10 px-4 border-[#01959f]/40 text-[#01959f] hover:bg-teal-50"
+              className="w-full sm:w-auto rounded-xl text-xs sm:text-sm font-semibold h-11 min-h-[44px] px-4 border-[#01959f]/40 text-[#01959f] hover:bg-teal-50 justify-center shadow-2xs"
             >
               <Plus className="h-4 w-4 mr-1.5" /> Tambah dari Taksonomi Standar B7
             </Button>
@@ -304,11 +304,11 @@ export default function VacancyEditPage() {
         )}
 
         {/* Footer Actions */}
-        <div className="flex items-center justify-end gap-3 pt-2">
+        <div className="flex items-center justify-center sm:justify-end gap-3 pt-3 w-full">
           <Button
             type="button"
             variant="outline"
-            className="rounded-xl h-11 px-5 font-semibold"
+            className="rounded-xl h-11 px-6 font-semibold"
             onClick={() => navigate("/vacancies")}
           >
             Batal

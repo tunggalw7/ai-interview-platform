@@ -30,12 +30,12 @@ function ResultBadge({ comparison }: { comparison: SkillComparison }) {
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full shadow-xs transition-colors",
+        "inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full shadow-xs transition-colors whitespace-nowrap shrink-0",
         classes
       )}
     >
       {icon}
-      <span>{label}{suffix}</span>
+      <span className="whitespace-nowrap">{label}{suffix}</span>
     </span>
   );
 }
@@ -48,43 +48,79 @@ export default function ComparisonTable({ comparisons }: ComparisonTableProps) {
   const notAssessedCount = comparisons.filter((c) => c.result === "not_assessed").length;
   const totalCount = comparisons.length;
   const benchmarkRate = totalCount > 0 ? Math.round(((matchCount + exceedCount) / totalCount) * 100) : 0;
+  const matchPct = totalCount > 0 ? Math.round((matchCount / totalCount) * 100) : 0;
+  const exceedPct = totalCount > 0 ? Math.round((exceedCount / totalCount) * 100) : 0;
+  const gapPct = totalCount > 0 ? Math.round((gapCount / totalCount) * 100) : 0;
+  const notAssessedPct = totalCount > 0 ? Math.round((notAssessedCount / totalCount) * 100) : 0;
 
   return (
     <div className="space-y-4">
       {/* Visual Alignment Score Meter */}
-      <div className="p-4 rounded-xl border border-border/80 bg-gradient-to-r from-card via-card to-primary/5 shadow-xs space-y-2">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Sparkles className="h-4 w-4 text-primary" />
-            <span className="text-xs font-bold uppercase tracking-wider text-foreground">
+      <div className="p-4 rounded-xl border border-border/80 bg-gradient-to-r from-card via-card to-primary/5 shadow-xs space-y-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 sm:gap-2">
+          <div className="flex items-center gap-2 min-w-0">
+            <Sparkles className="h-4 w-4 text-[#01959f] shrink-0" />
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-800">
               Overall Benchmark Alignment
             </span>
           </div>
-          <span className="text-sm font-extrabold text-primary">
+          <span className="text-xs sm:text-sm font-extrabold text-[#01959f] self-start sm:self-auto bg-teal-50 sm:bg-transparent px-2 sm:px-0 py-0.5 rounded-md border sm:border-0 border-teal-200/60">
             {benchmarkRate}% Met or Exceeded
           </span>
         </div>
-        <div className="w-full bg-muted/80 rounded-full h-2.5 overflow-hidden flex shadow-inner">
-          <div
-            className="bg-emerald-500 h-full transition-all duration-500"
-            style={{ width: `${(matchCount / (totalCount || 1)) * 100}%` }}
-            title={`Matches: ${matchCount}`}
-          />
-          <div
-            className="bg-sky-500 h-full transition-all duration-500"
-            style={{ width: `${(exceedCount / (totalCount || 1)) * 100}%` }}
-            title={`Exceeds: ${exceedCount}`}
-          />
-          <div
-            className="bg-amber-400 h-full transition-all duration-500"
-            style={{ width: `${(gapCount / (totalCount || 1)) * 100}%` }}
-            title={`Gaps: ${gapCount}`}
-          />
-          <div
-            className="bg-slate-300 h-full transition-all duration-500"
-            style={{ width: `${(notAssessedCount / (totalCount || 1)) * 100}%` }}
-            title={`Not Evaluated: ${notAssessedCount}`}
-          />
+
+        {/* Multi-segment breakdown bar */}
+        <div className="w-full bg-slate-100 rounded-full h-3 overflow-hidden flex shadow-inner">
+          {matchCount > 0 && (
+            <div
+              className="bg-emerald-500 h-full transition-all duration-500"
+              style={{ width: `${(matchCount / totalCount) * 100}%` }}
+              title={`Matches: ${matchCount} (${matchPct}%)`}
+            />
+          )}
+          {exceedCount > 0 && (
+            <div
+              className="bg-sky-500 h-full transition-all duration-500"
+              style={{ width: `${(exceedCount / totalCount) * 100}%` }}
+              title={`Exceeds: ${exceedCount} (${exceedPct}%)`}
+            />
+          )}
+          {gapCount > 0 && (
+            <div
+              className="bg-amber-400 h-full transition-all duration-500"
+              style={{ width: `${(gapCount / totalCount) * 100}%` }}
+              title={`Gaps: ${gapCount} (${gapPct}%)`}
+            />
+          )}
+          {notAssessedCount > 0 && (
+            <div
+              className="bg-slate-300 h-full transition-all duration-500"
+              style={{ width: `${(notAssessedCount / totalCount) * 100}%` }}
+              title={`Not Evaluated: ${notAssessedCount} (${notAssessedPct}%)`}
+            />
+          )}
+        </div>
+
+        {/* Detailed Legend with counts and percentages */}
+        <div className="flex items-center gap-3 sm:gap-4 flex-wrap text-xs pt-0.5 text-slate-600">
+          <div className="flex items-center gap-1.5 font-medium">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0" />
+            <span>Match: <strong>{matchCount}</strong> ({matchPct}%)</span>
+          </div>
+          <div className="flex items-center gap-1.5 font-medium">
+            <span className="w-2.5 h-2.5 rounded-full bg-sky-500 shrink-0" />
+            <span>Exceed: <strong>{exceedCount}</strong> ({exceedPct}%)</span>
+          </div>
+          <div className="flex items-center gap-1.5 font-medium">
+            <span className="w-2.5 h-2.5 rounded-full bg-amber-400 shrink-0" />
+            <span>Gap: <strong>{gapCount}</strong> ({gapPct}%)</span>
+          </div>
+          {notAssessedCount > 0 && (
+            <div className="flex items-center gap-1.5 font-medium text-slate-400">
+              <span className="w-2.5 h-2.5 rounded-full bg-slate-300 shrink-0" />
+              <span>Belum Dinilai: <strong>{notAssessedCount}</strong> ({notAssessedPct}%)</span>
+            </div>
+          )}
         </div>
       </div>
 
@@ -167,15 +203,15 @@ export default function ComparisonTable({ comparisons }: ComparisonTableProps) {
                   </td>
 
                   <td className="px-4 py-3 text-center">
-                    <span className="inline-block px-2 py-0.5 rounded bg-muted text-xs font-semibold text-muted-foreground">
+                    <span className="inline-block px-2 py-0.5 rounded bg-muted text-xs font-semibold text-muted-foreground whitespace-nowrap shrink-0">
                       {LEVEL_LABELS[reqLevel] || (reqLevel ? `L${reqLevel}` : "—")}
                     </span>
                   </td>
 
                   <td className="px-4 py-3 text-center">
                     {hasCandidateLevel ? (
-                      <span className="inline-flex items-center gap-1">
-                        <span className="px-2 py-0.5 rounded bg-primary/10 text-primary text-xs font-semibold">
+                      <span className="inline-flex items-center gap-1 shrink-0">
+                        <span className="px-2 py-0.5 rounded bg-primary/10 text-primary text-xs font-semibold whitespace-nowrap shrink-0">
                           {LEVEL_LABELS[c.candidate_level!] || `L${c.candidate_level}`}
                         </span>
                         {c.is_override && (

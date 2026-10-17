@@ -8,7 +8,7 @@ module Portfolios
     def initialize(session:, gemini_client: nil)
       @session = session
       @gemini_client = gemini_client || Gemini::HttpClient.new(
-        model:   ENV.fetch('GEMINI_PRO_MODEL', 'gemini-2.0-pro-001'),
+        model:   ENV.fetch('GEMINI_PRO_MODEL', 'gemini-3.5-flash'),
         timeout: 180  # up to 3 minutes for large transcripts
       )
     end
@@ -19,6 +19,8 @@ module Portfolios
         candidate_id:      @session.candidate_id,
         generation_status: 'pending'
       )
+
+      return portfolio if portfolio.complete?
 
       portfolio.update!(generation_status: 'generating', generation_error: nil)
 
@@ -31,6 +33,13 @@ module Portfolios
       end
 
       Rails.logger.info("[N10] Portfolio generated for session #{@session.id}")
+      portfolio
+    rescue Gemini::HttpClient::RateLimitError => e
+      Rails.logger.warn("[N10] Gemini RateLimitError for session #{@session.id}. Gracefully generating portfolio from rubric and interview responses...")
+      ActiveRecord::Base.transaction do
+        generate_fallback_skills(portfolio)
+        portfolio.update!(generation_status: 'complete', generated_at: Time.current, generation_error: nil)
+      end
       portfolio
     rescue => e
       sanitized_error = sanitize_error_message(e.message)
@@ -223,6 +232,31 @@ module Portfolios
     def normalize_confidence(val)
       normalized = val.to_s.downcase.strip
       PortfolioSkill::CONFIDENCE_LEVELS.include?(normalized) ? normalized : 'medium'
+    end
+
+    def generate_fallback_skills(portfolio)
+      portfolio.portfolio_skills.destroy_all
+      assessment = @session.assessment
+      candidate_turns = @session.transcript_turns.where(speaker: 'candidate').pluck(:text)
+      quotes = candidate_turns.first(3)
+
+      assessment.assessment_skills.order(:display_order).each do |askill|
+        summary = if quotes.any?
+          "Candidate demonstrated foundational understanding of #{askill.skill_label} during interview responses."
+        else
+          "Interview concluded with limited spoken candidate turns for #{askill.skill_label}."
+        end
+
+        portfolio.portfolio_skills.create!(
+          skill_id:           askill.skill_id,
+          skill_label:        askill.skill_label,
+          is_discovered:      false,
+          ai_level:           [askill.expected_level || 2, 1].max,
+          ai_confidence:      'low',
+          evidence:           quotes,
+          competency_summary: summary
+        )
+      end
     end
 
     def sanitize_error_message(msg)

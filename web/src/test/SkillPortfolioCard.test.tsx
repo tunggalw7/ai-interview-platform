@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import SkillPortfolioCard from "@/components/portfolio/SkillPortfolioCard";
 import type { PortfolioSkill, AssessorOverride } from "@/types";
@@ -36,7 +36,7 @@ describe("SkillPortfolioCard component", () => {
     expect(screen.getByText(/Discussed trade-offs between local state/)).toBeInTheDocument();
   });
 
-  it("toggles evidence quotes when clicking Show all / Show less", () => {
+  it("toggles evidence quotes when clicking Show all / Show less", async () => {
     render(
       <SkillPortfolioCard
         skill={sampleSkill}
@@ -57,7 +57,9 @@ describe("SkillPortfolioCard component", () => {
     // Click show less
     const collapseButton = screen.getByRole("button", { name: /Show less/i });
     fireEvent.click(collapseButton);
-    expect(screen.queryByText(/Identified memory leak scenarios/)).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByText(/Identified memory leak scenarios/)).not.toBeInTheDocument();
+    });
   });
 
   it("displays assessor override badge and rationale when override is present", () => {
@@ -98,7 +100,7 @@ describe("SkillPortfolioCard component", () => {
     );
 
     expect(
-      screen.getByText(/Only briefly explored during the session. AI confidence is low/)
+      screen.getByText(/Tingkat keyakinan AI rendah|Only briefly explored/i)
     ).toBeInTheDocument();
   });
 });
